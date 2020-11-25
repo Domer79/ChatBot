@@ -1,0 +1,12 @@
+<div class="chat-editor">
+  <div class="whenEmpty" *ngIf="this.message === ''">Введите сообщение</div>
+  <div
+    #editor
+    class="editor"
+    contenteditable="true"
+    (keypress)="enter($event)"
+    (input)="onChange($event.target)"
+    (keyup.enter)="onKeyupEnter($event)"
+    (keydown.enter)="onKeydownEnter($event)"
+  ></div>
+</div>

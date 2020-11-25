@@ -1,0 +1,2 @@
+<chat-bot-button (toggle)="onToggle()" *ngIf="!opened"></chat-bot-button>
+<msg-container [opened]="opened" (closed)="onClosed()"></msg-container>

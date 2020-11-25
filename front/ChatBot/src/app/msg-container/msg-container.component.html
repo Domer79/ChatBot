@@ -1,0 +1,9 @@
+<div [@openClose]="opened ? 'open' : 'closed'" class="parent-chatbot">
+  <div class="chatbot">
+    <button (click)="onClosed()">Закрыть</button>
+    <msg-content>
+      <p id="msg_{{pId}}" *ngFor="let msg of messages; index as pId" (domChange)="onDomChange($event, msg)"></p>
+    </msg-content>
+    <chat-editor></chat-editor>
+  </div>
+</div>

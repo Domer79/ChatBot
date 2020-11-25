@@ -1,0 +1,49 @@
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ClientMsgDispatcher} from '../../services/client-msg-dispatcher.service';
+import {MessageType} from '../../misc/message-type';
+import {isEmpty} from 'rxjs/operators';
+
+@Component({
+  selector: 'chat-editor',
+  templateUrl: './chat-editor.component.html',
+  styleUrls: ['./chat-editor.component.sass']
+})
+export class ChatEditorComponent implements OnInit {
+  @ViewChild('editor') editorElement: ElementRef;
+
+  message = '';
+
+  constructor(private clientMsgDispatcher: ClientMsgDispatcher) {
+  }
+
+  ngOnInit(): void {
+  }
+
+  enter($event: KeyboardEvent): void {
+  }
+
+  onChange(eventTarget: EventTarget | any): void {
+    this.message = eventTarget.innerHTML;
+  }
+
+  onKeyupEnter($event: Event): void {
+  }
+
+  onKeydownEnter($event: Event): void {
+    if (this.message === ''){
+      $event.preventDefault();
+      return;
+    }
+
+    const event = $event as KeyboardEvent;
+    if (event.code === 'Enter' && event.shiftKey !== true)
+    {
+      this.clientMsgDispatcher.setMessage(MessageType.String, this.message);
+
+      this.message = '';
+      this.editorElement.nativeElement.innerHTML = '';
+
+      $event.preventDefault();
+    }
+  }
+}
