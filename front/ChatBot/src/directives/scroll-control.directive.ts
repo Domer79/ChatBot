@@ -16,7 +16,10 @@ export class ScrollControlDirective implements OnDestroy{
         console.log(element);
         if (element.scrollHeight > 400) {
           const p: any = mutations[0].addedNodes[0];
-          viewPortScroller.scrollToAnchor(p.id);
+          setTimeout(() => {
+            viewPortScroller.scrollToAnchor(p.id);
+            element.scrollTo(0, 428);
+          }, 50);
         }
       }
     );
