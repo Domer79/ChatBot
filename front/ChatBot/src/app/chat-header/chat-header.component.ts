@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-chat-header',
+  selector: 'chat-header',
   templateUrl: './chat-header.component.html',
   styleUrls: ['./chat-header.component.sass']
 })
