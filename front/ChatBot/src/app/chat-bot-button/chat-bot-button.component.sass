@@ -4,12 +4,25 @@
   position: fixed
   bottom: 10px
   right: 10px
-  max-width: $chat-bot-button-radius
-  max-height: $chat-bot-button-radius
-  min-width: $chat-bot-button-radius
-  min-height: $chat-bot-button-radius
-  border: 1px solid black
-  border-radius: ($chat-bot-button-radius * 1.45) / 3.14
+  max-width: $chat-bot-button-width
+  min-width: $chat-bot-button-width
+  max-height: $chat-bot-button-height
+  min-height: $chat-bot-button-height
+  border-radius: ($chat-bot-button-height * 1.45) / 3.14
   cursor: pointer
+  background-color: #E52D2E
+  box-shadow: 0 0 10px #E52D2E
+  user-select: none
 
-
+.btn-text
+  position: absolute
+  top: 50%
+  left: 50%
+  margin-top: 9%
+  margin-left: -25%
+  color: #fff
+  font-family: Open Sans
+  font-style: normal
+  font-weight: bold
+  font-size: 13px
+  line-height: 18px

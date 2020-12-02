@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ClientMsgDispatcher} from '../../services/client-msg-dispatcher.service';
 import {MessageType} from '../../misc/message-type';
-import {isEmpty} from 'rxjs/operators';
 
 @Component({
   selector: 'chat-editor',

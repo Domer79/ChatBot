@@ -13,17 +13,17 @@ import {map, tap} from 'rxjs/operators';
     trigger('openClose', [
       state('open', style({
         opacity: 1,
-        bottom: '10px'
+        bottom: '70px'
       })),
       state('closed', style({
         opacity: 0,
         bottom: '-510px'
       })),
       transition('open => closed', [
-        animate('0.5s ease-out')
+        animate('0.3s ease-out')
       ]),
       transition('closed => open', [
-        animate('0.5s cubic-bezier(0.35, 0, 0.25, 1)')
+        animate('0.3s cubic-bezier(0.35, 0, 0.25, 1)')
       ]),
     ])
   ]

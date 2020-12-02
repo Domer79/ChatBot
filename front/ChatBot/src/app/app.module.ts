@@ -11,6 +11,8 @@ import { MsgContentComponent } from './msg-content/msg-content.component';
 import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import { DomChangeDirective } from '../directives/dom-change.directive';
 import { ScrollControlDirective } from '../directives/scroll-control.directive';
+import { EmojiEditorComponent } from './emoji-editor/emoji-editor.component';
+import { ChatHeaderComponent } from './chat-header/chat-header.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { ScrollControlDirective } from '../directives/scroll-control.directive';
     MsgContentComponent,
     DomChangeDirective,
     ScrollControlDirective,
+    EmojiEditorComponent,
+    ChatHeaderComponent,
   ],
   imports: [
     BrowserModule,
