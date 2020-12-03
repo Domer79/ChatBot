@@ -13,6 +13,7 @@ import { DomChangeDirective } from '../directives/dom-change.directive';
 import { ScrollControlDirective } from '../directives/scroll-control.directive';
 import { EmojiEditorComponent } from './emoji-editor/emoji-editor.component';
 import { ChatHeaderComponent } from './chat-header/chat-header.component';
+import { ClientMessageComponent } from './client-message/client-message.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ChatHeaderComponent } from './chat-header/chat-header.component';
     ScrollControlDirective,
     EmojiEditorComponent,
     ChatHeaderComponent,
+    ClientMessageComponent,
   ],
   imports: [
     BrowserModule,

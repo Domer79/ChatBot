@@ -1,5 +1,9 @@
 <div class="chatbot-button" (click)="clickBtn()">
   <div style="position: relative">
-    <div class="btn-text">Закрыть</div>
+    <div class="btn-text">
+      {{isOpen ? 'Закрыть' : 'Открыть'}}
+      <img class="text-open-icon" src="assets/chaticon.svg" *ngIf="!isOpen"/>
+      <img class="text-close-icon" src="assets/cross.svg" *ngIf="isOpen"/>
+    </div>
   </div>
 </div>

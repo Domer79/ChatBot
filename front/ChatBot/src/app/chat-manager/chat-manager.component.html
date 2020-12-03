@@ -1,2 +1,2 @@
-<chat-bot-button (toggle)="onToggle()"></chat-bot-button>
+<chat-bot-button (toggle)="onToggle()" [isOpen]="opened"></chat-bot-button>
 <msg-container [opened]="opened" (closed)="onClosed()"></msg-container>

@@ -6,6 +6,7 @@ import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
   styleUrls: ['./chat-bot-button.component.sass']
 })
 export class ChatBotButtonComponent implements OnInit {
+  @Input() isOpen = false;
   @Output() toggle = new EventEmitter<boolean>();
 
   constructor() { }
