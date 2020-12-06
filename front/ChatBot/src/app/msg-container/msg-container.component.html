@@ -2,8 +2,9 @@
   <div class="chatbot">
     <chat-header></chat-header>
     <msg-content>
-      <p id="msg_{{pId}}" *ngFor="let msg of messages; index as pId" (domChange)="onDomChange($event, msg)"></p>
+        <client-message *ngFor="let msg of messages; index as pId" [message]="msg"></client-message>
     </msg-content>
     <chat-editor></chat-editor>
   </div>
 </div>
+<!--(domChange)="onDomChange($event, msg)"-->

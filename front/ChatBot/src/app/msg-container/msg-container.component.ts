@@ -49,8 +49,4 @@ export class MsgContainerComponent implements OnInit {
       this.messages.push(msg);
     });
   }
-
-  onDomChange($event: any, msg: Message) {
-    $event.target.innerHTML = msg.content;
-  }
 }
