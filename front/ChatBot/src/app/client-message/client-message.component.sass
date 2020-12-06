@@ -1,8 +1,29 @@
+@use "../../common/styles/common"
+
 .client-message
   position: relative
   padding-right: 10px
+  height: auto
+  display: flex
+  padding-top: 0px
+  padding-bottom: 10px
+  margin-top: 0px
+  margin-bottom: 5px
 
 .msg-right
-  position: absolute
   right: 10px
   width: 70%
+  display: inline-block
+  background-color: white
+  border-radius: 4px
+
+.left-block
+ width: 30%
+
+.msg-status
+  text-align: right
+  color: #7E8999
+  @include common.font-roboto(12px, 14px)
+
+.svg
+  display: inline

@@ -24,4 +24,20 @@ export class ClientMessageComponent implements OnInit, OnChanges, AfterViewInit 
     this.msgView.nativeElement.innerHTML = this.message.content;
   }
 
+  public get timeStatus(): string{
+    const now = new Date();
+    // @ts-ignore
+    let elapsed = now - this.message.time;
+    elapsed = Math.round(elapsed / 1000 / 60);
+    if (elapsed < 5)
+      return 'только что';
+
+    if (elapsed < 1440)
+      return 'сегодня';
+
+    if (elapsed < 2880)
+      return 'Вчера';
+
+    return '';
+  }
 }

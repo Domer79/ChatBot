@@ -1,9 +1,9 @@
-import {MessageType} from '../misc/message-type';
+import {MessageOwner, MessageStatus, MessageType} from '../misc/message-type';
 
 export default interface Message{
   type: MessageType;
-
   content: string;
-
-  isClient: boolean;
+  owner: MessageOwner;
+  time: Date;
+  status: MessageStatus;
 }
