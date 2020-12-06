@@ -1,19 +1,16 @@
-import {AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import Message from '../../abstracts/message';
 import Helper from '../../misc/Helper';
 
 @Component({
-  selector: 'client-message',
-  templateUrl: './client-message.component.html',
-  styleUrls: ['./client-message.component.sass']
+  selector: 'operator-message',
+  templateUrl: './operator-message.component.html',
+  styleUrls: ['./operator-message.component.sass']
 })
-export class ClientMessageComponent implements OnInit, AfterViewInit {
+export class OperatorMessageComponent implements AfterViewInit {
   @Input() message: Message;
   @ViewChild('msg') msgView: ElementRef;
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
   ngAfterViewInit(): void {
     this.msgView.nativeElement.innerHTML = this.message.content;

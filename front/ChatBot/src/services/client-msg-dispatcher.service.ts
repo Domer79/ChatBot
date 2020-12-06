@@ -24,5 +24,6 @@ export class ClientMsgDispatcher {
 
   public setMessage(type: MessageType, msg: string): void{
     this.messages$.next({ type, content: msg, owner: MessageOwner.client, status: MessageStatus.sending, time: new Date() });
+    this.messages$.next({ type, content: msg, owner: MessageOwner.operator, status: MessageStatus.sending, time: new Date() });
   }
 }
