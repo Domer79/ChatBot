@@ -18,7 +18,7 @@ export class ScrollControlDirective implements OnDestroy{
           const p: any = mutations[0].addedNodes[0];
           setTimeout(() => {
             viewPortScroller.scrollToAnchor(p.id);
-            element.scrollTo(0, 428);
+            element.scrollTo(0, 10000);
           }, 50);
         }
       }
