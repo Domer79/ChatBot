@@ -1,0 +1,17 @@
+<questions-header [responsePreset]="responsePresent"></questions-header>
+<div class="questions-container" *ngIf="!responsePresent">
+  <div *ngFor="let question of questions | async" class="question-container">
+    <div>
+      <img src="assets/document.svg" class="document-svg"/>
+    </div>
+    <div class="question-question-container">
+      <span class="question-question" (click)="showResponse(question)">{{question.question}}</span>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="responsePresent">
+  <p>
+    {{selectedQuestion.response}}
+  </p>
+</div>

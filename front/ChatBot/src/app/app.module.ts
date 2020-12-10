@@ -15,6 +15,11 @@ import { EmojiEditorComponent } from './emoji-editor/emoji-editor.component';
 import { ChatHeaderComponent } from './chat-header/chat-header.component';
 import { ClientMessageComponent } from './client-message/client-message.component';
 import { OperatorMessageComponent } from './operator-message/operator-message.component';
+import { ChatDialogComponent } from './dialog/chat-dialog.component';
+import { BaseChatHeaderComponent } from './base-chat-header/base-chat-header.component';
+import { QuestionsHeaderComponent } from './questions/questions-header/questions-header.component';
+import { QuestionsComponent } from './questions/questions/questions.component';
+import {QuestionsProviderService} from '../services/questions-provider.service';
 
 @NgModule({
   declarations: [
@@ -29,6 +34,10 @@ import { OperatorMessageComponent } from './operator-message/operator-message.co
     ChatHeaderComponent,
     ClientMessageComponent,
     OperatorMessageComponent,
+    ChatDialogComponent,
+    BaseChatHeaderComponent,
+    QuestionsHeaderComponent,
+    QuestionsComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,7 +45,8 @@ import { OperatorMessageComponent } from './operator-message/operator-message.co
     FormsModule,
   ],
   providers: [
-    ClientMsgDispatcher
+    ClientMsgDispatcher,
+    QuestionsProviderService
   ],
   bootstrap: [ChatManagerComponent]
 })

@@ -1,0 +1,6 @@
+<base-chat-header>
+  <div *ngIf="!responsePreset">Вероятный ответ на ваш вопрос</div>
+  <div>
+    <button (click)="stopShowResponse()" class="back-btn" *ngIf="responsePreset">Назад</button>
+  </div>
+</base-chat-header>

@@ -33,9 +33,8 @@ export class MsgContainerComponent implements OnInit {
   @Output() closed = new EventEmitter<void>();
 
   title = 'ChatBot';
-  messages: Message[] = [];
 
-  constructor(private clientMsgDispatcher: ClientMsgDispatcher) {
+  constructor() {
 
   }
 
@@ -45,8 +44,6 @@ export class MsgContainerComponent implements OnInit {
   }
 
   ngOnInit(): void{
-    this.clientMsgDispatcher.receive(msg => {
-      this.messages.push(msg);
-    });
+
   }
 }

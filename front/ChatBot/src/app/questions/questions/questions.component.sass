@@ -1,0 +1,33 @@
+@use "src/common/styles/common"
+
+.document-svg
+  width: 20px
+  color: #3757A1
+
+.questions-container
+  width: 80%
+  padding:
+    top: 5%
+    left: 5%
+    right: 15%
+  background-color: #F7F8FA
+
+.question-container
+  display: flex
+  padding:
+    top: 1em
+
+.question-question-container
+  padding:
+    left: 1em
+
+.question-question
+  text-decoration-line: underline
+  color: #7E8999
+  @include common.font-roboto(14px, 16px, 500)
+  cursor: pointer
+
+.question-question:hover
+  text-decoration-line: underline
+  color: #6E8999
+  @include common.font-roboto(15px, 16px, 1000)
