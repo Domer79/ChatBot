@@ -1,4 +1,33 @@
+@use "src/common/styles/common"
+
 .back-btn
   background-color: transparent
   border-radius: 3px
-  border: 1px solid white
+  border: 1px solid transparent
+
+.header-container
+  display: flex
+  justify-content: space-between
+
+.header-element
+  color: white
+  padding:
+    left: 2em
+    top: 1.6em
+
+.header-message
+  text-transform: uppercase
+  @include common.font-roboto(16px, 19px, bold)
+
+.close-container
+  text-align: right
+
+.close-icon
+  width: 20px
+  margin-right: 1em
+
+.close-icon:hover
+  width: 22px
+
+.close-btn
+  cursor: pointer

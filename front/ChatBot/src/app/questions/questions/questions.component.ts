@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {QuestionsProviderService} from '../../../services/questions-provider.service';
 import {Observable} from 'rxjs';
 import Question from '../../../abstracts/Question';
+import {PageDispatcherService} from '../../../services/page-dispatcher.service';
 
 @Component({
   selector: 'questions',
@@ -10,7 +11,9 @@ import Question from '../../../abstracts/Question';
 })
 export class QuestionsComponent implements OnInit {
   questions: Observable<Question[]>;
-  constructor(private questionsProvider: QuestionsProviderService) { }
+  constructor(private questionsProvider: QuestionsProviderService,
+              private pageDispatcher: PageDispatcherService
+              ) {}
 
   ngOnInit(): void {
     this.questions = this.questionsProvider.getQuestions();
@@ -26,5 +29,9 @@ export class QuestionsComponent implements OnInit {
 
   get selectedQuestion(): Question{
     return this.questionsProvider.getSelectedQuestion();
+  }
+
+  closePage(): void {
+    this.pageDispatcher.closeCurrent();
   }
 }

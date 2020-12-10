@@ -20,6 +20,9 @@ import { BaseChatHeaderComponent } from './base-chat-header/base-chat-header.com
 import { QuestionsHeaderComponent } from './questions/questions-header/questions-header.component';
 import { QuestionsComponent } from './questions/questions/questions.component';
 import {QuestionsProviderService} from '../services/questions-provider.service';
+import { PageDispatcherComponent } from './page-dispatcher/page-dispatcher.component';
+import {PageDispatcherService} from '../services/page-dispatcher.service';
+import { PageHostDirective } from '../directives/page-host.directive';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,8 @@ import {QuestionsProviderService} from '../services/questions-provider.service';
     BaseChatHeaderComponent,
     QuestionsHeaderComponent,
     QuestionsComponent,
+    PageDispatcherComponent,
+    PageHostDirective,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +51,8 @@ import {QuestionsProviderService} from '../services/questions-provider.service';
   ],
   providers: [
     ClientMsgDispatcher,
-    QuestionsProviderService
+    QuestionsProviderService,
+    PageDispatcherService
   ],
   bootstrap: [ChatManagerComponent]
 })

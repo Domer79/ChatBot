@@ -18,3 +18,8 @@ export enum MessageOwner{
   client,
   operator
 }
+
+export enum PageEvent{
+  update
+}
+

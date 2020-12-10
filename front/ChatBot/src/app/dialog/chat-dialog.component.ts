@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ClientMsgDispatcher} from '../../services/client-msg-dispatcher.service';
 import Message from '../../abstracts/message';
 
@@ -7,7 +7,7 @@ import Message from '../../abstracts/message';
   templateUrl: './chat-dialog.component.html',
   styleUrls: ['./dialog.component.sass']
 })
-export class ChatDialogComponent implements OnInit {
+export class ChatDialogComponent implements OnInit, OnDestroy {
 
   messages: Message[] = [];
 
@@ -17,6 +17,10 @@ export class ChatDialogComponent implements OnInit {
     this.clientMsgDispatcher.receive(msg => {
       this.messages.push(msg);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.clientMsgDispatcher.stop();
   }
 
 }

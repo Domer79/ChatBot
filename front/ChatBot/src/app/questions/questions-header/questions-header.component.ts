@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {QuestionsProviderService} from '../../../services/questions-provider.service';
 
 @Component({
@@ -8,6 +8,7 @@ import {QuestionsProviderService} from '../../../services/questions-provider.ser
 })
 export class QuestionsHeaderComponent implements OnInit {
   @Input() responsePreset: boolean;
+  @Output() close: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private questionsProvider: QuestionsProviderService) { }
 
@@ -16,5 +17,9 @@ export class QuestionsHeaderComponent implements OnInit {
 
   stopShowResponse(): void {
     this.questionsProvider.stopShowResponse();
+  }
+
+  closePage(): void {
+    this.close.emit();
   }
 }

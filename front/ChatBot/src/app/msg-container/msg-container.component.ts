@@ -4,6 +4,8 @@ import {Observable} from 'rxjs';
 import Message from '../../abstracts/message';
 import {ClientMsgDispatcher} from '../../services/client-msg-dispatcher.service';
 import {map, tap} from 'rxjs/operators';
+import {PageDispatcherService} from '../../services/page-dispatcher.service';
+import {QuestionsComponent} from '../questions/questions/questions.component';
 
 @Component({
   selector: 'msg-container',
@@ -34,7 +36,7 @@ export class MsgContainerComponent implements OnInit {
 
   title = 'ChatBot';
 
-  constructor() {
+  constructor(private pageDispatcher: PageDispatcherService) {
 
   }
 
@@ -44,6 +46,6 @@ export class MsgContainerComponent implements OnInit {
   }
 
   ngOnInit(): void{
-
+    this.pageDispatcher.showPage(QuestionsComponent);
   }
 }
