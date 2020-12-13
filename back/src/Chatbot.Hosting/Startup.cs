@@ -52,6 +52,8 @@ namespace Chatbot.Hosting
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+            var context = AutofacContainer.Resolve<ChatbotContext>();
+            context.Database.Migrate();
             
             if (env.IsDevelopment())
             {

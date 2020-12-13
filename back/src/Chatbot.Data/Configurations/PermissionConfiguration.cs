@@ -27,7 +27,7 @@ namespace Chatbot.Data.Configurations
 
             b.HasKey(_ => _.Id);
             b.HasIndex(_ => _.Politic)
-                .HasName("UQ_permission_politic");
+                .HasDatabaseName("UQ_permission_politic");
         }
     }
 }

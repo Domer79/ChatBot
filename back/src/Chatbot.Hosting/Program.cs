@@ -14,32 +14,7 @@ namespace Chatbot.Hosting
     {
         public static void Main(string[] args)
         {
-            var env = "development";
-            if (args.All(_ => _ != "--environment"))
-            {
-                var argsList = new List<string>(args);
-                argsList.Add("--environment");
-                argsList.Add("development");
-                args = argsList.ToArray();
-            }
-            else
-            {
-                var index = -1;
-                do
-                {
-                    index++;
-                } while (args[index] != "--environment");
-
-                env = args[index + 1];
-            }
-            
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddCommandLine(args)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env}.json", optional: true)
-                .AddEnvironmentVariables();
-            var config = builder.Build();
+            var config = StartupHelper.GetConfiguration(args);
 
             var host = Host.CreateDefaultBuilder(args)
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())

@@ -34,6 +34,15 @@ namespace Chatbot.Data.Configurations
                 .HasColumnName("date_completed");
 
             b.HasKey(_ => _.Id);
+            b.HasOne(_ => _.Client)
+                .WithMany(_ => _.ClientDialogs)
+                .HasForeignKey(_ => _.ClientId)
+                .OnDelete(DeleteBehavior.NoAction);
+            
+            b.HasOne(_ => _.Operator)
+                .WithMany(_ => _.OperatorDialogs)
+                .HasForeignKey(_ => _.OperatorId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

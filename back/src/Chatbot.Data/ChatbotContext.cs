@@ -8,16 +8,11 @@ namespace Chatbot.Data
 {
     public class ChatbotContext: DbContext
     {
-        private readonly IAppConfig _appConfig;
+        private readonly DbContextOptions _options;
 
-        protected ChatbotContext(IAppConfig appConfig)
+        public ChatbotContext(DbContextOptions options) : base(options)
         {
-            _appConfig = appConfig;
-        }
-
-        public ChatbotContext(DbContextOptions options, IAppConfig appConfig) : base(options)
-        {
-            _appConfig = appConfig;
+            _options = options;
         }
         
         public DbSet<Message> Messages { get; set; }
@@ -30,11 +25,6 @@ namespace Chatbot.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ChatbotContext).Assembly);
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_appConfig.GetConnectionString());
         }
     }
 }

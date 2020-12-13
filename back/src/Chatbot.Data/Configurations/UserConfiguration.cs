@@ -39,6 +39,20 @@ namespace Chatbot.Data.Configurations
                 .IsRequired();
             
             b.HasKey(_ => _.Id);
+
+            b
+                .HasMany(_ => _.Roles)
+                .WithMany(_ => _.Users)
+                .UsingEntity<UserRole>(
+                    j => j
+                        .HasOne(_ => _.Role)
+                        .WithMany(_ => _.RoleUsers)
+                        .HasForeignKey(_ => _.RoleId),
+                    j => j
+                        .HasOne(_ => _.User)
+                        .WithMany(_ => _.UserRoles)
+                        .HasForeignKey(_ => _.UserId)
+                );
         }
     }
 }
