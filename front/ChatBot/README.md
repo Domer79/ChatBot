@@ -1,27 +1,20 @@
 # ChatBot
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.2.
+На данный момент реализовано:
+1. Кнопка виджета
+1. Открываемое окно виджета
+1. Страница выбора вопрос-ответов, правда без итогового окна, где пользователь может зафиксировать ответ
+1. Страница диалога
 
-## Development server
+## Пример работы виджета
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+При открытии виджета по кнопке открывается сам виджет, где представлена страница
+выбора вопросов, по клику на вопрос будет отображен ответ. В этом примере
+отсутствует возможность пройти по дереву вопросов, один вопрос — один ответ.
+Пока не реализовано закрытие виджета при вводе вопроса в редакторе, закрыть можно
+при нажатии соответствующей кнопки в правом верхнем углу страницы.
+На странице диалога можно вводить сообщения, но связи с сервером пока нет.
+Кнопки фиксации сообщения пока не работает, сообщение можно зафиксировать 
+при помощи клавиши Enter. Пока, для визуального тестирования сообщений от оператора,
+сообщения веденные пользователем дублируются так, как будто они пришли от оператора.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

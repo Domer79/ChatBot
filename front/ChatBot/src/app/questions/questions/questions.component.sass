@@ -1,5 +1,10 @@
 @use "src/common/styles/common"
 
+.main-container
+  max-height: 378px
+  overflow-y: auto
+  scroll-behavior: smooth
+
 .document-svg
   width: 20px
   color: #3757A1
@@ -31,3 +36,28 @@
   text-decoration-line: underline
   color: #6E8999
   @include common.font-roboto(15px, 16px, 1000)
+
+.response-body
+  white-space: pre-line
+  color: #333740
+  @include common.font-roboto(15, 140%, 300)
+
+.response-header
+  color: #333740
+  @include common.font-roboto(17px, 20px, bold)
+
+.response-container
+  width: 90%
+  padding:
+    left: 5%
+    right: 5%
+
+.main-container::-webkit-scrollbar
+  width: 6px
+
+.main-container::-webkit-scrollbar-track
+  background-color: transparent
+
+.main-container::-webkit-scrollbar-thumb
+  background-color: #D3D6DE
+  border-radius: 3px

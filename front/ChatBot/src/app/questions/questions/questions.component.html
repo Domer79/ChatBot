@@ -1,17 +1,23 @@
 <questions-header [responsePreset]="responsePresent" (close)="closePage()"></questions-header>
-<div class="questions-container" *ngIf="!responsePresent">
-  <div *ngFor="let question of questions | async" class="question-container">
-    <div>
-      <img src="assets/document.svg" class="document-svg"/>
-    </div>
-    <div class="question-question-container">
-      <span class="question-question" (click)="showResponse(question)">{{question.question}}</span>
+<div>
+  <div class="main-container questions-container" *ngIf="!responsePresent">
+    <div *ngFor="let question of questions | async" class="question-container">
+      <div>
+        <img src="assets/document.svg" class="document-svg"/>
+      </div>
+      <div class="question-question-container">
+        <span class="question-question" (click)="showResponse(question)">{{question.question}}</span>
+      </div>
     </div>
   </div>
+  <chat-editor></chat-editor>
 </div>
 
-<div *ngIf="responsePresent">
-  <p>
+<div *ngIf="responsePresent" class="main-container response-container">
+  <p class="response-header">
+    {{selectedQuestion.question}}
+  </p>
+  <p class="response-body">
     {{selectedQuestion.response}}
   </p>
 </div>

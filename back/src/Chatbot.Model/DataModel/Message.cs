@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Chatbot.Model.Data
+namespace Chatbot.Model.DataModel
 {
     public class Message
     {
@@ -10,5 +10,8 @@ namespace Chatbot.Model.Data
         public MessageOwner Owner { get; set; }
         public MessageStatus Status { get; set; }
         public DateTime Time { get; set; }
+        public Guid MessageDialogId { get; set; }
+        
+        public MessageDialog Dialog { get; set; }
     }
 }
