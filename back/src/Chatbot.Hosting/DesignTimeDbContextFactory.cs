@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Chatbot.Data;
+using Chatbot.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;

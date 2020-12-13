@@ -12,6 +12,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Chatbot.Common\Chatbot.Common.csproj" />
+      <ProjectReference Include="..\Chatbot.Core\Chatbot.Core.csproj" />
+      <ProjectReference Include="..\Chatbot.Ef.Data\Chatbot.Ef.Data.csproj" />
     </ItemGroup>
 
 </Project>

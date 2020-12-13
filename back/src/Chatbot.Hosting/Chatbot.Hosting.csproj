@@ -22,12 +22,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Chatbot.Common\Chatbot.Common.csproj" />
-      <ProjectReference Include="..\Chatbot.Data\Chatbot.Data.csproj" />
+      <ProjectReference Include="..\Chatbot.Ef\Chatbot.Ef.csproj" />
       <ProjectReference Include="..\Chatbot.Ioc\Chatbot.Ioc.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="wwwroot" />
     </ItemGroup>
 
     <ItemGroup>
@@ -41,6 +37,12 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="wwwroot\index.html">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

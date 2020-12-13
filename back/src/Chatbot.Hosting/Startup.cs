@@ -2,9 +2,12 @@
 using Autofac.Core;
 using Autofac.Core.Registration;
 using Autofac.Extensions.DependencyInjection;
-using Chatbot.Common.Abstracts;
-using Chatbot.Data;
+using Chatbot.Abstractions;
+using Chatbot.Ef;
+using Chatbot.Hosting.Authentication;
 using Chatbot.Ioc;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +21,6 @@ namespace Chatbot.Hosting
 {
     public class Startup
     {
-        private readonly IAppConfig _appConfig;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
 
@@ -40,6 +42,12 @@ namespace Chatbot.Hosting
             {
                 options.UseSqlServer(_configuration.GetConnectionString("default"));
             });
+            services.AddSingleton<IAuthenticationHandler, TokenAuthenticationHandler>();
+            // services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationPolicyProvider, CustomAuthPolicyProvider>();
+            services.AddAuthentication("Token")
+                .AddScheme<TokenAuthenticationOptions, TokenAuthenticationHandler>("Token", null);
+            // services.AddAuthorization();
             
             services.AddControllers();
         }
@@ -67,7 +75,7 @@ namespace Chatbot.Hosting
             app.UseRouting();
             app.UseMvc();
             app.UseStaticFiles();
-            // app.UseAuthentication();
+            app.UseAuthentication();
             // app.UseAuthorization();
             // app.UseWebSockets();
             
