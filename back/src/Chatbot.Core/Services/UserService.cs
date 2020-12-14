@@ -114,5 +114,15 @@ namespace Chatbot.Core.Services
                 return false;
             }
         }
+
+        public Task<Role[]> GetRoles(Guid userId)
+        {
+            return _userRepository.GetRoles(userId);
+        }
+
+        public Task<Role[]> GetRoles(string loginOrEmail)
+        {
+            return _userRepository.GetRoles(loginOrEmail);
+        }
     }
 }

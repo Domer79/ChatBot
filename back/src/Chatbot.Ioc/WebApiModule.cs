@@ -29,12 +29,14 @@ namespace Chatbot.Ioc
         {
             _containerBuilder.RegisterType<UserRepository>().As<IUserRepository>();
             _containerBuilder.RegisterType<TokenRepository>().As<ITokenRepository>();
+            _containerBuilder.RegisterType<RoleRepository>().As<IRoleRepository>();
         }
 
         private void RegisterServices()
         {
             _containerBuilder.RegisterType<UserService>().As<IUserService>();
             _containerBuilder.RegisterType<TokenService>().As<ITokenService>();
+            _containerBuilder.RegisterType<RoleService>().As<IRoleService>();
             _containerBuilder.RegisterType<AuthService>().As<IAuthService>();
         }
 

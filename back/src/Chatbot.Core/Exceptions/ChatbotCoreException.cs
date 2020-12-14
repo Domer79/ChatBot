@@ -14,11 +14,11 @@ namespace Chatbot.Core.Exceptions
         {
         }
 
-        public ChatbotCoreException(string? message) : this(message, ErrorType.None)
+        public ChatbotCoreException(string message) : this(message, ErrorType.None)
         {
         }
 
-        public ChatbotCoreException(string? message, Exception? innerException) 
+        public ChatbotCoreException(string message, Exception innerException) 
             : this(message, innerException, ErrorType.None)
         {
         }
@@ -33,12 +33,12 @@ namespace Chatbot.Core.Exceptions
             ErrorType = errorType;
         }
 
-        public ChatbotCoreException(string? message, ErrorType errorType) : base(message)
+        public ChatbotCoreException(string message, ErrorType errorType) : base(message)
         {
             ErrorType = errorType;
         }
 
-        public ChatbotCoreException(string? message, Exception? innerException, ErrorType errorType) : base(message, innerException)
+        public ChatbotCoreException(string message, Exception innerException, ErrorType errorType) : base(message, innerException)
         {
             ErrorType = errorType;
         }

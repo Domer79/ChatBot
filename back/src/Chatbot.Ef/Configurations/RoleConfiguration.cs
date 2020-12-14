@@ -39,6 +39,8 @@ namespace Chatbot.Ef.Configurations
                         .WithMany(_ => _.RolePermissions)
                         .HasForeignKey(_ => _.RoleId)
                     );
+
+            b.HasIndex(_ => _.Name).IsUnique();
         }
     }
 }

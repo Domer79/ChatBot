@@ -18,5 +18,7 @@ namespace Chatbot.Abstractions.Core.Services
         Task<bool> SetPassword(Guid userId, string password);
         Task<bool> SetPassword(string loginOrEmail, string password);
         Task<bool> SetPassword(User user, string password);
+        Task<Role[]> GetRoles(Guid userId);
+        Task<Role[]> GetRoles(string loginOrEmail);
     }
 }

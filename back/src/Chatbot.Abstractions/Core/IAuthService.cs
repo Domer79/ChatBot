@@ -7,9 +7,10 @@ namespace Chatbot.Abstractions.Core
     public interface IAuthService
     {
         Task<Token> LogIn(string loginOrEmail, string password);
-        Task<bool> CheckAccess(User user);
-        Task<bool> CheckAccess(Guid userId);
-        Task<bool> CheckAccess(string loginOrEmail);
+        Task<bool> CheckAccess(SecurityPolicy policy, User user);
+        Task<bool> CheckAccess(SecurityPolicy policy, Guid userId);
+        Task<bool> CheckAccess(SecurityPolicy policy, string loginOrEmail);
         Task<bool> ValidateToken(string tokenId);
+        Task<User> GetUserByToken(string tokenId);
     }
 }

@@ -2,89 +2,48 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions;
+using Chatbot.Abstractions.Core;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
 
 namespace Chatbot.Hosting.Authentication
 {
-    public class PolicyAuthorizationRequirement : IAuthorizationRequirement
-    {
-        public string Policy { get; }
-
-        public PolicyAuthorizationRequirement(string policy)
-        {
-            Policy = policy;
-        }
-    }
-
-    public class CustomSecurityAttribute : AuthorizeAttribute
-    {
-        public CustomSecurityAttribute(SecurityPolicy securityPolicy)
-        {
-            Policy = securityPolicy.ToString();
-            AuthenticationSchemes = "Token";
-        }
-    }
-    
+    // TODO: Придумать кэш для хранения
     public class CustomAuthorizationHandler: AuthorizationHandler<PolicyAuthorizationRequirement>
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, PolicyAuthorizationRequirement requirement)
+        private readonly IAuthService _authService;
+
+        public CustomAuthorizationHandler(IAuthService authService)
         {
-            context.Succeed(requirement);
-            return Task.CompletedTask;
-        }
-    }
-    
-    public class CustomAuthPolicyProvider: IAuthorizationPolicyProvider
-    {
-        public CustomAuthPolicyProvider(IOptions<AuthorizationOptions> options)
-        {
-            FallbackPolicyProvider = new DefaultAuthorizationPolicyProvider(options);
-            DefaultPolicy = options.Value.DefaultPolicy;
+            _authService = authService;
         }
 
-        public AuthorizationPolicy DefaultPolicy { get; set; }
-
-        public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
-
-        public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
+            PolicyAuthorizationRequirement requirement)
         {
             try
             {
-                //All custom policies created by us will have " : " as delimiter to identify policy name and values
-                //Any delimiter or character can be choosen, and it is upto user choice
+                var securityPolicy = Enum.Parse<SecurityPolicy>(requirement.Policy);
+                var userGuid = context.User.Claims.FirstOrDefault(_ => _.Type == CustomClaimTypes.UserId)?.Value;
 
-                var policy = policyName; //Name for policy and values are set in A2AuthorizePermission Attribute
-
-                if (policy!=null)
+                if (string.IsNullOrEmpty(userGuid))
                 {
-                    //Dynamically building the AuthorizationPolicy and adding the respective requirement based on the policy names which we define in Authroize Attribute.
-                    var policyBuilder = new AuthorizationPolicyBuilder();
-
-                    //Authorize Hanlders are created based on Authroize Requirement type.
-                    //Adding the object of A2AuthorizePermissionRequirement will invoke the A2AuthorizePermissionHandler
-                    policyBuilder
-                        .AddRequirements(new PolicyAuthorizationRequirement(policy))
-                        .AddRequirements(DefaultPolicy.Requirements.ToArray())
-                        .AddAuthenticationSchemes(DefaultPolicy.AuthenticationSchemes.ToArray());
-                    return Task.FromResult(policyBuilder.Build());
+                    context.Fail();
+                    return;
                 }
-                return FallbackPolicyProvider.GetPolicyAsync(policyName);
+
+                var userId = Guid.Parse(userGuid);
+                if (!await _authService.CheckAccess(securityPolicy, userId))
+                {
+                    context.Fail();
+                    return;
+                }
+                
+                context.Succeed(requirement);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return FallbackPolicyProvider.GetPolicyAsync(policyName);
+                context.Fail();
             }
-        }
-
-        public Task<AuthorizationPolicy> GetDefaultPolicyAsync()
-        {
-            return FallbackPolicyProvider.GetDefaultPolicyAsync();
-        }
-
-        public Task<AuthorizationPolicy?> GetFallbackPolicyAsync()
-        {
-            return FallbackPolicyProvider.GetDefaultPolicyAsync();
         }
     }
 }

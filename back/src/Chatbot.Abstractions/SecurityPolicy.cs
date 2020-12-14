@@ -2,9 +2,9 @@
 {
     public enum SecurityPolicy
     {
-        ReadMessage,
-        AddUser,
-        ChangeUser,
-        RemoveUser
+        ReadMessage = 1,
+        AddUser = 2,
+        ChangeUser = 3,
+        RemoveUser = 4
     }
 }

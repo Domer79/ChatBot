@@ -10,10 +10,10 @@ namespace Chatbot.Core.Common
     {
         private readonly IConfiguration _configuration;
 
-        // public AppConfig(IConfiguration configuration)
-        // {
-        //     _configuration = configuration;
-        // }
+        public AppConfig(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         public string GetConnectionString()
         {

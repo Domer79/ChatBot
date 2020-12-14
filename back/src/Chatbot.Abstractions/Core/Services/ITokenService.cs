@@ -7,5 +7,6 @@ namespace Chatbot.Abstractions.Core.Services
     {
         Task<bool> ValidateToken(string tokenId);
         Task<Token> IssueToken(User user);
+        Task<Token> GetToken(string tokenId);
     }
 }

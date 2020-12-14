@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Repositories;
 using Chatbot.Model.DataModel;
@@ -62,6 +63,19 @@ namespace Chatbot.Ef.Data
         public Task<User> GetByLoginOrEmail(string loginOrEmail)
         {
             return _context.Users.SingleOrDefaultAsync(_ => _.Login == loginOrEmail || _.Email == loginOrEmail);
+        }
+
+        public async Task<Role[]> GetRoles(Guid userId)
+        {
+            var user = await _context.Users.Include(_ => _.Roles).SingleOrDefaultAsync(_ => _.Id == userId);
+            return user.Roles.ToArray();
+        }
+
+        public async Task<Role[]> GetRoles(string loginOrEmail)
+        {
+            var user = await _context.Users.Include(_ => _.Roles)
+                .SingleOrDefaultAsync(_ => _.Login == loginOrEmail || _.Email == loginOrEmail);
+            return user.Roles.ToArray();
         }
     }
 }

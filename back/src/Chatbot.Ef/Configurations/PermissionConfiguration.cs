@@ -26,6 +26,7 @@ namespace Chatbot.Ef.Configurations
 
             b.HasKey(_ => _.Id);
             b.HasIndex(_ => _.Politic)
+                .IsUnique()
                 .HasDatabaseName("UQ_permission_politic");
         }
     }

@@ -41,5 +41,10 @@ namespace Chatbot.Core.Services
 
             return await _tokenRepository.Add(token);
         }
+
+        public Task<Token> GetToken(string tokenId)
+        {
+            return _tokenRepository.GetTokenById(tokenId);
+        }
     }
 }

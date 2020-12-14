@@ -4,14 +4,16 @@ using Chatbot.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Chatbot.Ef.Migrations
 {
     [DbContext(typeof(ChatbotContext))]
-    partial class ChatbotContextModelSnapshot : ModelSnapshot
+    [Migration("20201214151542_5")]
+    partial class _5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
