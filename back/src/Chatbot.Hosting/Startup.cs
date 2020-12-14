@@ -43,11 +43,17 @@ namespace Chatbot.Hosting
                 options.UseSqlServer(_configuration.GetConnectionString("default"));
             });
             services.AddSingleton<IAuthenticationHandler, TokenAuthenticationHandler>();
-            // services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
             services.AddSingleton<IAuthorizationPolicyProvider, CustomAuthPolicyProvider>();
             services.AddAuthentication("Token")
                 .AddScheme<TokenAuthenticationOptions, TokenAuthenticationHandler>("Token", null);
-            // services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .AddAuthenticationSchemes("Token")
+                    .Build();
+            });
             
             services.AddControllers();
         }
@@ -76,7 +82,7 @@ namespace Chatbot.Hosting
             app.UseMvc();
             app.UseStaticFiles();
             app.UseAuthentication();
-            // app.UseAuthorization();
+            app.UseAuthorization();
             // app.UseWebSockets();
             
             app.UseEndpoints(endpoints =>

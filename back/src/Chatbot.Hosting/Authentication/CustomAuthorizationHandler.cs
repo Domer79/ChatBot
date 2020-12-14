@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions;
 using Microsoft.AspNetCore.Authorization;
@@ -21,6 +22,7 @@ namespace Chatbot.Hosting.Authentication
         public CustomSecurityAttribute(SecurityPolicy securityPolicy)
         {
             Policy = securityPolicy.ToString();
+            AuthenticationSchemes = "Token";
         }
     }
     
@@ -28,7 +30,8 @@ namespace Chatbot.Hosting.Authentication
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, PolicyAuthorizationRequirement requirement)
         {
-            throw new System.NotImplementedException();
+            context.Succeed(requirement);
+            return Task.CompletedTask;
         }
     }
     
@@ -37,8 +40,11 @@ namespace Chatbot.Hosting.Authentication
         public CustomAuthPolicyProvider(IOptions<AuthorizationOptions> options)
         {
             FallbackPolicyProvider = new DefaultAuthorizationPolicyProvider(options);
+            DefaultPolicy = options.Value.DefaultPolicy;
         }
-        
+
+        public AuthorizationPolicy DefaultPolicy { get; set; }
+
         public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
 
         public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
@@ -57,7 +63,10 @@ namespace Chatbot.Hosting.Authentication
 
                     //Authorize Hanlders are created based on Authroize Requirement type.
                     //Adding the object of A2AuthorizePermissionRequirement will invoke the A2AuthorizePermissionHandler
-                    policyBuilder.AddRequirements(new PolicyAuthorizationRequirement(policy));
+                    policyBuilder
+                        .AddRequirements(new PolicyAuthorizationRequirement(policy))
+                        .AddRequirements(DefaultPolicy.Requirements.ToArray())
+                        .AddAuthenticationSchemes(DefaultPolicy.AuthenticationSchemes.ToArray());
                     return Task.FromResult(policyBuilder.Build());
                 }
                 return FallbackPolicyProvider.GetPolicyAsync(policyName);

@@ -9,12 +9,17 @@ namespace Chatbot.Hosting.Controllers
     [Route("api/[controller]/[action]")]
     public class HomeController: ControllerBase
     {
-        // [CustomSecurity(SecurityPolicy.ReadMessage)]
-        [Authorize(Policy = "ReadMessage")]
+        [CustomSecurity(SecurityPolicy.ReadMessage)]
         [HttpGet]
         public string Hello()
         {
             return "Hello World!!!";
+        }
+
+        [HttpGet]
+        public string Hello2()
+        {
+            return "Hello2 World!!!";
         }
     }
 }

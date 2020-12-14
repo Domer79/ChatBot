@@ -17,10 +17,11 @@ namespace Chatbot.Hosting.Authentication
         private readonly IUserService _userService;
 
         public TokenAuthenticationHandler(IOptionsMonitor<TokenAuthenticationOptions> options,
-            ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
+            ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock,
+            IAuthService authService, IUserService userService) : base(options, logger, encoder, clock)
         {
-            // _authService = authService;
-            // _userService = userService;
+            _authService = authService;
+            _userService = userService;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
