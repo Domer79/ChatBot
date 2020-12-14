@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Chatbot.Abstractions.Enums;
 using Chatbot.Model.DataModel;
 
 namespace Chatbot.Abstractions.Core

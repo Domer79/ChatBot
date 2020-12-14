@@ -11,6 +11,7 @@ namespace Chatbot.Model.DataModel
         public MessageStatus Status { get; set; }
         public DateTime Time { get; set; }
         public Guid MessageDialogId { get; set; }
+        public Guid? Sender { get; set; }
         
         public MessageDialog Dialog { get; set; }
     }

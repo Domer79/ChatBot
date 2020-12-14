@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions;
 using Chatbot.Abstractions.Core;
+using Chatbot.Abstractions.Enums;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Chatbot.Hosting.Authentication

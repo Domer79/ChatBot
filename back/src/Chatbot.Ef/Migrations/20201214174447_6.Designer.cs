@@ -4,14 +4,16 @@ using Chatbot.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Chatbot.Ef.Migrations
 {
     [DbContext(typeof(ChatbotContext))]
-    partial class ChatbotContextModelSnapshot : ModelSnapshot
+    [Migration("20201214174447_6")]
+    partial class _6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,10 +50,8 @@ namespace Chatbot.Ef.Migrations
                         .HasColumnName("status");
 
                     b.Property<DateTime>("Time")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasColumnName("time")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnName("time");
 
                     b.Property<int>("Type")
                         .HasColumnType("int")
@@ -84,12 +84,6 @@ namespace Chatbot.Ef.Migrations
                     b.Property<DateTime>("DateWork")
                         .HasColumnType("datetime2")
                         .HasColumnName("date_work");
-
-                    b.Property<int>("DialogStatus")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1)
-                        .HasColumnName("dialog_status");
 
                     b.HasKey("Id");
 

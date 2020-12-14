@@ -31,11 +31,15 @@ namespace Chatbot.Ef.Configurations
 
             builder.Property(_ => _.Time)
                 .HasColumnName("time")
+                .HasDefaultValueSql("GETDATE()")
                 .IsRequired();
 
             builder.Property(_ => _.MessageDialogId)
                 .HasColumnName("message_dialog_id")
                 .IsRequired();
+
+            builder.Property(_ => _.Sender)
+                .HasColumnName("sender");
 
             builder.HasKey(_ => _.Id);
             builder.HasOne(_ => _.Dialog)

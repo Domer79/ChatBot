@@ -1,4 +1,4 @@
-﻿namespace Chatbot.Abstractions
+﻿namespace Chatbot.Abstractions.Enums
 {
     public enum SecurityPolicy
     {

@@ -28,23 +28,40 @@ namespace Chatbot.Core.Services
             return token.DateExpired > DateTime.Now;
         }
 
-        public async Task<Token> IssueToken(User user)
+        public Task<Token> IssueToken(Guid userId)
         {
-            if (user == null) throw new ArgumentNullException(nameof(user));
             var token = new Token()
             {
                 TokenId = Helper.Generate(),
                 DateExpired = DateTime.Now.AddHours(_appConfig.GetTokenLifetime()),
                 AutoExpired = TimeSpan.FromMinutes(_appConfig.GetTokenAutoExpired()),
-                UserId = user.Id
+                UserId = userId
             };
 
-            return await _tokenRepository.Add(token);
+            return _tokenRepository.Add(token);
+        }
+
+        public Task<Token> IssueToken(User user)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            return IssueToken(user.Id);
         }
 
         public Task<Token> GetToken(string tokenId)
         {
             return _tokenRepository.GetTokenById(tokenId);
+        }
+
+        public async Task<bool> IsExpires(string tokenId)
+        {
+            var token = await GetToken(tokenId);
+            return (token.DateExpired - DateTime.Now) > token.AutoExpired;
+        }
+
+        public async Task<Token> Refresh(string tokenId)
+        {
+            var token = await GetToken(tokenId);
+            return await IssueToken(token.UserId);
         }
     }
 }

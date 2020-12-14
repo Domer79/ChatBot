@@ -14,13 +14,6 @@ namespace Chatbot.Ef.Configurations
 
             b.Property(_ => _.Id)
                 .HasColumnName("message_dialog_id");
-
-            b.Property(_ => _.ClientId)
-                .HasColumnName("client_id")
-                .IsRequired();
-
-            b.Property(_ => _.OperatorId)
-                .HasColumnName("operator_id");
             
             b.Property(_ => _.DateCreated)
                 .HasColumnName("date_created")
@@ -33,16 +26,11 @@ namespace Chatbot.Ef.Configurations
             b.Property(_ => _.DateCompleted)
                 .HasColumnName("date_completed");
 
+            b.Property(_ => _.DialogStatus)
+                .HasColumnName("dialog_status")
+                .HasDefaultValue(1);
+
             b.HasKey(_ => _.Id);
-            b.HasOne(_ => _.Client)
-                .WithMany(_ => _.ClientDialogs)
-                .HasForeignKey(_ => _.ClientId)
-                .OnDelete(DeleteBehavior.NoAction);
-            
-            b.HasOne(_ => _.Operator)
-                .WithMany(_ => _.OperatorDialogs)
-                .HasForeignKey(_ => _.OperatorId)
-                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
