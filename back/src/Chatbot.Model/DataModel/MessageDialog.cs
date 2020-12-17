@@ -7,8 +7,8 @@ namespace Chatbot.Model.DataModel
     {
         public Guid Id { get; set; }
         public DateTime DateCreated { get; set; }
-        public DateTime DateWork { get; set; }
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateWork { get; set; }
+        public DateTime? DateCompleted { get; set; }
         public int DialogStatus { get; set; } 
         public HashSet<Message> Messages { get; set; }
     }

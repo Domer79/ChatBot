@@ -1,28 +1,46 @@
 <mat-sidenav-container class="main-container">
     <mat-sidenav opened mode="side" class="main-left-side">
-        Side nav content
+        <div class="ao-res-logo">
+            <img src="assets/ao_res_logo.svg"/>
+        </div>
+        <div class="main-menu">
+            <mat-nav-list>
+                <mat-list-item style="text-align: center">
+                    <button mat-icon-button class="list-button">
+                        <mat-icon svgIcon="res-chat"></mat-icon>&nbsp;&nbsp;
+                        <span class="side-nav-menu-caption">Диалоги</span>
+                    </button>
+                    <div class="arrow-container">
+                        <mat-icon class="res-menu-active-icon" svgIcon="res-menu-active"></mat-icon>
+                    </div>
+                </mat-list-item>
+            </mat-nav-list>
+        </div>
     </mat-sidenav>
     <mat-sidenav-content >
         <mat-toolbar color="primary">
             <mat-toolbar-row>
-                <span>My App</span>
+                <span>Диалоги</span>
                 <span class="example-spacer"></span>
                 <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
                     <mat-icon>menu</mat-icon>
                 </button>
             </mat-toolbar-row>
-
-            <mat-toolbar-row>
-                <span>Second Line</span>
-                <span class="example-spacer"></span>
-                <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-                    <mat-icon>favorite</mat-icon>
-                </button>
-                <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-                    <mat-icon>share</mat-icon>
-                </button>
-            </mat-toolbar-row>
         </mat-toolbar>
+        <nav mat-tab-nav-bar [backgroundColor]="'primary'">
+            <div class="action-bar">
+                <div>
+                    <a mat-tab-link [active]="activeLink == linkType.all" (click)="activeLink = linkType.all">Все</a>
+                    <a mat-tab-link [active]="activeLink == linkType.opened" (click)="activeLink = linkType.opened">Открытые</a>
+                    <a mat-tab-link [active]="activeLink == linkType.rejected" (click)="activeLink = linkType.rejected">Отклоненные</a>
+                    <a mat-tab-link [active]="activeLink == linkType.worked" (click)="activeLink = linkType.worked">В работе</a>
+                    <a mat-tab-link [active]="activeLink == linkType.closed" (click)="activeLink = linkType.closed">Закрытые</a>
+                </div>
+                <div>
+                    Additional info
+                </div>
+            </div>
+        </nav>
         <router-outlet></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>

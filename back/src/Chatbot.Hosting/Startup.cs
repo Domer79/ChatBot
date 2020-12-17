@@ -5,12 +5,14 @@ using Autofac.Extensions.DependencyInjection;
 using Chatbot.Abstractions;
 using Chatbot.Ef;
 using Chatbot.Hosting.Authentication;
+using Chatbot.Hosting.Hubs;
 using Chatbot.Ioc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,6 +56,9 @@ namespace Chatbot.Hosting
                     .AddAuthenticationSchemes("Token")
                     .Build();
             });
+            services.AddSignalR(options =>
+            {
+            });
             
             services.AddControllers();
         }
@@ -90,6 +95,9 @@ namespace Chatbot.Hosting
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                
+                endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapHub<DialogHub>("/dialog");
             });
         }
 
