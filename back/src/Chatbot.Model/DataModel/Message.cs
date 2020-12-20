@@ -1,4 +1,5 @@
 ﻿using System;
+using Chatbot.Model.Enums;
 
 namespace Chatbot.Model.DataModel
 {

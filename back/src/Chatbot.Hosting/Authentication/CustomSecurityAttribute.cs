@@ -1,5 +1,5 @@
 ﻿using Chatbot.Abstractions;
-using Chatbot.Abstractions.Enums;
+using Chatbot.Model.Enums;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Chatbot.Hosting.Authentication

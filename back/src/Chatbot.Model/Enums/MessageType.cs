@@ -1,4 +1,4 @@
-﻿namespace Chatbot.Model
+﻿namespace Chatbot.Model.Enums
 {
     public enum MessageType
     {

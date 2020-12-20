@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,6 +74,42 @@ namespace Chatbot.Common
         public static async Task<List<T>> ToListAsync<T>(this Task<IEnumerable<T>> source)
         {
             return (await source).ToList();
+        }
+
+        public static EnumInfo[] GetEnumInfos(Type enumType)
+        {
+            var fieldInfos = enumType.GetFields(BindingFlags.Public | BindingFlags.Static);
+            return fieldInfos.Select(_ =>
+                {
+                    var descriptionAttribute =
+                        (DescriptionAttribute) _.GetCustomAttribute(typeof(DescriptionAttribute));
+                    return new EnumInfo()
+                    {
+                        Name = _.Name,
+                        Enum = (Enum) _.GetValue(null),
+                        Description = descriptionAttribute?.Description
+                    };
+                })
+                .ToArray();
+        }
+
+        public static EnumInfo<T>[] GetEnumInfos<T>() where T : Enum
+        {
+            return GetEnumInfos(typeof(T))
+                .Select(_ => new EnumInfo<T>(_) {Value = (T) _.Enum})
+                .ToArray();
+        }
+
+        public static bool IsEnum(Type enumType, Enum value)
+        {
+            var enumInfos = GetEnumInfos(enumType);
+            return enumInfos.Any(enumInfo => enumInfo.Enum.Equals(value));
+        }
+
+        public static bool IsEnum<T>(T value) where T : Enum
+        {
+            var enumInfos = GetEnumInfos<T>();
+            return enumInfos.Any(enumInfo => enumInfo.Value.Equals(value));
         }
     }
 }

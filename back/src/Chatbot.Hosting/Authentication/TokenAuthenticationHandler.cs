@@ -56,6 +56,7 @@ namespace Chatbot.Hosting.Authentication
                 var user = await _authService.GetUserByToken(tokenId);
                 var claims = new List<Claim>()
                 {
+                    new Claim(ClaimTypes.NameIdentifier, user.Login),
                     new Claim(CustomClaimTypes.Token, tokenId),
                     new Claim(CustomClaimTypes.Login, user.Login),
                     new Claim(CustomClaimTypes.UserId, user.Id.ToString())

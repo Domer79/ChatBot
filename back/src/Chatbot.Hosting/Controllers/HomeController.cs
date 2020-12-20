@@ -1,6 +1,6 @@
 ﻿using Chatbot.Abstractions;
-using Chatbot.Abstractions.Enums;
 using Chatbot.Hosting.Authentication;
+using Chatbot.Model.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

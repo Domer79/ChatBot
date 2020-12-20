@@ -21,6 +21,7 @@ namespace Chatbot.Ef
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<QuestionResponse> Questions { get; set; }
         public DbSet<Token> Tokens { get; set; }
+        public DbSet<OperatorLog> OperatorLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

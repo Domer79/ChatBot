@@ -1,4 +1,5 @@
 ﻿using Chatbot.Model.DataModel;
+using Chatbot.Model.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -28,9 +29,17 @@ namespace Chatbot.Ef.Configurations
 
             b.Property(_ => _.DialogStatus)
                 .HasColumnName("dialog_status")
-                .HasDefaultValue(1);
+                .HasDefaultValue(DialogStatus.Started);
+
+            b.Property(_ => _.OperatorId)
+                .HasColumnName("operator_id");
 
             b.HasKey(_ => _.Id);
+
+            b.HasOne(_ => _.Operator)
+                .WithMany(_ => _.Dialogs)
+                .HasForeignKey(_ => _.OperatorId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

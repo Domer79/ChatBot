@@ -32,7 +32,8 @@ namespace Chatbot.Ef.Data
             if (user.Id == Guid.Empty)
             {
                 user.Id = Guid.NewGuid();
-                _context.Users.Add(user);
+                user.IsActive = true;
+                _context.Add(user);
             }
             else
             {

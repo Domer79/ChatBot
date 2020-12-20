@@ -4,14 +4,16 @@ using Chatbot.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Chatbot.Ef.Migrations
 {
     [DbContext(typeof(ChatbotContext))]
-    partial class ChatbotContextModelSnapshot : ModelSnapshot
+    [Migration("20201219093255_8")]
+    partial class _8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,33 +102,6 @@ namespace Chatbot.Ef.Migrations
                     b.HasIndex("OperatorId");
 
                     b.ToTable("message_dialog");
-                });
-
-            modelBuilder.Entity("Chatbot.Model.DataModel.OperatorLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("operator_log_id");
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("action");
-
-                    b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_created")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<Guid>("OperatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("operator_id");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OperatorLogs");
                 });
 
             modelBuilder.Entity("Chatbot.Model.DataModel.Permission", b =>
@@ -297,7 +272,9 @@ namespace Chatbot.Ef.Migrations
                         .HasColumnName("first_name");
 
                     b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasColumnName("is_active");
 
                     b.Property<string>("LastName")

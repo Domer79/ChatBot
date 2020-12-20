@@ -17,5 +17,6 @@ namespace Chatbot.Model.DataModel
         public HashSet<Role> Roles { get; set; }
         public HashSet<UserRole> UserRoles { get; set; }
         public HashSet<Token> Tokens { get; set; }
+        public HashSet<MessageDialog> Dialogs { get; set; }
     }
 }

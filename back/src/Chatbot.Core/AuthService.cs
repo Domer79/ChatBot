@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Chatbot.Abstractions;
 using Chatbot.Abstractions.Core;
 using Chatbot.Abstractions.Core.Services;
-using Chatbot.Abstractions.Enums;
 using Chatbot.Model.DataModel;
+using Chatbot.Model.Enums;
 
 namespace Chatbot.Core
 {

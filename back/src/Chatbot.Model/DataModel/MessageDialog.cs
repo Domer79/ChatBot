@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chatbot.Model.Enums;
 
 namespace Chatbot.Model.DataModel
 {
@@ -9,7 +10,10 @@ namespace Chatbot.Model.DataModel
         public DateTime DateCreated { get; set; }
         public DateTime? DateWork { get; set; }
         public DateTime? DateCompleted { get; set; }
-        public int DialogStatus { get; set; } 
+        public DialogStatus DialogStatus { get; set; } 
+        public Guid? OperatorId { get; set; }
         public HashSet<Message> Messages { get; set; }
+        
+        public User Operator { get; set; }
     }
 }

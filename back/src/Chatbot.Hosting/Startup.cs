@@ -3,6 +3,7 @@ using Autofac.Core;
 using Autofac.Core.Registration;
 using Autofac.Extensions.DependencyInjection;
 using Chatbot.Abstractions;
+using Chatbot.Abstractions.Core.Services;
 using Chatbot.Ef;
 using Chatbot.Hosting.Authentication;
 using Chatbot.Hosting.Hubs;
@@ -26,6 +27,8 @@ namespace Chatbot.Hosting
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
 
+        private ILifetimeScope AutofacContainer { get; set; }
+
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
@@ -39,7 +42,6 @@ namespace Chatbot.Hosting
             {
                 options.EnableEndpointRouting = false;
             });
-            services.AddEntityFrameworkSqlServer();
             services.AddDbContext<ChatbotContext>(options =>
             {
                 options.UseSqlServer(_configuration.GetConnectionString("default"));
@@ -72,7 +74,10 @@ namespace Chatbot.Hosting
         {
             AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             var context = AutofacContainer.Resolve<ChatbotContext>();
+            var permissionService = AutofacContainer.Resolve<IPermissionService>();
+            
             context.Database.Migrate();
+            permissionService.RefreshPolicy();
             
             if (env.IsDevelopment())
             {
@@ -99,16 +104,6 @@ namespace Chatbot.Hosting
                 endpoints.MapHub<ChatHub>("/chat");
                 endpoints.MapHub<DialogHub>("/dialog");
             });
-        }
-
-        public ILifetimeScope AutofacContainer { get; set; }
-    }
-
-    public class AutofacModule : IModule
-    {
-        public void Configure(IComponentRegistryBuilder componentRegistry)
-        {
-            
         }
     }
 }

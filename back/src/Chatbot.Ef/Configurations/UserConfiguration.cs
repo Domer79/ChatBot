@@ -47,8 +47,7 @@ namespace Chatbot.Ef.Configurations
                 .IsRequired();
 
             b.Property(_ => _.IsActive)
-                .HasColumnName("is_active")
-                .HasDefaultValue(true);
+                .HasColumnName("is_active");
             
             b.HasKey(_ => _.Id);
 
