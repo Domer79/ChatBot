@@ -3,11 +3,14 @@ using System.Threading.Tasks;
 using Chatbot.Abstractions;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Common;
+using Chatbot.Hosting.Authentication;
 using Chatbot.Model.DataModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Chatbot.Hosting.Hubs
 {
+    [Authorize]
     public class OperatorHub : HubBase
     {
         private readonly IHubDispatcher _hubDispatcher;
@@ -39,6 +42,7 @@ namespace Chatbot.Hosting.Hubs
 
         public override async Task OnConnectedAsync()
         {
+            await Console.Out.WriteLineAsync($"Connection {Context.ConnectionId} open");
             await _hubDispatcher.OperatorConnect(Context.UserIdentifier);
         }
 

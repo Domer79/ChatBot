@@ -6,7 +6,7 @@ import {
   HttpInterceptor, HttpHeaders
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {environment} from "../environments/environment";
+import {environment} from "../../environments/environment";
 import {TokenService} from "./token.service";
 
 
@@ -23,7 +23,7 @@ export class ApiInterceptor implements HttpInterceptor {
     if (request.url.match(regex)){
       debugger;
       const cloneRequest = request.clone({
-        url: request.url.replace(request.url, `${environment.baseUrl}/${request.url}`),
+        url: request.url.replace(request.url, `${environment.apiUrl}/${request.url}`),
         setHeaders: { token: this.tokenService.tokenId ?? "" },
       });
 

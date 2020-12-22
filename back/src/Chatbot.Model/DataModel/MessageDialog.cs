@@ -7,6 +7,7 @@ namespace Chatbot.Model.DataModel
     public class MessageDialog
     {
         public Guid Id { get; set; }
+        public int Number { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateWork { get; set; }
         public DateTime? DateCompleted { get; set; }

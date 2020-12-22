@@ -9,10 +9,12 @@ using Chatbot.Abstractions.Core.Services;
 using Chatbot.Abstractions.Repositories;
 using Chatbot.Common;
 using Chatbot.Model.DataModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Chatbot.Hosting.Hubs
 {
+    [Authorize]
     public class ChatHub: HubBase
     {
         private readonly IMessageService _messageService;
@@ -74,6 +76,11 @@ namespace Chatbot.Hosting.Hubs
             dialogGroup.AddUser(await GetUser(), Context.ConnectionId, true);
             await _logService.Log(user.Id, $"Operator {user.Login} connect to dialog {messageDialogId}");
             await Clients.Caller.SendAsync("OperatorConnect", "success");
+        }
+
+        public override Task OnConnectedAsync()
+        {
+            return Console.Out.WriteLineAsync($"Connection {Context.ConnectionId} open");
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)

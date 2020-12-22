@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Token from "./contracts/token";
+import Token from "../contracts/token";
 
 @Injectable({
   providedIn: 'root'

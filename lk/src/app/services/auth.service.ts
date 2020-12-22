@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable, of} from "rxjs";
 import {CacheService} from "./cache.service";
 import {map, tap} from "rxjs/operators";
-import Token from "./contracts/token";
+import Token from "../contracts/token";
 import {TokenService} from "./token.service";
 
 @Injectable({

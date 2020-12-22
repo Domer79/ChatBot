@@ -15,6 +15,11 @@ namespace Chatbot.Ef.Configurations
 
             b.Property(_ => _.Id)
                 .HasColumnName("message_dialog_id");
+
+            b.Property(_ => _.Number)
+                .HasColumnName("number")
+                .IsRequired()
+                .UseIdentityColumn();
             
             b.Property(_ => _.DateCreated)
                 .HasColumnName("date_created")
@@ -35,6 +40,9 @@ namespace Chatbot.Ef.Configurations
                 .HasColumnName("operator_id");
 
             b.HasKey(_ => _.Id);
+
+            b.HasIndex(_ => _.Number)
+                .IsUnique();
 
             b.HasOne(_ => _.Operator)
                 .WithMany(_ => _.Dialogs)

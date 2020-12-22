@@ -8,7 +8,7 @@ import {
   UrlTree
 } from "@angular/router";
 import {Observable, of, Subscription} from "rxjs";
-import User from "./contracts/user";
+import User from "../contracts/user";
 import {AuthService} from "./auth.service";
 import {tap} from "rxjs/operators";
 

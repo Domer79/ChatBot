@@ -13,17 +13,18 @@ import {MatListModule} from "@angular/material/list";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MatMenuModule} from "@angular/material/menu";
 import { LoginComponent } from './login/login.component';
-import {AuthGuard} from "./auth-guard.service";
+import {AuthGuard} from "./services/auth-guard.service";
 import {RouterModule} from "@angular/router";
-import {ApiInterceptor} from "./api-interceptor.service";
-import {AuthService} from "./auth.service";
-import {CacheService} from "./cache.service";
+import {ApiInterceptor} from "./services/api-interceptor.service";
+import {AuthService} from "./services/auth.service";
+import {CacheService} from "./services/cache.service";
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {TokenService} from "./token.service";
+import {TokenService} from "./services/token.service";
 import { DialogsComponent } from './dialogs/dialogs.component';
+import {DialogService} from "./services/dialog.service";
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { DialogsComponent } from './dialogs/dialogs.component';
       AuthGuard,
       CacheService,
       TokenService,
+      DialogService,
   ],
   bootstrap: [MainComponent]
 })
