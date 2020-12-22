@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import {MatIconRegistry} from "@angular/material/icon";
 import {DomSanitizer} from "@angular/platform-browser";
+import {Security} from "../security.decorator";
 
 @Component({
   selector: 'main',
   templateUrl: './main.component.html',
   styleUrls:['./main.component.sass']
 })
+@Security("MainPage")
 export class MainComponent {
   title = 'lk';
   activeLink = LinkType.all;

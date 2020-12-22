@@ -69,5 +69,14 @@ namespace Chatbot.Core
 
             return user;
         }
+
+        public async Task<bool> CheckAccessByToken(SecurityPolicy securityPolicy, string tokenId)
+        {
+            var token = await _tokenService.GetToken(tokenId);
+            if (token == null)
+                return false;
+
+            return await CheckAccess(securityPolicy, token.UserId);
+        }
     }
 }

@@ -1,0 +1,13 @@
+<div class="login-container">
+    <form class="login-form" [formGroup]="checkoutForm" (ngSubmit)="logIn(checkoutForm.value)">
+        <mat-form-field class="input login">
+            <mat-label>Логин</mat-label>
+            <input matInput placeholder="Введите логин" formControlName="login"/>
+        </mat-form-field>
+        <mat-form-field class="input password">
+            <mat-label>Пароль</mat-label>
+            <input matInput placeholder="Введите пароль" type="password" formControlName="password"/>
+        </mat-form-field>
+        <button mat-raised-button type="submit" color="primary">Войти</button>
+    </form>
+</div>

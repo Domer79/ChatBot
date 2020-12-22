@@ -13,5 +13,6 @@ namespace Chatbot.Abstractions.Core
         Task<bool> CheckAccess(SecurityPolicy policy, string loginOrEmail);
         Task<bool> ValidateToken(string tokenId);
         Task<User> GetUserByToken(string tokenId);
+        Task<bool> CheckAccessByToken(SecurityPolicy securityPolicy, string tokenId);
     }
 }

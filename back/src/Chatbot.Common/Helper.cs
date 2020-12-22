@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Chatbot.Abstractions.Contracts;
 
 namespace Chatbot.Common
 {
@@ -110,6 +112,17 @@ namespace Chatbot.Common
         {
             var enumInfos = GetEnumInfos<T>();
             return enumInfos.Any(enumInfo => enumInfo.Value.Equals(value));
+        }
+
+        public static string GetLogin(this ClaimsPrincipal claimsPrincipal)
+        {
+            var claim = claimsPrincipal.Claims.FirstOrDefault(_ => _.Type == CustomClaimTypes.Login);
+            return claim?.Value;
+        }
+
+        public static bool IsEmpty(this Guid guid)
+        {
+            return guid == Guid.Empty;
         }
     }
 }

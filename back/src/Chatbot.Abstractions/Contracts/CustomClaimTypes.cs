@@ -1,4 +1,4 @@
-﻿namespace Chatbot.Hosting.Authentication
+﻿namespace Chatbot.Abstractions.Contracts
 {
     public static class CustomClaimTypes
     {

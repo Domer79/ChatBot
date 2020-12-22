@@ -18,7 +18,6 @@ namespace Chatbot.Ef.Data
 
         public async Task<Message> Add(Message message)
         {
-            message.Id = Guid.NewGuid();
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
             return message;

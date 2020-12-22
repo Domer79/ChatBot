@@ -13,7 +13,14 @@ namespace Chatbot.Model.Enums
         [Description("Изменение пользователя")]
         ChangeUser = 3,
         
-        // [Description("Удаление пользователя")]
-        // RemoveUser = 4
+        [Description("Удаление пользователя")]
+        RemoveUser = 4,
+        
+        #region Front pages
+        
+        MainPage = 5,
+        DialogPage = 6,
+        
+        #endregion
     }
 }

@@ -126,7 +126,7 @@ namespace Chatbot.Ef.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OperatorLogs");
+                    b.ToTable("operator_logs");
                 });
 
             modelBuilder.Entity("Chatbot.Model.DataModel.Permission", b =>

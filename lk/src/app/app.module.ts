@@ -10,27 +10,52 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatListModule} from "@angular/material/list";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MatMenuModule} from "@angular/material/menu";
+import { LoginComponent } from './login/login.component';
+import {AuthGuard} from "./auth-guard.service";
+import {RouterModule} from "@angular/router";
+import {ApiInterceptor} from "./api-interceptor.service";
+import {AuthService} from "./auth.service";
+import {CacheService} from "./cache.service";
+import { AccessDeniedComponent } from './access-denied/access-denied.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatInputModule} from "@angular/material/input";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {TokenService} from "./token.service";
+import { DialogsComponent } from './dialogs/dialogs.component';
 
 @NgModule({
   declarations: [
-    MainComponent
+    MainComponent,
+    LoginComponent,
+    AccessDeniedComponent,
+    DialogsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    RouterModule,
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
     MatTabsModule,
     MatListModule,
-    MatMenuModule
+    MatMenuModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatSnackBarModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
+      AuthService,
+      AuthGuard,
+      CacheService,
+      TokenService,
+  ],
   bootstrap: [MainComponent]
 })
 export class AppModule { }

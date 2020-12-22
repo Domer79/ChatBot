@@ -7,5 +7,7 @@ namespace Chatbot.Hosting.Authentication
         public TokenAuthenticationOptions()
         {
         }
+
+        public const string SchemeName = "Token";
     }
 }

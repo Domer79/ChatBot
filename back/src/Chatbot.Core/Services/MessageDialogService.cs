@@ -16,9 +16,9 @@ namespace Chatbot.Core.Services
             _dialogRepository = dialogRepository;
         }
 
-        public Task<MessageDialog> Start(MessageDialog dialog)
+        public Task<MessageDialog> Start()
         {
-            dialog.DialogStatus = DialogStatus.Started;
+            var dialog = new MessageDialog {DialogStatus = DialogStatus.Started};
             return _dialogRepository.Upsert(dialog);
         }
 

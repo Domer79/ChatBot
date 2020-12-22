@@ -57,12 +57,16 @@ namespace Chatbot.Core.Services
         public async Task<bool> ValidatePassword(Guid userId, string password)
         {
             var user = await _userRepository.GetById(userId);
+            if (user == null)
+                throw new ChatbotCoreException($"User by user id {userId} not found", ErrorType.UserNotFound);
             return ValidatePassword(user, password);
         }
 
         public async Task<bool> ValidatePassword(string loginOrEmail, string password)
         {
             var user = await GetByLoginOrEmail(loginOrEmail);
+            if (user == null)
+                throw new ChatbotCoreException($"User by login {loginOrEmail} not found", ErrorType.UserNotFound);
             return ValidatePassword(user, password);
         }
 

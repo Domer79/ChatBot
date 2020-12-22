@@ -21,7 +21,7 @@ namespace Chatbot.Hosting
                 .ConfigureWebHostDefaults(builder =>
                 {
                     builder.UseConfiguration(config)
-                        .UseUrls("http://localhost:5011")
+                        .UseUrls(config.GetValue<string>("BaseUrl"))
                         .UseContentRoot(Directory.GetCurrentDirectory())
                         .UseWebRoot("wwwroot")
                         .UseStartup<Startup>();

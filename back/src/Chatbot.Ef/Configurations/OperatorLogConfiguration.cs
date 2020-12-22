@@ -27,6 +27,7 @@ namespace Chatbot.Ef.Configurations
                 .HasDefaultValueSql("GETDATE()");
 
             b.HasKey(_ => _.Id);
+            b.ToTable("operator_logs");
         }
     }
 }

@@ -19,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Chatbot.Hosting
 {
@@ -55,19 +56,27 @@ namespace Chatbot.Hosting
             {
                 options.DefaultPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes("Token")
+                    .AddAuthenticationSchemes(TokenAuthenticationOptions.SchemeName)
                     .Build();
             });
             services.AddSignalR(options =>
             {
             });
+
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
             
-            services.AddControllers();
+            if (_env.IsDevelopment())
+                services.AddCors();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule(new WebApiModule());
+            builder.RegisterModule<WebApiModule>();
+            builder.RegisterModule<HostingModule>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -81,6 +90,13 @@ namespace Chatbot.Hosting
             
             if (env.IsDevelopment())
             {
+                app.UseCors(builder =>
+                {
+                    builder
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithOrigins("http://localhost:4200");
+                });
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -93,8 +109,7 @@ namespace Chatbot.Hosting
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization();
-            // app.UseWebSockets();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -102,7 +117,7 @@ namespace Chatbot.Hosting
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 
                 endpoints.MapHub<ChatHub>("/chat");
-                endpoints.MapHub<DialogHub>("/dialog");
+                endpoints.MapHub<OperatorHub>("/dialog");
             });
         }
     }

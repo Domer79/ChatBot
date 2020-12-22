@@ -37,6 +37,7 @@ namespace Chatbot.Ioc
             _containerBuilder.RegisterType<RolePermissionRepository>().As<IRolePermissionRepository>();
             _containerBuilder.RegisterType<PermissionRepository>().As<IPermissionRepository>();
             _containerBuilder.RegisterType<UserRoleRepository>().As<IUserRoleRepository>();
+            _containerBuilder.RegisterType<OperatorLogRepository>().As<IOperatorLogRepository>();
         }
 
         private void RegisterServices()
@@ -49,6 +50,7 @@ namespace Chatbot.Ioc
             _containerBuilder.RegisterType<MessageService>().As<IMessageService>();
             _containerBuilder.RegisterType<PermissionService>().As<IPermissionService>();
             _containerBuilder.RegisterType<QuestionService>().As<IQuestionService>();
+            _containerBuilder.RegisterType<OperatorLogService>().As<IOperatorLogService>();
         }
 
         private void RegisterCommon()

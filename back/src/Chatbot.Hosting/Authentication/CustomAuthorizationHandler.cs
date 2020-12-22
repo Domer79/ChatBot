@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions;
+using Chatbot.Abstractions.Contracts;
 using Chatbot.Abstractions.Core;
 using Chatbot.Model.Enums;
 using Microsoft.AspNetCore.Authorization;

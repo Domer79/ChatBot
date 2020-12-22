@@ -1,13 +1,19 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Chatbot.Abstractions.Contracts;
 using Chatbot.Model.DataModel;
 
 namespace Chatbot.Abstractions
 {
     public interface IHubDispatcher
     {
-        Task<Message> DialogCreate(Message message);
+        DialogGroup GetDialogGroup(Guid messageDialogId);
+        Task<DialogGroup> CreateGroup(User user, string connectionId);
         Task OperatorConnect(string userIdentifier);
-        Task OperatorDisconnect(string? contextUserIdentifier);
+        Task OperatorDisconnect(string? userIdentifier);
+        DialogGroup[] GetDialogGroups(string connectionId);
+        DialogGroup[] GetDialogGroups();
+        bool CheckOperator(User user);
     }
 }

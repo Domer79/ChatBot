@@ -5,7 +5,7 @@ namespace Chatbot.Abstractions.Core.Services
 {
     public interface IMessageDialogService
     {
-        Task<MessageDialog> Start(MessageDialog dialog);
+        Task<MessageDialog> Start();
         Task<MessageDialog> Activate(MessageDialog dialog);
         Task<MessageDialog> Reject(MessageDialog dialog);
         Task<MessageDialog> Close(MessageDialog dialog);
