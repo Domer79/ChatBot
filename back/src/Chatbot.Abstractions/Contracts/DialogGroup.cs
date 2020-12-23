@@ -61,6 +61,9 @@ namespace Chatbot.Abstractions.Contracts
         public string Name => _name;
         public Guid MessageDialogId => _dialog.Id;
         public int MemberCount => _dialogUsers.Count;
+        public DateTime LastMessageTime { get; set; }
+        
+        public bool IsDeprecated => (DateTime.Now - LastMessageTime) > TimeSpan.FromMinutes(10);
 
         public bool UserExist(User user)
         {

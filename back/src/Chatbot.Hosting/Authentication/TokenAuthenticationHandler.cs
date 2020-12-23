@@ -32,22 +32,10 @@ namespace Chatbot.Hosting.Authentication
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            string tempTokenId = null;
-            if (Request.HttpContext.WebSockets.IsWebSocketRequest)
-                if (!Request.Headers.ContainsKey("token"))
-                {
-                    // TODO: Пока создаем временного пользователя
-                    // return AuthenticateResult.Fail("Unauthorized");
-
-                    var user = await _userService.Upsert(GetTempUser());
-                    var token = await _tokenService.IssueToken(user.Id);
-                    tempTokenId = token.TokenId;
-                }
-            
-            var tokenId = tempTokenId ?? Request.Headers["token"];
+            var tokenId = Request.Headers["token"];
             if (string.IsNullOrEmpty(tokenId))
             {
-                return AuthenticateResult.NoResult();
+                return AuthenticateResult.Fail("Unauthorized");
             }
             
             try
@@ -74,19 +62,6 @@ namespace Chatbot.Hosting.Authentication
             {
                 return AuthenticateResult.Fail(ex.Message);
             }
-        }
-        
-        private User GetTempUser()
-        {
-            return new User()
-            {
-                Login = Guid.NewGuid().ToString("N"),
-                Email = Guid.NewGuid().ToString("N"),
-                FirstName = Guid.NewGuid().ToString("N"),
-                LastName = Guid.NewGuid().ToString("N"),
-                MiddleName = Guid.NewGuid().ToString("N"),
-                IsActive = true,
-            };
         }
     }
 }

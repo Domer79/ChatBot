@@ -26,13 +26,11 @@ export class AuthService {
     if (this.cacheService.contains(policy))
       return of(this.cacheService.get<boolean>(policy));
 
-    debugger;
     return this.httpClient.get<boolean>("api/Auth/CheckAccess", { params: { policy } })
         .pipe(tap(_ => this.cacheService.set(policy, _)));
   }
 
   logIn(login: string, password: string): Observable<boolean> {
-    debugger;
     return this.httpClient.post<any>("api/Auth/Login", {
       loginOrEmail: login,
       password

@@ -10,10 +10,15 @@ namespace Chatbot.Abstractions
     {
         DialogGroup GetDialogGroup(Guid messageDialogId);
         Task<DialogGroup> CreateGroup(User user, string connectionId);
-        Task OperatorConnect(string userIdentifier);
-        Task OperatorDisconnect(string? userIdentifier);
         DialogGroup[] GetDialogGroups(string connectionId);
         DialogGroup[] GetDialogGroups();
         bool CheckOperator(User user);
+        void ConfigureDialogCreated(Func<Guid, Task> dialogCreated);
+        Task RemoveDialogGroup(DialogGroup dialogGroup);
+    }
+
+    public interface IDialogCreated
+    {
+        Task DialogCreated(Guid messageDialogId);
     }
 }

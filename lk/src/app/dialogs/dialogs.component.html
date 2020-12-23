@@ -1,2 +1,28 @@
 <p>dialogs works!</p>
 
+<mat-card *ngFor="let dialog of dialogs | async; index as i" tabindex="i" class="card">
+    <mat-card-subtitle>{{dialog.firstMessage}}</mat-card-subtitle>
+    <mat-card-content>
+        <div class="dialog-info-container">
+            <div class="dialog-number">{{dialog.number}}</div>
+            <div class="dialog-status">{{dialog.dialogStatus.toString()}}</div>
+            <div class="dialog-date-created">{{dialog.dateCreated | date }}</div>
+            <div class="dialog-date-closed">{{dialog.dateCompleted | date}}</div>
+            <div class="dialog-client">{{dialog.clientId}}</div>
+            <div class="dialog-actions">
+                <div class="dialog-work">
+                    <button mat-button>Взять в работу</button>
+                </div>
+                <div class="dialog-close">
+                    <button mat-button>Отклонить</button>
+                </div>
+                <div class="dialog-close">
+                    <button mat-button (click)="openChat()">Открыть</button>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+<!--    <mat-card-actions align="end">-->
+<!--        -->
+<!--    </mat-card-actions>-->
+</mat-card>

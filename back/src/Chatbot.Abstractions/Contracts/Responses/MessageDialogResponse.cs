@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Chatbot.Model.Enums;
 
-namespace Chatbot.Model.DataModel
+namespace Chatbot.Abstractions.Contracts.Responses
 {
-    public class MessageDialog
+    public class MessageDialogResponse
     {
         public Guid Id { get; set; }
         public int Number { get; set; }
@@ -13,9 +12,6 @@ namespace Chatbot.Model.DataModel
         public DateTime? DateCompleted { get; set; }
         public DialogStatus DialogStatus { get; set; } 
         public Guid? OperatorId { get; set; }
-        public Guid? ClientId { get; set; }
-        public HashSet<Message> Messages { get; set; }
-        
-        public User Operator { get; set; }
+        public string FirstMessage { get; set; }
     }
 }

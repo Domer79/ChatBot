@@ -8,7 +8,7 @@ export enum MessageStatus{
   sending,
 
   // Доставлено
-  delivered,
+  saved,
 
   // Получено
   received

@@ -12,12 +12,12 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Chatbot.Hosting.Hubs
 {
-    public class HubDispatcher : IHubDispatcher
+    public class HubDispatcher : IHubDispatcher, IDialogCreated
     {
         private readonly IMessageDialogService _messageDialogService;
         private readonly IMessageService _messageService;
-        private readonly List<string> _activeOperators = new();
         private readonly List<DialogGroup> _dialogGroups = new();
+        private Func<Guid, Task> _dialogCreated; 
 
         public HubDispatcher( 
             IMessageDialogService messageDialogService,
@@ -35,23 +35,27 @@ namespace Chatbot.Hosting.Hubs
 
         public async Task<DialogGroup> CreateGroup(User user, string connectionId)
         {
-            var messageDialog = await _messageDialogService.Start();
+            var messageDialog = await _messageDialogService.Start(user.Id);
             var dialogGroup = new DialogGroup(messageDialog);
             dialogGroup.AddUser(user, connectionId);
             _dialogGroups.Add(dialogGroup);
-            return dialogGroup;        
+            return dialogGroup;
         }
 
-        public Task OperatorConnect(string userIdentifier)
+        public void ConfigureDialogCreated(Func<Guid, Task> dialogCreated)
         {
-            _activeOperators.Add(userIdentifier);
-            return Task.CompletedTask;
+            _dialogCreated = dialogCreated;
         }
 
-        public Task OperatorDisconnect(string? userIdentifier)
+        public async Task RemoveDialogGroup(DialogGroup dialogGroup)
         {
-            _activeOperators.Remove(userIdentifier);
-            return Task.CompletedTask;
+            _dialogGroups.Remove(dialogGroup);
+            await _messageDialogService.Close(dialogGroup.MessageDialogId);
+        }
+
+        public Task DialogCreated(Guid messageDialogId)
+        {
+            return _dialogCreated?.Invoke(messageDialogId);
         }
 
         public DialogGroup[] GetDialogGroups(string connectionId)

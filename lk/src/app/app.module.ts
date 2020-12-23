@@ -25,13 +25,17 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {TokenService} from "./services/token.service";
 import { DialogsComponent } from './dialogs/dialogs.component';
 import {DialogService} from "./services/dialog.service";
+import {MatCardModule} from "@angular/material/card";
+import { ClientChatDialogComponent } from './client-chat-dialog/client-chat-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
     MainComponent,
     LoginComponent,
     AccessDeniedComponent,
-    DialogsComponent
+    DialogsComponent,
+    ClientChatDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -49,6 +53,8 @@ import {DialogService} from "./services/dialog.service";
     MatInputModule,
     ReactiveFormsModule,
     MatSnackBarModule,
+    MatCardModule,
+    MatDialogModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },

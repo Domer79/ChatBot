@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {QuestionsProviderService} from '../../../services/questions-provider.service';
+import {QuestionsProviderService} from '../../services/questions-provider.service';
 import {Observable} from 'rxjs';
 import Question from '../../../abstracts/Question';
-import {PageDispatcherService} from '../../../services/page-dispatcher.service';
+import {PageDispatcherService} from '../../services/page-dispatcher.service';
 
 @Component({
   selector: 'questions',

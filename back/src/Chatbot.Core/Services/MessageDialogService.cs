@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Chatbot.Abstractions.Contracts;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Abstractions.Repositories;
 using Chatbot.Model.DataModel;
@@ -22,6 +24,17 @@ namespace Chatbot.Core.Services
             return _dialogRepository.Upsert(dialog);
         }
 
+        public Task<MessageDialog> Start(Guid clientId)
+        {
+            var dialog = new MessageDialog
+            {
+                DialogStatus = DialogStatus.Started,
+                ClientId = clientId
+            };
+
+            return _dialogRepository.Upsert(dialog);
+        }
+
         public Task<MessageDialog> Activate(MessageDialog dialog)
         {
             dialog.DialogStatus = DialogStatus.Active;
@@ -38,6 +51,24 @@ namespace Chatbot.Core.Services
         {
             dialog.DialogStatus = DialogStatus.Closed;
             return _dialogRepository.Upsert(dialog);
+        }
+
+        public async Task<MessageDialog> Activate(Guid messageDialogId)
+        {
+            var dialog = await GetDialog(messageDialogId);
+            return await Activate(dialog);
+        }
+
+        public async Task<MessageDialog> Reject(Guid messageDialogId)
+        {
+            var dialog = await GetDialog(messageDialogId);
+            return await Reject(dialog);
+        }
+
+        public async Task<MessageDialog> Close(Guid messageDialogId)
+        {
+            var dialog = await GetDialog(messageDialogId);
+            return await Close(dialog);
         }
 
         public Task<MessageDialog[]> GetAll()
@@ -63,6 +94,23 @@ namespace Chatbot.Core.Services
         public Task<MessageDialog[]> GetClosed()
         {
             return _dialogRepository.GetByStatus(DialogStatus.Closed);
+        }
+
+        public async Task<Page<MessageDialog>> GetPage(int number, int size)
+        {
+            var dialogs = await _dialogRepository.GetPage(number, size);
+            var totalCount = await _dialogRepository.GetTotalCount();
+
+            return new Page<MessageDialog>()
+            {
+                Items = dialogs,
+                TotalCount = totalCount
+            };
+        }
+
+        public Task<MessageDialog> GetDialog(Guid messageDialogId)
+        {
+            return _dialogRepository.GetById(messageDialogId);
         }
     }
 }

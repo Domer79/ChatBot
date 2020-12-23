@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {QuestionsProviderService} from '../../../services/questions-provider.service';
+import {QuestionsProviderService} from '../../services/questions-provider.service';
 
 @Component({
   selector: 'questions-header',

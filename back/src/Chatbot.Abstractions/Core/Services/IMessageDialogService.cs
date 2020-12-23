@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Chatbot.Abstractions.Contracts;
 using Chatbot.Model.DataModel;
 
 namespace Chatbot.Abstractions.Core.Services
@@ -6,14 +8,20 @@ namespace Chatbot.Abstractions.Core.Services
     public interface IMessageDialogService
     {
         Task<MessageDialog> Start();
+        Task<MessageDialog> Start(Guid clientId);
         Task<MessageDialog> Activate(MessageDialog dialog);
         Task<MessageDialog> Reject(MessageDialog dialog);
         Task<MessageDialog> Close(MessageDialog dialog);
+        Task<MessageDialog> Activate(Guid messageDialogId);
+        Task<MessageDialog> Reject(Guid messageDialogId);
+        Task<MessageDialog> Close(Guid messageDialogId);
         
         Task<MessageDialog[]> GetAll();
         Task<MessageDialog[]> GetStarted();
         Task<MessageDialog[]> GetActivities();
         Task<MessageDialog[]> GetRejected();
         Task<MessageDialog[]> GetClosed();
+        Task<Page<MessageDialog>> GetPage(int number, int size);
+        Task<MessageDialog> GetDialog(Guid messageDialogId);
     }
 }

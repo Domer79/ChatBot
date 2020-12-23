@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ClientMsgDispatcher} from '../../services/client-msg-dispatcher.service';
+import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import {MessageType} from '../../misc/message-type';
 
 @Component({

@@ -1,11 +1,11 @@
 ﻿namespace Chatbot.Model.Enums
 {
     public enum MessageStatus{
-        // Отправляется
+        // Отправлен
         Sending = 0,
 
         // Доставлено
-        Delivered = 1,
+        Saved = 1,
 
         // Получено
         Received = 2

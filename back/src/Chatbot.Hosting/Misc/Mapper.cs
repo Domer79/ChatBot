@@ -6,19 +6,21 @@ namespace Chatbot.Hosting.Misc
 {
     public class Mapper
     {
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public Mapper()
         {
             _mapper = Configure();
         }
 
-        private IMapper Configure()
+        private static IMapper Configure()
         {
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<User, UserResponse>();
                 cfg.CreateMap<Token, TokenResponse>();
+                cfg.CreateMap<MessageDialog, MessageDialogResponse>();
+                cfg.CreateMap<Message, MessageResponse>();
             });
 
             return config.CreateMapper();

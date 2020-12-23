@@ -39,6 +39,9 @@ namespace Chatbot.Ef.Configurations
             b.Property(_ => _.OperatorId)
                 .HasColumnName("operator_id");
 
+            b.Property(_ => _.ClientId)
+                .HasColumnName("client_id");
+
             b.HasKey(_ => _.Id);
 
             b.HasIndex(_ => _.Number)

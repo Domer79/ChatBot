@@ -29,26 +29,33 @@ namespace Chatbot.Hosting.Hubs
             _logService = logService;
             _messageService = messageService;
             _messageDialogService = messageDialogService;
+            
+            _hubDispatcher.ConfigureDialogCreated(DialogCreated);
         }
 
-        public async Task<Message[]> TakeToWork(MessageDialog dialog)
+        private Task DialogCreated(Guid messageDialogId)
+        {
+            return Clients.All.SendAsync("dialogCreated", messageDialogId);
+        }
+
+        public async Task TakeToWork(MessageDialog dialog)
         {
             var dialogOperator = await GetUser();
             await _logService.Log(dialogOperator.Id, $"Dialog {dialog.Id} taken to work");
             dialog.OperatorId = dialogOperator.Id;
             await _messageDialogService.Activate(dialog);
-            return await _messageService.GetDialogMessages(dialog.Id);
+
+            await Clients.Others.SendAsync("dialogTaken", dialog.Id, dialogOperator.Id);
         }
 
         public override async Task OnConnectedAsync()
         {
             await Console.Out.WriteLineAsync($"Connection {Context.ConnectionId} open");
-            await _hubDispatcher.OperatorConnect(Context.UserIdentifier);
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            await _hubDispatcher.OperatorDisconnect(Context.UserIdentifier);
+            await Console.Out.WriteLineAsync($"Connection {Context.ConnectionId} closed");
         }
     }
 }

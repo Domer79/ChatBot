@@ -1,4 +1,8 @@
-﻿using Autofac;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Autofac;
 using Autofac.Core;
 using Autofac.Core.Registration;
 using Autofac.Extensions.DependencyInjection;
@@ -59,9 +63,17 @@ namespace Chatbot.Hosting
                     .AddAuthenticationSchemes(TokenAuthenticationOptions.SchemeName)
                     .Build();
             });
-            services.AddSignalR(options =>
-            {
-            });
+            services.AddSignalR()
+                .AddHubOptions<ChatHub>(options =>
+                {
+                    options.EnableDetailedErrors = true;
+                    options.ClientTimeoutInterval = TimeSpan.FromMinutes(5);
+                })
+                .AddHubOptions<OperatorHub>(options =>
+                {
+                    options.EnableDetailedErrors = true;
+                    options.ClientTimeoutInterval = TimeSpan.FromMinutes(20);
+                });
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -69,8 +81,7 @@ namespace Chatbot.Hosting
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
             
-            if (_env.IsDevelopment())
-                services.AddCors();
+            services.AddCors();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -88,22 +99,26 @@ namespace Chatbot.Hosting
             context.Database.Migrate();
             permissionService.RefreshPolicy();
             
+            app.UseCors(builder =>
+            {
+                builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .WithOrigins("http://localhost:4200", "http://localhost:4201")
+                    .SetIsOriginAllowed(h => true);
+            });
+            app.Use(async (context, next) => await AuthQueryStringToHeader(context, next));
+            app.Use(async (context, next) => await ErrorHandle(context, next));
             if (env.IsDevelopment())
             {
-                app.UseCors(builder =>
-                {
-                    builder
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .WithOrigins("http://localhost:4200");
-                });
                 app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseHsts();
             }
-
+            
             app.UseRouting();
             app.UseMvc();
             app.UseStaticFiles();
@@ -118,7 +133,40 @@ namespace Chatbot.Hosting
                 
                 endpoints.MapHub<ChatHub>("/chat");
                 endpoints.MapHub<OperatorHub>("/dialog");
+                endpoints.MapHub<TokenHub>("/token").AllowAnonymous();
             });
+        }
+
+        private async Task ErrorHandle(HttpContext context, Func<Task> next)
+        {
+            try
+            {
+                await next.Invoke();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        private async Task AuthQueryStringToHeader(HttpContext context, Func<Task> next)
+        {
+            var qs = context.Request.QueryString;
+
+            if (string.IsNullOrWhiteSpace(context.Request.Headers["token"]) && qs.HasValue)
+            {
+                var token = (from pair in qs.Value.TrimStart('?').Split('&')
+                    where pair.StartsWith("token=")
+                    select pair.Substring(6)).FirstOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(token))
+                {
+                    context.Request.Headers.Add("token", token);
+                }
+            }
+
+            await next.Invoke();
         }
     }
 }

@@ -18,10 +18,8 @@ export class ApiInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    debugger;
     var regex = /^api\//i;
     if (request.url.match(regex)){
-      debugger;
       const cloneRequest = request.clone({
         url: request.url.replace(request.url, `${environment.apiUrl}/${request.url}`),
         setHeaders: { token: this.tokenService.tokenId ?? "" },

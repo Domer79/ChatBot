@@ -18,8 +18,17 @@ namespace Chatbot.Model.Enums
         
         #region Front pages
         
+        [Description("Главная страница")]
         MainPage = 5,
+        
+        [Description("Страница диалогов")]
         DialogPage = 6,
+        
+        #endregion
+
+        #region Действия операторов
+        
+        OperatorConnect = 7,
         
         #endregion
     }

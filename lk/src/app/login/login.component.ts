@@ -31,9 +31,7 @@ export class LoginComponent implements OnInit {
   }
 
   logIn(data: any): void {
-    debugger;
     this.authService.logIn(data.login, data.password).subscribe(async result => {
-      debugger;
       if (!result) {
         this._snackBar.open(`${data.login} LogIn failed!`);
         return;

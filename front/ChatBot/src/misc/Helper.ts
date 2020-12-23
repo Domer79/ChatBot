@@ -18,4 +18,8 @@ export default class Helper{
 
     return '';
   }
+
+  public static guidEmpty(): string{
+    return '00000000-0000-0000-0000-000000000000';
+  }
 }

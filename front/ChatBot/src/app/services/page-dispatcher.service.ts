@@ -1,5 +1,5 @@
 import {Injectable, Type} from '@angular/core';
-import Page from '../abstracts/Page';
+import Page from '../../abstracts/Page';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {PageSource} from './PageSource';
 

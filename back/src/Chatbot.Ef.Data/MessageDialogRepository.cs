@@ -22,6 +22,16 @@ namespace Chatbot.Ef.Data
             return _context.Dialogs.ToArrayAsync();
         }
 
+        public Task<MessageDialog[]> GetPage(int pageNumber, int pageSize)
+        {
+            return _context.Dialogs.Skip(pageNumber * pageSize - pageSize).Take(pageSize).ToArrayAsync();
+        }
+
+        public Task<long> GetTotalCount()
+        {
+            return _context.Dialogs.LongCountAsync();
+        }
+
         public Task<MessageDialog[]> GetByStatus(DialogStatus status)
         {
             return _context.Dialogs.Where(_ => _.DialogStatus == status).ToArrayAsync();
@@ -47,6 +57,11 @@ namespace Chatbot.Ef.Data
         {
             _context.Dialogs.Remove(dialog);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public Task<MessageDialog> GetById(Guid messageDialogId)
+        {
+            return _context.Dialogs.FindAsync(messageDialogId).AsTask();
         }
     }
 }

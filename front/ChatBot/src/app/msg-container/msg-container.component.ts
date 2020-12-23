@@ -2,9 +2,9 @@ import {Component, Input, Output, EventEmitter, OnInit, ElementRef} from '@angul
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {Observable} from 'rxjs';
 import Message from '../../abstracts/message';
-import {ClientMsgDispatcher} from '../../services/client-msg-dispatcher.service';
+import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import {map, tap} from 'rxjs/operators';
-import {PageDispatcherService} from '../../services/page-dispatcher.service';
+import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
 
 @Component({

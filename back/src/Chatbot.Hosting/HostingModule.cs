@@ -9,8 +9,8 @@ namespace Chatbot.Hosting
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<HubDispatcher>().As<IHubDispatcher>();
-            builder.RegisterType<Mapper>().AsSelf();
+            builder.RegisterType<HubDispatcher>().As<IHubDispatcher>().SingleInstance();
+            builder.RegisterType<Mapper>().AsSelf().SingleInstance();
         }
     }
 }

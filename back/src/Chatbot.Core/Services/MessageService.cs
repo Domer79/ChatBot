@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Abstractions.Repositories;
+using Chatbot.Core.Exceptions;
 using Chatbot.Model.DataModel;
 
 namespace Chatbot.Core.Services
@@ -17,6 +18,9 @@ namespace Chatbot.Core.Services
 
         public Task<Message> Add(Message message)
         {
+            if (message.Id == Guid.Empty)
+                throw new ChatbotCoreException("MessageId must be set");
+            
             return _messageRepository.Add(message);
         }
 
@@ -28,6 +32,11 @@ namespace Chatbot.Core.Services
         public Task<Message[]> GetDialogMessages(Guid dialogId)
         {
             return _messageRepository.GetDialogMessages(dialogId);
+        }
+
+        public Task<Message[]> GetFirstMessages(Guid[] dialogIds)
+        {
+            return _messageRepository.GetFirstMessages(dialogIds);
         }
     }
 }

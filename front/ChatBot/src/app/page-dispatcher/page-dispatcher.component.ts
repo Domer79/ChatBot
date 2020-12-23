@@ -1,7 +1,7 @@
 import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import Page from '../../abstracts/Page';
 import {ChatDialogComponent} from '../dialog/chat-dialog.component';
-import {PageDispatcherService} from '../../services/page-dispatcher.service';
+import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {PageHostDirective} from '../../directives/page-host.directive';
 import {Observable, Subscription} from 'rxjs';
 
