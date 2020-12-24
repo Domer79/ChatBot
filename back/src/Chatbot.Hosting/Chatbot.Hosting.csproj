@@ -26,6 +26,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Chatbot.Common\Chatbot.Common.csproj" />
+      <ProjectReference Include="..\Chatbot.Ef.Postgres\Chatbot.Ef.Postgres.csproj" />
       <ProjectReference Include="..\Chatbot.Ef\Chatbot.Ef.csproj" />
       <ProjectReference Include="..\Chatbot.Ioc\Chatbot.Ioc.csproj" />
     </ItemGroup>
