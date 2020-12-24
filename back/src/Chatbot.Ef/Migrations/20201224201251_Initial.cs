@@ -8,6 +8,20 @@ namespace Chatbot.Ef.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "operator_logs",
+                columns: table => new
+                {
+                    operator_log_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    operator_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    action = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    date_created = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_operator_logs", x => x.operator_log_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "permission",
                 columns: table => new
                 {
@@ -18,6 +32,26 @@ namespace Chatbot.Ef.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_permission", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "question_response",
+                columns: table => new
+                {
+                    question_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    question = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    response = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    parent_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    date_created = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_question_response", x => x.question_id);
+                    table.ForeignKey(
+                        name: "FK_question_response_question_response_parent_id",
+                        column: x => x.parent_id,
+                        principalTable: "question_response",
+                        principalColumn: "question_id");
                 });
 
             migrationBuilder.CreateTable(
@@ -38,11 +72,14 @@ namespace Chatbot.Ef.Migrations
                 columns: table => new
                 {
                     user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    login = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     first_name = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     last_name = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     middle_name = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     date_created = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
-                    password = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                    password = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,23 +116,41 @@ namespace Chatbot.Ef.Migrations
                 columns: table => new
                 {
                     message_dialog_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    client_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    operator_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    number = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     date_created = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
-                    date_work = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    date_completed = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    date_work = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    date_completed = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    dialog_status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    operator_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    client_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_message_dialog", x => x.message_dialog_id);
                     table.ForeignKey(
-                        name: "FK_message_dialog_user_client_id",
-                        column: x => x.client_id,
-                        principalTable: "user",
-                        principalColumn: "user_id");
-                    table.ForeignKey(
                         name: "FK_message_dialog_user_operator_id",
                         column: x => x.operator_id,
+                        principalTable: "user",
+                        principalColumn: "user_id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "token",
+                columns: table => new
+                {
+                    token_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    date_created = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    date_expired = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    auto_expired = table.Column<TimeSpan>(type: "time", nullable: false),
+                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_token", x => x.token_id);
+                    table.ForeignKey(
+                        name: "FK_token_user_user_id",
+                        column: x => x.user_id,
                         principalTable: "user",
                         principalColumn: "user_id");
                 });
@@ -134,8 +189,9 @@ namespace Chatbot.Ef.Migrations
                     type = table.Column<int>(type: "int", nullable: false),
                     owner = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<int>(type: "int", nullable: false),
-                    time = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    message_dialog_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    time = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    message_dialog_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    sender = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -154,9 +210,10 @@ namespace Chatbot.Ef.Migrations
                 column: "message_dialog_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_message_dialog_client_id",
+                name: "IX_message_dialog_number",
                 table: "message_dialog",
-                column: "client_id");
+                column: "number",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_message_dialog_operator_id",
@@ -166,12 +223,47 @@ namespace Chatbot.Ef.Migrations
             migrationBuilder.CreateIndex(
                 name: "UQ_permission_politic",
                 table: "permission",
-                column: "politic");
+                column: "politic",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_question_response_parent_id",
+                table: "question_response",
+                column: "parent_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_question_response_question",
+                table: "question_response",
+                column: "question",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_role_Name",
+                table: "role",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_role_permission_permission_id",
                 table: "role_permission",
                 column: "permission_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_token_user_id",
+                table: "token",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_email",
+                table: "user",
+                column: "email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_login",
+                table: "user",
+                column: "login",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_user_role_role_id",
@@ -185,7 +277,16 @@ namespace Chatbot.Ef.Migrations
                 name: "message");
 
             migrationBuilder.DropTable(
+                name: "operator_logs");
+
+            migrationBuilder.DropTable(
+                name: "question_response");
+
+            migrationBuilder.DropTable(
                 name: "role_permission");
+
+            migrationBuilder.DropTable(
+                name: "token");
 
             migrationBuilder.DropTable(
                 name: "user_role");
