@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatbot.Ef.Data", "Chatbot.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatbot.Abstractions", "Chatbot.Abstractions\Chatbot.Abstractions.csproj", "{B8F221DA-0087-4426-BC5A-8742AA6B7F69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatbot.Ef.Postgres", "Chatbot.Ef.Postgres\Chatbot.Ef.Postgres.csproj", "{7456C3A4-023A-403E-988B-BEBA7DC8A30B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,10 +63,6 @@ Global
 		{B8F221DA-0087-4426-BC5A-8742AA6B7F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8F221DA-0087-4426-BC5A-8742AA6B7F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8F221DA-0087-4426-BC5A-8742AA6B7F69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7456C3A4-023A-403E-988B-BEBA7DC8A30B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7456C3A4-023A-403E-988B-BEBA7DC8A30B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7456C3A4-023A-403E-988B-BEBA7DC8A30B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7456C3A4-023A-403E-988B-BEBA7DC8A30B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

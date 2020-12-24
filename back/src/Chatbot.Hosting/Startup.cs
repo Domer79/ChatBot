@@ -47,15 +47,9 @@ namespace Chatbot.Hosting
             {
                 options.EnableEndpointRouting = false;
             });
-            var provider = _configuration.GetValue<string>("Provider");
-            services.AddDbContext<ChatbotContext>(options => _ = provider switch
+            services.AddDbContext<ChatbotContext>(options =>
             {
-                "SqlServer" => options.UseSqlServer(
-                    _configuration.GetConnectionString("default"),
-                    x => x.MigrationsAssembly("Chatbot.Ef")),
-                "PostgreSql" => options.UseNpgsql(_configuration.GetConnectionString("PostgresConnection"),
-                    x => x.MigrationsAssembly("Chatbot.Ef.Postgres")),
-                _ => throw new ArgumentOutOfRangeException(nameof(provider))
+                options.UseSqlServer(_configuration.GetConnectionString("default"));
             });
             services.AddSingleton<IAuthenticationHandler, TokenAuthenticationHandler>();
             services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
