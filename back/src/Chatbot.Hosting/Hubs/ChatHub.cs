@@ -16,6 +16,7 @@ using Chatbot.Model.DataModel;
 using Chatbot.Model.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 
 namespace Chatbot.Hosting.Hubs
 {
@@ -29,6 +30,7 @@ namespace Chatbot.Hosting.Hubs
         private readonly IHubDispatcher _hubDispatcher;
         private readonly IHubContext<OperatorHub> _operatorHubContext;
         private readonly IOperatorLogService _logService;
+        private readonly ILogger<ChatHub> _logger;
         private readonly Mapper _mapper;
 
         public ChatHub(IMessageService messageService,
@@ -38,6 +40,7 @@ namespace Chatbot.Hosting.Hubs
             IHubDispatcher hubDispatcher,
             IHubContext<OperatorHub> operatorHubContext,
             IOperatorLogService logService,
+            ILogger<ChatHub> logger,
             Mapper mapper)
         : base(userService)
         {
@@ -48,40 +51,49 @@ namespace Chatbot.Hosting.Hubs
             _hubDispatcher = hubDispatcher;
             _operatorHubContext = operatorHubContext;
             _logService = logService;
+            _logger = logger;
             _mapper = mapper;
         }
 
         public async Task Send(Message message)
         {
-            var user = await GetUser();
-            message.Sender = user.Id;
-
-            DialogGroup dialogGroup;
-            if (message.MessageDialogId.IsEmpty())
+            try
             {
-                dialogGroup = await _hubDispatcher.CreateGroup(user, Context.ConnectionId);
-                message.MessageDialogId = dialogGroup.MessageDialogId;
-                await Groups.AddToGroupAsync(Context.ConnectionId, dialogGroup.Name);
-                await _operatorHubContext.Clients.All.SendAsync("dialogCreated", dialogGroup.MessageDialogId);
-            }
+                var user = await GetUser();
+                message.Sender = user.Id;
+
+                DialogGroup dialogGroup;
+                if (message.MessageDialogId.IsEmpty())
+                {
+                    dialogGroup = await _hubDispatcher.CreateGroup(user, Context.ConnectionId);
+                    message.MessageDialogId = dialogGroup.MessageDialogId;
+                    await Groups.AddToGroupAsync(Context.ConnectionId, dialogGroup.Name);
+                    await _operatorHubContext.Clients.All.SendAsync("dialogCreated", dialogGroup.MessageDialogId);
+                }
             
-            dialogGroup = _hubDispatcher.GetDialogGroup(message.MessageDialogId);
-            if (dialogGroup == null)
-                throw new InvalidOperationException($"Group by message dialog id '{message.MessageDialogId}' not found");
-            if (!dialogGroup.UserExist(user))
-            {
-                throw new InvalidOperationException($"User {user.Login} not connected in chat room");
+                dialogGroup = _hubDispatcher.GetDialogGroup(message.MessageDialogId);
+                if (dialogGroup == null)
+                    throw new InvalidOperationException($"Group by message dialog id '{message.MessageDialogId}' not found");
+                if (!dialogGroup.UserExist(user))
+                {
+                    throw new InvalidOperationException($"User {user.Login} not connected in chat room");
+                }
+
+                message.Status = MessageStatus.Saved;
+                message = await _messageService.Add(message);
+                dialogGroup.LastMessageTime = message.Time;
+
+                await Clients.Caller.SendAsync("meta", _mapper.Map<MessageResponse>(message));
+
+                if (dialogGroup.MemberCount > 1)
+                {
+                    await Clients.OthersInGroup(dialogGroup.Name).SendAsync("send", _mapper.Map<MessageResponse>(message));
+                }
             }
-
-            message.Status = MessageStatus.Saved;
-            message = await _messageService.Add(message);
-            dialogGroup.LastMessageTime = message.Time;
-
-            await Clients.Caller.SendAsync("meta", _mapper.Map<MessageResponse>(message));
-
-            if (dialogGroup.MemberCount > 1)
+            catch (Exception e)
             {
-                await Clients.OthersInGroup(dialogGroup.Name).SendAsync("send", _mapper.Map<MessageResponse>(message));
+                _logger.LogError(e.Message);
+                throw;
             }
         }
 

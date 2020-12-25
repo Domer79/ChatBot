@@ -35,9 +35,11 @@ export class ChatEditorComponent implements OnInit, AfterViewInit {
   }
 
   onKeyupEnter($event: Event): void {
+    debugger;
   }
 
   onKeydownEnter($event: Event): void {
+    debugger;
     const event = $event as KeyboardEvent;
     if (this.message === ''){
       event.preventDefault();

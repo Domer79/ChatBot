@@ -105,7 +105,7 @@ namespace Chatbot.Hosting
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                    .WithOrigins("http://localhost:4200", "http://localhost:4201")
+                    .WithOrigins("http://*:4200", "http://*:4201")
                     .SetIsOriginAllowed(h => true);
             });
             app.Use(async (context, next) => await AuthQueryStringToHeader(context, next));

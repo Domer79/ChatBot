@@ -51,6 +51,7 @@ export class ClientMsgDispatcher {
   }
 
   public setMessage(type: MessageType, msg: string): void{
+    debugger;
     const message: Message = {
       id: uuidv4(),
       type,

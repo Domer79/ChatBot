@@ -21,11 +21,12 @@
       </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+      <PackageReference Include="NLog" Version="4.7.6" />
+      <PackageReference Include="NLog.Config" Version="4.7.6" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Chatbot.Common\Chatbot.Common.csproj" />
-      <ProjectReference Include="..\Chatbot.Ef.Postgres\Chatbot.Ef.Postgres.csproj" />
       <ProjectReference Include="..\Chatbot.Ef\Chatbot.Ef.csproj" />
       <ProjectReference Include="..\Chatbot.Ioc\Chatbot.Ioc.csproj" />
     </ItemGroup>
