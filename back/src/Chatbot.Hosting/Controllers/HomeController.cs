@@ -3,6 +3,7 @@ using Chatbot.Hosting.Authentication;
 using Chatbot.Model.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Chatbot.Hosting.Controllers
 {
@@ -10,10 +11,18 @@ namespace Chatbot.Hosting.Controllers
     [Route("api/[controller]/[action]")]
     public class HomeController: ControllerBase
     {
+        private readonly ILogger<HomeController> _logger;
+
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+        }
+
         [CustomSecurity(SecurityPolicy.ReadMessage)]
         [HttpGet]
         public string Hello()
         {
+            _logger.LogInformation("Hello World!!!");
             return "Hello World!!!";
         }
 
