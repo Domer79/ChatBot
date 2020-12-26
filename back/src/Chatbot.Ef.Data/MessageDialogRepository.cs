@@ -46,7 +46,7 @@ namespace Chatbot.Ef.Data
             }
             else
             {
-                _context.Update(dialog);
+                _context.Update(dialog).Property(_ => _.Number).IsModified = false;
             }
             
             await _context.SaveChangesAsync();

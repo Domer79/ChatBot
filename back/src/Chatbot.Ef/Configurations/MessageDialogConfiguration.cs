@@ -19,7 +19,7 @@ namespace Chatbot.Ef.Configurations
             b.Property(_ => _.Number)
                 .HasColumnName("number")
                 .IsRequired()
-                .UseIdentityColumn();
+                .ValueGeneratedOnAdd();
             
             b.Property(_ => _.DateCreated)
                 .HasColumnName("date_created")
