@@ -10,5 +10,6 @@ namespace Chatbot.Abstractions.Core.Services
         Task<Message> GetMessage(Guid messageId);
         Task<Message[]> GetDialogMessages(Guid dialogId);
         Task<Message[]> GetFirstMessages(Guid[] dialogIds);
+        Task<Message[]> GetLastMessages(Guid[] dialogIds);
     }
 }

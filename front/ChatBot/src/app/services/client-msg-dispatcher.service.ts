@@ -81,7 +81,7 @@ export class ClientMsgDispatcher {
     });
 
     this.connection.on('closeDialog', (message: Message) => {
-      this.meta$.next({
+      this.messages$.next({
         id: uuidv4(),
         type: MessageType.String,
         content: 'Сессия закрыта',

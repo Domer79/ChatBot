@@ -38,5 +38,10 @@ namespace Chatbot.Core.Services
         {
             return _messageRepository.GetFirstMessages(dialogIds);
         }
+
+        public Task<Message[]> GetLastMessages(Guid[] dialogIds)
+        {
+            return _messageRepository.GetLastMessages(dialogIds);
+        }
     }
 }

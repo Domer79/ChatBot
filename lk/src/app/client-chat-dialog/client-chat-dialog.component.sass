@@ -1,0 +1,33 @@
+.chat
+  height: 350px
+  border: 1px solid red
+
+.chat-message
+  height: 351px
+
+.chat-editor
+  outline: none
+  border: 1px solid blue
+  height: 3em
+
+.placeholder-active
+  color: gray
+
+.editor-container
+  display: flex
+
+.chat-editor
+  width: 100%
+
+.chat-editor[contentEditable="true"]:empty:before
+  content: attr(placeholder)
+  cursor: text
+  width: 100%
+
+.btn-send
+  width: 40px
+  height: 40px
+  cursor: pointer
+  color: #DADEE5
+  text-align: center
+  padding-top: 10px

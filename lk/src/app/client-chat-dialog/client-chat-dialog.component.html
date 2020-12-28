@@ -1,11 +1,29 @@
-<h1 mat-dialog-title></h1>
-<div mat-dialog-content>
-
-    <mat-form-field>
-        <mat-label>Favorite Animal</mat-label>
-        <input matInput >
-    </mat-form-field>
-</div>
-<div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">No Thanks</button>
+<div>
+    <div>
+    <h1 mat-dialog-title>{{firstMessage.sender}}</h1>
+    </div>
+    <div class="chat">
+        <div class="chat-message">
+            <div *ngFor="let msg of messages" [ngSwitch]="msg.owner">
+                <client-message [message]="msg" *ngSwitchCase="0"></client-message>
+                <operator-message [message]="msg" *ngSwitchCase="1"></operator-message>
+            </div>
+        </div>
+        <div class="editor-container" [attr.disabled]="isDisallowSend">
+            <div
+                #chatEditor
+                contenteditable="true"
+                class="chat-editor"
+                placeholder="Введите сообщение"
+                [ngClass]="{'placeholder-active': inputText === ''}"
+                (keypress)="enter($event)"
+                (input)="onChange($event.target)"
+                (keydown.enter)="onKeydownEnter($event)"
+            >
+            </div>
+            <div class="btn-send" (click)="sendMessageClick()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"></path></svg>
+            </div>
+        </div>
+    </div>
 </div>

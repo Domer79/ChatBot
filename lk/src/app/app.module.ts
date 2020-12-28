@@ -28,6 +28,9 @@ import {DialogService} from "./services/dialog.service";
 import {MatCardModule} from "@angular/material/card";
 import { ClientChatDialogComponent } from './client-chat-dialog/client-chat-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import { OperatorMessageComponent } from './dialog/operator-message/operator-message.component';
+import { ClientMessageComponent } from './dialog/client-message/client-message.component';
+import {MessageService} from "./services/message.service";
 
 @NgModule({
   declarations: [
@@ -35,7 +38,9 @@ import {MatDialogModule} from "@angular/material/dialog";
     LoginComponent,
     AccessDeniedComponent,
     DialogsComponent,
-    ClientChatDialogComponent
+    ClientChatDialogComponent,
+    OperatorMessageComponent,
+    ClientMessageComponent
   ],
   imports: [
     BrowserModule,
@@ -63,6 +68,7 @@ import {MatDialogModule} from "@angular/material/dialog";
       CacheService,
       TokenService,
       DialogService,
+      MessageService,
   ],
   bootstrap: [MainComponent]
 })

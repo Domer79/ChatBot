@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Contracts;
 using Chatbot.Abstractions.Contracts.Responses;
@@ -46,11 +47,13 @@ namespace Chatbot.Hosting.Controllers
         public async Task<MessageDialogResponse[]> GetStartedDialogs()
         {
             var dialogs = await _messageDialogService.GetStarted();
-            var messages = await _messageService.GetFirstMessages(dialogs.Select(_ => _.Id).ToArray());
+            Message[] messages = Array.Empty<Message>();
+            if (dialogs.Length > 0)
+                messages = await _messageService.GetFirstMessages(dialogs.Select(_ => _.Id).ToArray());
             return dialogs.Select((_, index) =>
             {
                 var dialogResponse = _mapper.Map<MessageDialogResponse>(_);
-                dialogResponse.FirstMessage = messages.FirstOrDefault(_ => _.MessageDialogId == _.Id)?.Content;
+                dialogResponse.FirstMessage = messages.FirstOrDefault(m => m.MessageDialogId == _.Id)?.Content;
                 return dialogResponse;
             }).ToArray();
         }

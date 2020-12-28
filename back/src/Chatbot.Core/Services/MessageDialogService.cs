@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Chatbot.Abstractions.Contracts;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Abstractions.Repositories;
+using Chatbot.Common;
 using Chatbot.Model.DataModel;
 using Chatbot.Model.Enums;
 
@@ -78,22 +79,22 @@ namespace Chatbot.Core.Services
 
         public Task<MessageDialog[]> GetStarted()
         {
-            return _dialogRepository.GetByStatus(DialogStatus.Started);
+            return GetByStatusFlags(DialogStatus.Started);
         }
 
         public Task<MessageDialog[]> GetActivities()
         {
-            return _dialogRepository.GetByStatus(DialogStatus.Active);
+            return GetByStatusFlags(DialogStatus.Active);
         }
 
         public Task<MessageDialog[]> GetRejected()
         {
-            return _dialogRepository.GetByStatus(DialogStatus.Rejected);
+            return GetByStatusFlags(DialogStatus.Rejected);
         }
 
         public Task<MessageDialog[]> GetClosed()
         {
-            return _dialogRepository.GetByStatus(DialogStatus.Closed);
+            return GetByStatusFlags(DialogStatus.Closed);
         }
 
         public async Task<Page<MessageDialog>> GetPage(int number, int size)
@@ -111,6 +112,17 @@ namespace Chatbot.Core.Services
         public Task<MessageDialog> GetDialog(Guid messageDialogId)
         {
             return _dialogRepository.GetById(messageDialogId);
+        }
+
+        public async Task<MessageDialog[]> GetByStatusFlags(DialogStatus status)
+        {
+            var dialogs = new List<MessageDialog>();
+            foreach (var value in Helper.GetFlags(status))
+            {
+                dialogs.AddRange(await _dialogRepository.GetByStatus(value));
+            }
+
+            return dialogs.ToArray();
         }
     }
 }

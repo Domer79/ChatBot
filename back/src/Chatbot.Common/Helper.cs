@@ -113,6 +113,18 @@ namespace Chatbot.Common
             var enumInfos = GetEnumInfos<T>();
             return enumInfos.Any(enumInfo => enumInfo.Value.Equals(value));
         }
+        
+        public static IEnumerable<Enum> GetFlags(Enum input)
+        {
+            foreach (Enum value in Enum.GetValues(input.GetType()))
+                if (input.HasFlag(value))
+                    yield return value;
+        }
+
+        public static IEnumerable<TEnum> GetFlags<TEnum>(TEnum input) where TEnum: Enum
+        {
+            return GetFlags((Enum)input).Cast<TEnum>();
+        }
 
         public static string GetLogin(this ClaimsPrincipal claimsPrincipal)
         {

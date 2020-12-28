@@ -23,11 +23,7 @@ namespace Chatbot.Hosting.Hubs
     [Authorize]
     public class ChatHub: HubBase
     {
-        private readonly IMessageService _messageService;
-        private readonly IMessageDialogService _messageDialogService;
-        private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
-        private readonly IHubDispatcher _hubDispatcher;
         private readonly IHubContext<OperatorHub> _operatorHubContext;
         private readonly IOperatorLogService _logService;
         private readonly ILogger<ChatHub> _logger;
@@ -42,13 +38,9 @@ namespace Chatbot.Hosting.Hubs
             IOperatorLogService logService,
             ILogger<ChatHub> logger,
             Mapper mapper)
-        : base(userService)
+        : base(userService, hubDispatcher, messageDialogService, messageService)
         {
-            _messageService = messageService;
-            _messageDialogService = messageDialogService;
-            _userService = userService;
             _tokenService = tokenService;
-            _hubDispatcher = hubDispatcher;
             _operatorHubContext = operatorHubContext;
             _logService = logService;
             _logger = logger;
@@ -61,17 +53,18 @@ namespace Chatbot.Hosting.Hubs
             {
                 var user = await GetUser();
                 message.Sender = user.Id;
+                message.Time = DateTime.UtcNow;
 
                 DialogGroup dialogGroup;
                 if (message.MessageDialogId.IsEmpty())
                 {
-                    dialogGroup = await _hubDispatcher.CreateGroup(user, Context.ConnectionId);
+                    dialogGroup = await HubDispatcher.CreateGroup(user, Context.ConnectionId);
                     message.MessageDialogId = dialogGroup.MessageDialogId;
                     await Groups.AddToGroupAsync(Context.ConnectionId, dialogGroup.Name);
                     await _operatorHubContext.Clients.All.SendAsync("dialogCreated", dialogGroup.MessageDialogId);
                 }
             
-                dialogGroup = _hubDispatcher.GetDialogGroup(message.MessageDialogId);
+                dialogGroup = HubDispatcher.GetDialogGroup(message.MessageDialogId);
                 if (dialogGroup == null)
                     throw new InvalidOperationException($"Group by message dialog id '{message.MessageDialogId}' not found");
                 if (!dialogGroup.UserExist(user))
@@ -80,14 +73,17 @@ namespace Chatbot.Hosting.Hubs
                 }
 
                 message.Status = MessageStatus.Saved;
-                message = await _messageService.Add(message);
+                message = await MessageService.Add(message);
                 dialogGroup.LastMessageTime = message.Time;
 
                 await Clients.Caller.SendAsync("meta", _mapper.Map<MessageResponse>(message));
 
                 if (dialogGroup.MemberCount > 1)
                 {
-                    await Clients.OthersInGroup(dialogGroup.Name).SendAsync("send", _mapper.Map<MessageResponse>(message));
+                    await Clients.Clients(dialogGroup
+                            .Others(user.Id)
+                            .Select(_ => _.ConnectionId))
+                        .SendAsync("send", _mapper.Map<MessageResponse>(message));
                 }
             }
             catch (Exception e)
@@ -101,22 +97,23 @@ namespace Chatbot.Hosting.Hubs
         public async Task OperatorConnect(Guid messageDialogId)
         {
             var user = await GetUser();
-            var dialogGroup = _hubDispatcher.GetDialogGroup(messageDialogId);
+            var dialogGroup = HubDispatcher.GetDialogGroup(messageDialogId);
             dialogGroup.AddUser(user, Context.ConnectionId, true);
             await _logService.Log(user.Id, $"Operator {user.Login} connect to dialog {messageDialogId}");
-            await Clients.Caller.SendAsync("OperatorConnect", "success");
+            await Clients.Caller.SendAsync("operatorConnect", "success");
         }
 
         public override async Task OnConnectedAsync()
         {
+            await CheckDeprecated();
             await Console.Out.WriteLineAsync($"Connection {Context.ConnectionId} open");
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             var user = await GetUser();
-            DialogGroup[] dialogGroups = _hubDispatcher.GetDialogGroups(Context.ConnectionId);
-            bool isOperatorConnection = _hubDispatcher.CheckOperator(user);
+            DialogGroup[] dialogGroups = HubDispatcher.GetDialogGroups(Context.ConnectionId);
+            bool isOperatorConnection = HubDispatcher.CheckOperator(user);
             foreach (var dialogGroup in dialogGroups)
             {
                 dialogGroup.RemoveUser(Context.ConnectionId);
@@ -129,16 +126,10 @@ namespace Chatbot.Hosting.Hubs
                     $"Operator disconnect from {string.Join(',', dialogGroups.Select(_ => _.MessageDialogId))}");
         }
 
-        private async Task CheckDeprecated()
-        {
-            var dialogGroups = _hubDispatcher.GetDialogGroups().Where(_ => _.IsDeprecated).ToArray();
-            foreach (var dialogGroup in dialogGroups)
-            {
-                await Clients.Clients(dialogGroup.GetAllConnectionIds())
-                    .SendAsync("closeDialog", dialogGroup.MessageDialogId);
 
-                await _hubDispatcher.RemoveDialogGroup(dialogGroup);
-            }
+        protected override Task NotifyOperators(Guid messageDialogId)
+        {
+            return _operatorHubContext.Clients.All.SendAsync("dialogClosed", messageDialogId);
         }
     }
 }

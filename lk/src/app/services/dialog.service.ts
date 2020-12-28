@@ -13,6 +13,8 @@ export class DialogService {
   private connection: HubConnection;
   private dialogCreated$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public dialogCreated: Observable<string> = this.dialogCreated$.asObservable();
+  private dialogClosed$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  public dialogClosed: Observable<string> = this.dialogCreated$.asObservable();
 
   constructor(
       private httpClient: HttpClient,
@@ -24,7 +26,7 @@ export class DialogService {
         .withAutomaticReconnect()
         .build();
     this.startConnection().then(() => {
-      this.addDialogCreatedListener();
+      this.addDialogCreatedListener();``
     })
   }
 
@@ -34,8 +36,11 @@ export class DialogService {
 
   addDialogCreatedListener = () => {
     this.connection.on('dialogCreated', (dialogId: string) => {
-      debugger;
       this.dialogCreated$.next(dialogId);
+    });
+
+    this.connection.on('dialogClosed', (dialogId: string) => {
+      this.dialogClosed$.next(dialogId);
     });
   }
 

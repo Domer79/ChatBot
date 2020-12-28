@@ -1,5 +1,8 @@
-﻿namespace Chatbot.Model.Enums
+﻿using System;
+
+namespace Chatbot.Model.Enums
 {
+    [Flags]
     public enum DialogStatus
     {
         /// <summary>
@@ -10,21 +13,21 @@
         /// <summary>
         /// Оператор берет в работу или первый раз отвечает
         /// </summary>
-        Active = 2,
+        Active = 1 << 1,
         
         /// <summary>
         /// Соединение с пользователем прервано, но диалог может быть возобновлен 
         /// </summary>
-        Sleep = 3,
+        Sleep = 1 << 2,
         
         /// <summary>
         /// Диалог закрыт
         /// </summary>
-        Closed = 4,
+        Closed = 1 << 3,
         
         /// <summary>
         /// Диалог отклонен оператором
         /// </summary>
-        Rejected = 5,
+        Rejected = 1 << 4,
     }
 }

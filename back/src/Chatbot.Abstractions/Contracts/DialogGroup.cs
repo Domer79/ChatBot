@@ -17,6 +17,12 @@ namespace Chatbot.Abstractions.Contracts
             _name = Guid.NewGuid().ToString("N");
         }
 
+        public DialogGroup(MessageDialog dialog, DateTime lastMessageTime)
+            : this(dialog)
+        {
+            LastMessageTime = lastMessageTime;
+        }
+
         public void AddUser(User user, string connectionId, bool isOperator = false)
         {
             if (_dialogUsers.Any(_ => _.User.Id == user.Id)) return;
@@ -63,7 +69,7 @@ namespace Chatbot.Abstractions.Contracts
         public int MemberCount => _dialogUsers.Count;
         public DateTime LastMessageTime { get; set; }
         
-        public bool IsDeprecated => (DateTime.Now - LastMessageTime) > TimeSpan.FromMinutes(10);
+        public bool IsDeprecated => (DateTime.UtcNow - LastMessageTime) > TimeSpan.FromMinutes(10);
 
         public bool UserExist(User user)
         {
@@ -74,6 +80,11 @@ namespace Chatbot.Abstractions.Contracts
         {
             var dialogUser = _dialogUsers.FirstOrDefault(_ => _.User.Id == user.Id);
             return dialogUser?.IsOperator ?? throw new InvalidOperationException("Not found");
+        }
+
+        public DialogUser[] Others(Guid userId)
+        {
+            return _dialogUsers.Where(_ => _.User.Id != userId).ToArray();
         }
     }
 }
