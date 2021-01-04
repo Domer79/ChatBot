@@ -19,6 +19,10 @@ namespace Chatbot.Hosting
         public static void Main(string[] args)
         {
             var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var nlogOptions = new NLogAspNetCoreOptions()
+            {
+                IncludeScopes = true,
+            };
             try
             {
                 logger.Debug("init main");
@@ -34,7 +38,7 @@ namespace Chatbot.Hosting
                         // logging.AddNLog();
                         // logging.AddProvider(new MyLoggerProvider());
                     })
-                    .UseNLog()
+                    .UseNLog(nlogOptions)
                     .ConfigureWebHostDefaults(builder =>
                     {
                         builder.UseConfiguration(config)

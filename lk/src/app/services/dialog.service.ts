@@ -13,21 +13,21 @@ export class DialogService {
   private connection: HubConnection;
   private dialogCreated$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public dialogCreated: Observable<string> = this.dialogCreated$.asObservable();
-  private dialogClosed$: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  public dialogClosed: Observable<string> = this.dialogCreated$.asObservable();
+  private dialogClosed$: Subject<string> = new Subject<string>();
+  public dialogClosed: Observable<string> = this.dialogClosed$.asObservable();
 
   constructor(
       private httpClient: HttpClient,
       private tokenService: TokenService
   ) {
     this.connection = new HubConnectionBuilder()
-        .withUrl(`${environment.apiUrl}/dialog?token=${this.tokenService.tokenId}`,
+        .withUrl(`${environment.hubUrl}/dialog?token=${this.tokenService.tokenId}`,
             { accessTokenFactory: () => this.tokenService.tokenId ?? '' })
         .withAutomaticReconnect()
         .build();
     this.startConnection().then(() => {
-      this.addDialogCreatedListener();``
-    })
+      this.addDialogCreatedListener();
+    });
   }
 
   startConnection(): Promise<void> {
@@ -45,6 +45,6 @@ export class DialogService {
   }
 
   getDialogs(): Observable<MessageDialog[]>{
-    return this.httpClient.get<MessageDialog[]>("api/Dialog/GetStartedDialogs");
+    return this.httpClient.get<MessageDialog[]>("api/Dialog/GetStartedOrActiveDialogs");
   }
 }

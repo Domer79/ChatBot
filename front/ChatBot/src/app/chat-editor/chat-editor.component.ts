@@ -35,11 +35,9 @@ export class ChatEditorComponent implements OnInit, AfterViewInit {
   }
 
   onKeyupEnter($event: Event): void {
-    debugger;
   }
 
   onKeydownEnter($event: Event): void {
-    debugger;
     const event = $event as KeyboardEvent;
     if (this.message === ''){
       event.preventDefault();
@@ -48,17 +46,19 @@ export class ChatEditorComponent implements OnInit, AfterViewInit {
 
     if (!event.shiftKey)
     {
-      this.clientMsgDispatcher.setMessage(MessageType.String, this.message);
-
-      this.message = '';
-      this.editorElement.nativeElement.innerHTML = '';
-      this.chatEditorElement.nativeElement.style.height = `${this.originalClientHeight}px`;
-
+      this.sendMessage();
       $event.preventDefault();
     }
   }
 
   ngAfterViewInit(): void {
     this.originalClientHeight = this.chatEditorElement.nativeElement.clientHeight;
+  }
+
+  sendMessage(): void {
+    this.clientMsgDispatcher.setMessage(MessageType.String, this.message);
+    this.message = '';
+    this.editorElement.nativeElement.innerHTML = '';
+    this.chatEditorElement.nativeElement.style.height = `${this.originalClientHeight}px`;
   }
 }

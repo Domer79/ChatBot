@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
-import Message from '../../abstracts/message';
+import Message, {MessageInfo} from '../../abstracts/message';
 import {SubscribeCallBack} from '../../misc/types';
 import {MessageOwner, MessageStatus, MessageType} from '../../misc/message-type';
 import {HubConnection, HubConnectionBuilder, LogLevel} from '@microsoft/signalr';
 import {environment} from '../../environments/environment';
-import { v4 as uuidv4 } from 'uuid';
-import { NIL as guidEmpty } from 'uuid';
+import {NIL as guidEmpty, v4 as uuidv4} from 'uuid';
 import {TokenService} from './token.service';
 
 @Injectable({
@@ -15,9 +14,9 @@ import {TokenService} from './token.service';
 export class ClientMsgDispatcher {
   private connection: HubConnection;
   private messages$: Subject<Message> = new Subject<Message>();
-  private meta$: Subject<Message> = new Subject<Message>();
+  private meta$: Subject<MessageInfo> = new Subject<MessageInfo>();
   public messages: Observable<Message> = this.messages$.asObservable();
-  public meta: Observable<Message> = this.meta$.asObservable();
+  public meta: Observable<MessageInfo> = this.meta$.asObservable();
   private messageDialogId: string | null | undefined;
 
   constructor(private tokenService: TokenService) {
@@ -29,7 +28,7 @@ export class ClientMsgDispatcher {
   private async initHub(): Promise<void> {
     const token = await this.tokenService.getToken();
     this.connection = new HubConnectionBuilder()
-      .withUrl(`${environment.apiUrl}/chat?token=${token}`, { accessTokenFactory: () => {
+      .withUrl(`${environment.hubUrl}/chat?token=${token}`, { accessTokenFactory: () => {
           return token;
         }})
       .withAutomaticReconnect()
@@ -51,7 +50,6 @@ export class ClientMsgDispatcher {
   }
 
   public setMessage(type: MessageType, msg: string): void{
-    debugger;
     const message: Message = {
       id: uuidv4(),
       type,
@@ -70,17 +68,19 @@ export class ClientMsgDispatcher {
   }
 
   private connectionInit(): void {
-    this.connection.on('send', (message: Message) => {
-      debugger;
+    this.connection.on('send', async (message: Message) => {
+      message.status = MessageStatus.received;
       this.messages$.next(message);
+      await this.connection.invoke('MessageRead', message);
     });
 
-    this.connection.on('meta', (message: Message) => {
+    this.connection.on('setMeta', (message: MessageInfo) => {
+      debugger;
       this.messageDialogId = message.messageDialogId;
       this.meta$.next(message);
     });
 
-    this.connection.on('closeDialog', (message: Message) => {
+    this.connection.on('dialogClosed', (message: Message) => {
       this.messages$.next({
         id: uuidv4(),
         type: MessageType.String,

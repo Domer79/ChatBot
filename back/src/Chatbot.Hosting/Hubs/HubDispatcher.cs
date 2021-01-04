@@ -1,89 +1,100 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 using Chatbot.Abstractions;
-using Chatbot.Abstractions.Contracts;
+using Chatbot.Abstractions.Contracts.Chat;
 using Chatbot.Abstractions.Core.Services;
-using Chatbot.Common;
 using Chatbot.Model.DataModel;
-using Chatbot.Model.Enums;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Chatbot.Hosting.Hubs
 {
-    public class HubDispatcher : IHubDispatcher, IDialogCreated
+    public class HubDispatcher : IHubDispatcher, IDisposable
     {
+        private readonly DialogActiveCollection _dialogActiveCollection;
         private readonly IMessageDialogService _messageDialogService;
-        private readonly IMessageService _messageService;
-        private readonly List<DialogGroup> _dialogGroups = new();
-        private Func<Guid, Task> _dialogCreated; 
+        private readonly UserSet _userSet;
+        private readonly IHubContext<OperatorHub> _operatorHub;
+        private readonly IAppConfig _appconfig;
+        private Timer _timer;
 
         public HubDispatcher( 
+            DialogActiveCollection dialogActiveCollection,
             IMessageDialogService messageDialogService,
-            IMessageService messageService
+            UserSet userSet,
+            IHubContext<OperatorHub> operatorHub,
+            IAppConfig appconfig
         )
         {
+            _dialogActiveCollection = dialogActiveCollection;
             _messageDialogService = messageDialogService;
-            _messageService = messageService;
+            _userSet = userSet;
+            _operatorHub = operatorHub;
+            _appconfig = appconfig;
+            // CheckDeprecated().GetAwaiter().GetResult();
+            // InitCheckDeprecated();
         }
 
-        public DialogGroup GetDialogGroup(Guid messageDialogId)       
+        private void InitCheckDeprecated()
         {
-            return _dialogGroups.SingleOrDefault(_ => _.MessageDialogId == messageDialogId);
+            _timer = new Timer(_appconfig.Chat.DecayTime.Milliseconds);
+            _timer.Elapsed += CheckDeprecateEvent;
+            _timer.AutoReset = true;
+            _timer.Enabled = true;
         }
 
-        public async Task<DialogGroup> CreateGroup(User user, string connectionId)
+        private void CheckDeprecateEvent(object sender, ElapsedEventArgs e)
         {
-            var messageDialog = await _messageDialogService.Start(user.Id);
-            var dialogGroup = new DialogGroup(messageDialog);
-            dialogGroup.AddUser(user, connectionId);
-            _dialogGroups.Add(dialogGroup);
-            return dialogGroup;
+            CheckDeprecated().GetAwaiter().GetResult();
         }
 
-        public void ConfigureDialogCreated(Func<Guid, Task> dialogCreated)
+        public Task<DialogGroup> GetDialogGroup(Guid messageDialogId)
         {
-            _dialogCreated = dialogCreated;
+            return _dialogActiveCollection.GetDialogGroup(messageDialogId);
         }
 
-        public async Task RemoveDialogGroup(DialogGroup dialogGroup)
+        public Task<DialogGroup> GetOrCreateDialogGroup(User user, Guid messageDialogId)
         {
-            _dialogGroups.Remove(dialogGroup);
-            await _messageDialogService.Close(dialogGroup.MessageDialogId);
+            return _dialogActiveCollection.GetOrCreateDialog(user, messageDialogId);
         }
 
-        public Task DialogCreated(Guid messageDialogId)
+        public DialogGroup[] GetDeprecated()
         {
-            return _dialogCreated?.Invoke(messageDialogId);
+            return _dialogActiveCollection.GetDeprecated();
         }
 
-        public DialogGroup[] GetDialogGroups(string connectionId)
+        public async Task CloseClientDialog(Guid userId)
         {
-            var list = new List<DialogGroup>();
-            foreach (var dialogGroup in _dialogGroups)
+            foreach (var dialogGroup in _dialogActiveCollection)
             {
-                if (dialogGroup.GetAllConnectionIds().Any(_ => _ == connectionId))
-                    list.Add(dialogGroup);
+                if (dialogGroup.ClientId == userId)
+                {
+                    await _messageDialogService.Close(dialogGroup.MessageDialogId);
+                    await NotifyOperators(dialogGroup.MessageDialogId);
+                }
+            }
+        }
+
+        private async Task CheckDeprecated()
+        {
+            var dialogGroups = GetDeprecated();
+            foreach (var dialogGroup in dialogGroups)
+            {
+                await _messageDialogService.Close(dialogGroup.MessageDialogId);
+                await NotifyOperators(dialogGroup.MessageDialogId);
             }
 
-            return list.ToArray();
+            _userSet.RemoveInactiveUsers();
+        }
+        
+        public Task NotifyOperators(Guid messageDialogId)
+        {
+            return _operatorHub.Clients.All.SendAsync("dialogClosed", messageDialogId);
         }
 
-        public DialogGroup[] GetDialogGroups()
+        public void Dispose()
         {
-            return _dialogGroups.ToArray();
-        }
-
-        public bool CheckOperator(User user)
-        {
-            foreach (var dialogGroup in _dialogGroups)
-            {
-                if (dialogGroup.UserExist(user) && dialogGroup.IsOperator(user))
-                    return true;
-            }
-
-            return false;
+            _timer.Dispose();
         }
     }
 }

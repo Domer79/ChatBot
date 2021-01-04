@@ -4,16 +4,16 @@
 
         </div>
         <div class="msg-status" [ngSwitch]="message.status">
-            <div *ngSwitchCase="0" class="svg">
-                <img src="assets/sending.svg" style="width: 20px;height: 12px"/>
-            </div>
-            <div *ngSwitchCase="1" class="svg">
-                <img src="assets/delivered.svg" style="width: 20px;height: 12px"/>
-            </div>
-            <div *ngSwitchCase="2" class="svg">
-                <img src="assets/received.svg" style="width: 20px;height: 12px"/>
-            </div>
-            <span>{{timeStatus}} {{message.time | date: 'shortTime'}}</span>
+<!--            <div *ngSwitchCase="0" class="svg">-->
+<!--                <img src="assets/sending.svg" style="width: 20px;height: 12px"/>-->
+<!--            </div>-->
+<!--            <div *ngSwitchCase="1" class="svg">-->
+<!--                <img src="assets/delivered.svg" style="width: 20px;height: 12px"/>-->
+<!--            </div>-->
+<!--            <div *ngSwitchCase="2" class="svg">-->
+<!--                <img src="assets/received.svg" style="width: 20px;height: 12px"/>-->
+<!--            </div>-->
+            <span>{{timeStatus}} {{message.time | date: 'HH:mm:ss'}}</span>
         </div>
     </div>
     <div class="space"></div>

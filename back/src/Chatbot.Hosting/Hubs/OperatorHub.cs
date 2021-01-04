@@ -1,36 +1,39 @@
 ﻿using System;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Chatbot.Abstractions;
+using Chatbot.Abstractions.Contracts.Chat;
+using Chatbot.Abstractions.Contracts.Responses;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Common;
 using Chatbot.Hosting.Authentication;
+using Chatbot.Hosting.Misc;
 using Chatbot.Model.DataModel;
+using Chatbot.Model.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 
 namespace Chatbot.Hosting.Hubs
 {
     [Authorize]
     public class OperatorHub : HubBase
     {
+        private readonly Mapper _mapper;
         private readonly IOperatorLogService _logService;
 
         public OperatorHub(IHubDispatcher hubDispatcher,
             IOperatorLogService logService,
             IMessageService messageService,
             IMessageDialogService messageDialogService,
-            IUserService userService)
-            : base(userService, hubDispatcher, messageDialogService, messageService)
+            IUserService userService,
+            UserSet userSet,
+            ILogger<OperatorHub> logger,
+            Mapper mapper)
+            : base(userService, hubDispatcher, messageDialogService, messageService, userSet, logger)
         {
+            _mapper = mapper;
             _logService = logService;
-            
-            HubDispatcher.ConfigureDialogCreated(DialogCreated);
-        }
-
-        private Task DialogCreated(Guid messageDialogId)
-        {
-            return Clients.All.SendAsync("dialogCreated", messageDialogId);
         }
 
         public async Task TakeToWork(MessageDialog dialog)
@@ -43,21 +46,34 @@ namespace Chatbot.Hosting.Hubs
             await Clients.Others.SendAsync("dialogTaken", dialog.Id, dialogOperator.Id);
         }
 
-        public override async Task OnConnectedAsync()
+        protected override async Task SendMeta(MessageInfo messageInfo)
         {
-            await CheckDeprecated();
-            await Console.Out.WriteLineAsync($"Connection {Context.ConnectionId} open");
+            var dialogGroup = await HubDispatcher.GetDialogGroup(messageInfo.MessageDialogId);
+            await Clients.Clients(dialogGroup.Others(User.Id)).SendAsync("setMeta", messageInfo);
         }
 
-        public override async Task OnDisconnectedAsync(Exception? exception)
+        protected override async Task SendOf(Message message)
         {
-            await CheckDeprecated();
-            await Console.Out.WriteLineAsync($"Connection {Context.ConnectionId} closed");
-        }
-
-        protected override Task NotifyOperators(Guid messageDialogId)
-        {
-            return Clients.All.SendAsync("dialogClosed", messageDialogId);
+            var dialogGroup = await HubDispatcher.GetDialogGroup(message.MessageDialogId);
+            if (dialogGroup == null)
+                throw new InvalidOperationException(
+                    $"Group by message dialog id '{message.MessageDialogId}' not found");
+            if (!dialogGroup.UserExist(User))
+            {
+                dialogGroup.AddUser(User);
+            }
+        
+            message.Status = MessageStatus.Saved;
+            message = await MessageService.Add(message);
+            dialogGroup.LastMessageTime = message.Time;
+            
+            await Clients.Caller.SendAsync("setMeta", message);
+        
+            if (dialogGroup.MemberCount > 1)
+            {
+                await Clients.Clients(dialogGroup.Others(User.Id))
+                    .SendAsync("send", _mapper.Map<MessageResponse>(message));
+            }
         }
     }
 }

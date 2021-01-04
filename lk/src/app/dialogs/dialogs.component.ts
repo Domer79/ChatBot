@@ -1,10 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Security} from "../security.decorator";
 import {DialogService} from "../services/dialog.service";
-import {merge, Observable, Subscription} from "rxjs";
+import {merge, Observable, of, Subscription} from "rxjs";
 import MessageDialog from "../contracts/message-dialog";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ClientChatDialogComponent} from "../client-chat-dialog/client-chat-dialog.component";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-dialogs',
@@ -13,24 +14,37 @@ import {ClientChatDialogComponent} from "../client-chat-dialog/client-chat-dialo
 })
 @Security('DialogPage')
 export class DialogsComponent implements OnInit, OnDestroy {
-  private dialogEventsSubscription: Subscription;
+  private dialogCreatedSubscription: Subscription;
+  private dialogClosedSubscription: Subscription;
+
   dialogs: Observable<MessageDialog[]>;
 
   constructor(
       private dialogService: DialogService,
       public dialog: MatDialog
   ) {
-    this.dialogEventsSubscription = merge(this.dialogService.dialogCreated, this.dialogService.dialogClosed).subscribe(dialogId => {
+    this.dialogCreatedSubscription = this.dialogService.dialogCreated.pipe(catchError(err => {
       debugger;
+      console.error(err);
+      return of(err);
+    })).subscribe(dialogId => {
       this.dialogs = this.dialogService.getDialogs();
-    })
+    });
+    this.dialogClosedSubscription = this.dialogService.dialogClosed.pipe(catchError(err => {
+      debugger;
+      console.error(err);
+      return of(err);
+    })).subscribe(dialogId => {
+      this.dialogs = this.dialogService.getDialogs();
+    });
   }
 
   ngOnInit(): void {
   }
 
   ngOnDestroy(): void {
-    this.dialogEventsSubscription.unsubscribe();
+    this.dialogCreatedSubscription.unsubscribe();
+    this.dialogClosedSubscription.unsubscribe();
   }
 
   openChat(messageDialog: MessageDialog) {
@@ -38,10 +52,6 @@ export class DialogsComponent implements OnInit, OnDestroy {
     dialogConfig.width = '500px';
     dialogConfig.height = '510px';
     dialogConfig.data = messageDialog;
-    const dialogRef = this.dialog.open(ClientChatDialogComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    this.dialog.open(ClientChatDialogComponent, dialogConfig);
   }
 }

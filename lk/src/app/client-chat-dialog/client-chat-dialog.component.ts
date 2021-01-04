@@ -6,7 +6,8 @@ import Message from "../../abstracts/message";
 import {TokenService} from "../services/token.service";
 import MessageDialog, {DialogStatus} from "../contracts/message-dialog";
 import {MessageService} from "../services/message.service";
-import {tap} from "rxjs/operators";
+import {map, tap} from "rxjs/operators";
+import {Observable, Subject} from "rxjs";
 
 @Component({
   selector: 'app-client-chat-dialog',
@@ -19,7 +20,9 @@ export class ClientChatDialogComponent implements OnInit {
   private clientMessageService: ClientMessageService
   @ViewChild('chatEditor') chatEditorElement: ElementRef;
   private dialog: MessageDialog;
-  firstMessage: Message = undefined;
+  private firstMessage$: Subject<Message> = new Subject<Message>();
+  private firstMessage: Observable<Message> = this.firstMessage$.asObservable();
+  senderName: Observable<string>;
 
   constructor(
       public dialogRef: MatDialogRef<ClientChatDialogComponent>,
@@ -27,16 +30,21 @@ export class ClientChatDialogComponent implements OnInit {
       private tokenService: TokenService,
       private messageService: MessageService
   ) {
-    debugger;
     console.log(this.messageService);
     this.dialog = data;
     console.log(this.dialog.id);
     this.clientMessageService = new ClientMessageService(this.tokenService, data.id);
-    this.clientMessageService.onConnected.subscribe(s => this.connectedEvent(s));3
+    this.clientMessageService.onConnected.subscribe(s => this.connectedEvent(s));
     this.clientMessageService.messages.subscribe(_ => this.messages.push(_));
+    this.clientMessageService.meta.subscribe(m => this.setMeta(m));
+    this.senderName = this.firstMessage.pipe(map(m => m.content));
   }
 
   ngOnInit(): void {
+    this.dialogRef.afterClosed().subscribe(async result => {
+      console.log('The dialog was closed');
+      await this.clientMessageService.Disconnect();
+    })
   }
 
   enter($event: KeyboardEvent): void {
@@ -68,10 +76,6 @@ export class ClientChatDialogComponent implements OnInit {
     }
   }
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
   get isDisallowSend(){
     return this.dialog.dialogStatus == (DialogStatus.Closed | DialogStatus.Rejected)
         || !this.clientMessageService.connected;
@@ -89,7 +93,7 @@ export class ClientChatDialogComponent implements OnInit {
     this.clientMessageService.setMessage(MessageType.String, this.inputText);
     this.inputText = '';
     this.chatEditorElement.nativeElement.innerHTML = '';
-    this.chatEditorElement.nativeElement.style.height = ``;
+    this.chatEditorElement.nativeElement.style.height = '';
   }
 
   private connectedEvent(connectionStatus: string): void {
@@ -97,9 +101,24 @@ export class ClientChatDialogComponent implements OnInit {
       return;
 
     this.messageService.getMessages(this.dialog.id).pipe(tap(messages => {
-      if (!this.firstMessage)
-        this.firstMessage = messages[0];
-    }))
-        .subscribe(m => this.messages = m);
+      if (!this.senderName){
+        this.firstMessage$.next(messages[0]);
+      }
+    })).subscribe(m => this.messages = m.sort((a:Message, b: Message) => {
+      if (a.time < b.time)
+        return 1;
+
+      if (a.time > b.time)
+        return -1;
+
+      return 0;
+    }));
+  }
+
+  private setMeta(msg: Message) {
+    const messages = this.messages.filter(_ => _.id === msg.id);
+    if (messages.length > 0) {
+      messages[0].status = msg.status;
+    }
   }
 }

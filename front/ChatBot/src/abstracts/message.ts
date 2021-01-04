@@ -10,3 +10,9 @@ export default interface Message{
   messageDialogId: string;
   sender?: string;
 }
+
+export interface MessageInfo{
+  id: string;
+  status: MessageStatus;
+  messageDialogId: string;
+}

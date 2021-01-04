@@ -1,4 +1,6 @@
 ﻿using System;
+using Chatbot.Abstractions.Contracts;
+using Chatbot.Abstractions.Contracts.Chat;
 
 namespace Chatbot.Abstractions
 {
@@ -7,5 +9,7 @@ namespace Chatbot.Abstractions
         string GetConnectionString();
         int GetTokenLifetime();
         int GetTokenAutoExpired();
+        
+        ChatConfig Chat { get; }
     }
 }

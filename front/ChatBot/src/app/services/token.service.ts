@@ -22,7 +22,7 @@ export class TokenService {
 
   constructor() {
     this.tokenConnection = new HubConnectionBuilder()
-      .withUrl(`${environment.apiUrl}/token`)
+      .withUrl(`${environment.hubUrl}/token`)
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Information)
       .build();

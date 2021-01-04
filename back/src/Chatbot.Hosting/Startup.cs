@@ -50,10 +50,10 @@ namespace Chatbot.Hosting
             services.AddDbContext<ChatbotContext>(options =>
             {
                 options.UseSqlServer(_configuration.GetConnectionString("default"));
-            });
-            services.AddSingleton<IAuthenticationHandler, TokenAuthenticationHandler>();
-            services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
-            services.AddSingleton<IAuthorizationPolicyProvider, CustomAuthPolicyProvider>();
+            }, ServiceLifetime.Transient);
+            services.AddTransient<IAuthenticationHandler, TokenAuthenticationHandler>();
+            services.AddTransient<IAuthorizationHandler, CustomAuthorizationHandler>();
+            services.AddTransient<IAuthorizationPolicyProvider, CustomAuthPolicyProvider>();
             services.AddAuthentication("Token")
                 .AddScheme<TokenAuthenticationOptions, TokenAuthenticationHandler>("Token", null);
             services.AddAuthorization(options =>
@@ -88,17 +88,24 @@ namespace Chatbot.Hosting
         {
             builder.RegisterModule<WebApiModule>();
             builder.RegisterModule<HostingModule>();
+            builder.RegisterModule<HubModule>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            AutofacContainer = app.ApplicationServices.GetAutofacRoot();
-            var context = AutofacContainer.Resolve<ChatbotContext>();
-            var permissionService = AutofacContainer.Resolve<IPermissionService>();
+            if (!env.EnvironmentName.EndsWith("-hub"))
+            {
+                AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+                var context = AutofacContainer.Resolve<ChatbotContext>();
+                var permissionService = AutofacContainer.Resolve<IPermissionService>();
             
-            context.Database.Migrate();
-            permissionService.RefreshPolicy();
+                context.Database.Migrate();
+                permissionService.RefreshPolicy();
+            }
             
+            var logger = loggerFactory.CreateLogger<Startup>();
+            app.Use(async (context, next) => await ErrorHandle(context, next, logger));
+            app.Use(async (context, next) => await AuthQueryStringToHeader(context, next));
             app.UseCors(builder =>
             {
                 builder
@@ -108,8 +115,6 @@ namespace Chatbot.Hosting
                     .WithOrigins("http://*:4200", "http://*:4201")
                     .SetIsOriginAllowed(h => true);
             });
-            app.Use(async (context, next) => await AuthQueryStringToHeader(context, next));
-            app.Use(async (context, next) => await ErrorHandle(context, next));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -130,14 +135,17 @@ namespace Chatbot.Hosting
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                
-                endpoints.MapHub<ChatHub>("/chat");
-                endpoints.MapHub<OperatorHub>("/dialog");
-                endpoints.MapHub<TokenHub>("/token").AllowAnonymous();
+
+                if (env.EnvironmentName.EndsWith("-hub"))
+                {
+                    endpoints.MapHub<ChatHub>("/chat");
+                    endpoints.MapHub<OperatorHub>("/dialog");
+                    endpoints.MapHub<TokenHub>("/token").AllowAnonymous();
+                }
             });
         }
 
-        private async Task ErrorHandle(HttpContext context, Func<Task> next)
+        private async Task ErrorHandle(HttpContext context, Func<Task> next, ILogger<Startup> logger)
         {
             try
             {
@@ -146,7 +154,8 @@ namespace Chatbot.Hosting
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                logger.LogError(e, e.Message);
+                await next.Invoke();
             }
         }
 

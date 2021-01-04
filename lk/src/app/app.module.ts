@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
@@ -31,6 +31,10 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { OperatorMessageComponent } from './dialog/operator-message/operator-message.component';
 import { ClientMessageComponent } from './dialog/client-message/client-message.component';
 import {MessageService} from "./services/message.service";
+import { registerLocaleData } from "@angular/common";
+import localeRu from '@angular/common/locales/ru';
+
+registerLocaleData(localeRu, 'ru');
 
 @NgModule({
   declarations: [
@@ -63,6 +67,7 @@ import {MessageService} from "./services/message.service";
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
+    { provide: LOCALE_ID, useValue: 'ru' },
       AuthService,
       AuthGuard,
       CacheService,

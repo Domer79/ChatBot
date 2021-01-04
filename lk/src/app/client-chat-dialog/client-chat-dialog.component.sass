@@ -4,6 +4,19 @@
 
 .chat-message
   height: 351px
+  overflow-y: auto
+  scroll-behavior: smooth
+  background-color: #F7F8FA
+
+.chat-message::-webkit-scrollbar
+  width: 6px
+
+.chat-message::-webkit-scrollbar-track
+  background-color: transparent
+
+.chat-message::-webkit-scrollbar-thumb
+  background-color: #D3D6DE
+  border-radius: 3px
 
 .chat-editor
   outline: none

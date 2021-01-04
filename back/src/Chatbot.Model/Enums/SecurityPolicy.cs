@@ -28,7 +28,7 @@ namespace Chatbot.Model.Enums
 
         #region Действия операторов
         
-        OperatorConnect = 7,
+        OperatorConnection = 7,
         
         #endregion
     }

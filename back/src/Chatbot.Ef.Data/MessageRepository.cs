@@ -24,6 +24,12 @@ namespace Chatbot.Ef.Data
             return message;
         }
 
+        public async Task<bool> Update(Message message)
+        {
+            _context.Update(message);
+            return (await _context.SaveChangesAsync()) > 0;
+        }
+
         public Task<Message> GetMessage(Guid messageId)
         {
             return _context.Messages.SingleOrDefaultAsync(_ => _.Id == messageId);

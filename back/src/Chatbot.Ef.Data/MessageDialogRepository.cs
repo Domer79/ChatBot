@@ -5,6 +5,7 @@ using Chatbot.Abstractions.Repositories;
 using Chatbot.Model.DataModel;
 using Chatbot.Model.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Chatbot.Ef.Data
 {

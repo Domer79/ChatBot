@@ -31,7 +31,7 @@ export class ClientMessageService {
   private initHub(): void {
     const token = this.tokenService.tokenId;
     this.connection = new HubConnectionBuilder()
-        .withUrl(`${environment.apiUrl}/chat?token=${token}`, { accessTokenFactory: () => {
+        .withUrl(`${environment.hubUrl}/chat?token=${token}`, { accessTokenFactory: () => {
             return token;
           }})
         .withAutomaticReconnect()
@@ -48,12 +48,13 @@ export class ClientMessageService {
   }
 
   private connectionInit(): void {
-    this.connection.on('send', (message: Message) => {
-      debugger;
+    this.connection.on('send', async (message: Message) => {
+      message.status = MessageStatus.received;
       this.messages$.next(message);
+      await this.connection.invoke('MessageRead', message);
     });
 
-    this.connection.on('meta', (message: Message) => {
+    this.connection.on('setMeta', (message: Message) => {
       this.messageDialogId = message.messageDialogId;
       this.meta$.next(message);
     });
@@ -72,7 +73,6 @@ export class ClientMessageService {
     });
 
     this.connection.on("operatorConnect", (connectionStatus: string) => {
-      debugger;
       this.onConnected$.next(connectionStatus);
       this.connected = connectionStatus == "success";
     })
@@ -94,5 +94,9 @@ export class ClientMessageService {
         .catch(r => console.log(`Error: ${r}`));
 
     this.messages$.next(message);
+  }
+
+  public async Disconnect(): Promise<void>{
+    await this.connection.invoke('OperatorDisconnect', this.messageDialogId);
   }
 }

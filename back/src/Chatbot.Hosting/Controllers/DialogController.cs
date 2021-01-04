@@ -9,6 +9,7 @@ using Chatbot.Hosting.Misc;
 using Chatbot.Model.DataModel;
 using Chatbot.Model.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Chatbot.Hosting.Controllers
 {
@@ -44,9 +45,9 @@ namespace Chatbot.Hosting.Controllers
         }
 
         [HttpGet]
-        public async Task<MessageDialogResponse[]> GetStartedDialogs()
+        public async Task<MessageDialogResponse[]> GetStartedOrActiveDialogs()
         {
-            var dialogs = await _messageDialogService.GetStarted();
+            var dialogs = await _messageDialogService.GetByStatusFlags(DialogStatus.Started | DialogStatus.Active);
             Message[] messages = Array.Empty<Message>();
             if (dialogs.Length > 0)
                 messages = await _messageService.GetFirstMessages(dialogs.Select(_ => _.Id).ToArray());

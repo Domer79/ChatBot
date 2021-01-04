@@ -7,6 +7,7 @@ namespace Chatbot.Abstractions.Repositories
     public interface IMessageRepository
     {
         Task<Message> Add(Message message);
+        Task<bool> Update(Message message);
         Task<Message> GetMessage(Guid messageId);
         Task<Message[]> GetDialogMessages(Guid dialogId);
         Task<Message[]> GetFirstMessages(Guid[] dialogIds);

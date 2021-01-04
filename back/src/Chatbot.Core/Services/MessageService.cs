@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Chatbot.Abstractions.Contracts.Chat;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Abstractions.Repositories;
 using Chatbot.Core.Exceptions;
@@ -22,6 +23,13 @@ namespace Chatbot.Core.Services
                 throw new ChatbotCoreException("MessageId must be set");
             
             return _messageRepository.Add(message);
+        }
+
+        public async Task<bool> SetStatus(MessageInfo messageInfo)
+        {
+            var message = await _messageRepository.GetMessage(messageInfo.Id);
+            message.Status = messageInfo.Status;
+            return await _messageRepository.Update(message);
         }
 
         public Task<Message> GetMessage(Guid messageId)
