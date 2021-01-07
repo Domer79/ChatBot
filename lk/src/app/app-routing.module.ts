@@ -12,10 +12,11 @@ const routes: Routes = [
   {
     path: '',
     canActivateChild: [AuthGuard],
-    children: [
-      {path: '', component: DialogsComponent},
-    ]
+    redirectTo: '/dialogs',
+    pathMatch: 'full'
   },
+  {path: 'dialogs', component: DialogsComponent},
+  {path: 'dialogs/:id', component: DialogsComponent},
 ];
 
 @NgModule({

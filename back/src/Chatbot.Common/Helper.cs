@@ -132,6 +132,12 @@ namespace Chatbot.Common
             return claim?.Value;
         }
 
+        public static Guid? GetUserId(this ClaimsPrincipal claimsPrincipal)
+        {
+            var claim = claimsPrincipal.Claims.FirstOrDefault(_ => _.Type == CustomClaimTypes.UserId);
+            return claim == null ? null : Guid.Parse(claim.Value);
+        }
+
         public static bool IsEmpty(this Guid guid)
         {
             return guid == Guid.Empty;

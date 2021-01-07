@@ -17,5 +17,6 @@ namespace Chatbot.Model.DataModel
         public HashSet<Message> Messages { get; set; }
         
         public User Operator { get; set; }
+        public User Client { get; set; }
     }
 }

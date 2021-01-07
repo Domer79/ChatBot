@@ -9,7 +9,9 @@ namespace Chatbot.Abstractions.Repositories
     {
         Task<MessageDialog[]> GetAll();
         Task<MessageDialog[]> GetPage(int pageNumber, int pageSize);
+        Task<MessageDialog[]> GetPage(DialogStatus status, int number, int size);
         Task<long> GetTotalCount();
+        Task<long> GetTotalCount(DialogStatus status);
         Task<MessageDialog[]> GetByStatus(DialogStatus status);
         Task<MessageDialog> Upsert(MessageDialog dialog);
         Task<bool> Delete(MessageDialog dialog);

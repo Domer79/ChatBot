@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Chatbot.Abstractions.Contracts
+namespace Chatbot.Abstractions.Contracts.Requests
 {
     public class LoginRequest
     {

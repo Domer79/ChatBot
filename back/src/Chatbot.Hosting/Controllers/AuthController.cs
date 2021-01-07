@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Contracts;
+using Chatbot.Abstractions.Contracts.Requests;
 using Chatbot.Abstractions.Contracts.Responses;
 using Chatbot.Abstractions.Core;
 using Chatbot.Abstractions.Core.Services;

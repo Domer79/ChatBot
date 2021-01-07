@@ -13,7 +13,7 @@ namespace Chatbot.Abstractions.Core.Services
         Task<MessageDialog> Activate(MessageDialog dialog);
         Task<MessageDialog> Reject(MessageDialog dialog);
         Task<MessageDialog> Close(MessageDialog dialog);
-        Task<MessageDialog> Activate(Guid messageDialogId);
+        Task<MessageDialog> Activate(Guid actionsRequestMessageDialogId, Guid messageDialogId);
         Task<MessageDialog> Reject(Guid messageDialogId);
         Task<MessageDialog> Close(Guid messageDialogId);
         
@@ -25,5 +25,6 @@ namespace Chatbot.Abstractions.Core.Services
         Task<Page<MessageDialog>> GetPage(int number, int size);
         Task<MessageDialog> GetDialog(Guid messageDialogId);
         Task<MessageDialog[]> GetByStatusFlags(DialogStatus status);
+        Task<Page<MessageDialog>> GetPageByDialogStatus(DialogStatus status, int number, int size);
     }
 }

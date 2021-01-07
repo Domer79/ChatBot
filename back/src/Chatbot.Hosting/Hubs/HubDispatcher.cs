@@ -86,15 +86,15 @@ namespace Chatbot.Hosting.Hubs
 
             _userSet.RemoveInactiveUsers();
         }
-        
-        public Task NotifyOperators(Guid messageDialogId)
+
+        private Task NotifyOperators(Guid messageDialogId)
         {
             return _operatorHub.Clients.All.SendAsync("dialogClosed", messageDialogId);
         }
 
         public void Dispose()
         {
-            _timer.Dispose();
+            _timer?.Dispose();
         }
     }
 }

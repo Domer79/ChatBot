@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Contracts;
 using Chatbot.Abstractions.Core.Services;
@@ -54,15 +55,18 @@ namespace Chatbot.Core.Services
             return _dialogRepository.Upsert(dialog);
         }
 
-        public async Task<MessageDialog> Activate(Guid messageDialogId)
+        public async Task<MessageDialog> Activate(Guid messageDialogId, Guid userId)
         {
             var dialog = await GetDialog(messageDialogId);
+            dialog.OperatorId = userId;
+            dialog.DateWork = DateTime.UtcNow;
             return await Activate(dialog);
         }
 
         public async Task<MessageDialog> Reject(Guid messageDialogId)
         {
             var dialog = await GetDialog(messageDialogId);
+            dialog.DateCompleted = DateTime.UtcNow;
             return await Reject(dialog);
         }
 
@@ -123,6 +127,18 @@ namespace Chatbot.Core.Services
             }
 
             return dialogs.ToArray();
+        }
+
+        public async Task<Page<MessageDialog>> GetPageByDialogStatus(DialogStatus status, int number, int size)
+        {
+            var dialogs = await _dialogRepository.GetPage(status, number, size);
+            var totalCount = await _dialogRepository.GetTotalCount(status);
+            
+            return new Page<MessageDialog>()
+            {
+                Items = dialogs,
+                TotalCount = totalCount
+            };
         }
     }
 }

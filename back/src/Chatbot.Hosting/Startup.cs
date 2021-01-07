@@ -68,11 +68,22 @@ namespace Chatbot.Hosting
                 {
                     options.EnableDetailedErrors = true;
                     options.ClientTimeoutInterval = TimeSpan.FromMinutes(5);
+                    options.KeepAliveInterval = TimeSpan.FromSeconds(60);
+                    options.HandshakeTimeout = TimeSpan.FromSeconds(60);
                 })
                 .AddHubOptions<OperatorHub>(options =>
                 {
                     options.EnableDetailedErrors = true;
                     options.ClientTimeoutInterval = TimeSpan.FromMinutes(20);
+                    options.KeepAliveInterval = TimeSpan.FromSeconds(60);
+                    options.HandshakeTimeout = TimeSpan.FromSeconds(60);
+                })
+                .AddHubOptions<TokenHub>(options =>
+                {
+                    options.EnableDetailedErrors = true;
+                    options.ClientTimeoutInterval = TimeSpan.FromMinutes(20);
+                    options.KeepAliveInterval = TimeSpan.FromSeconds(60);
+                    options.HandshakeTimeout = TimeSpan.FromSeconds(60);
                 });
 
             services.AddControllers()

@@ -14,5 +14,6 @@ namespace Chatbot.Abstractions.Repositories
         Task<User> GetByLoginOrEmail(string loginOrEmail);
         Task<Role[]> GetRoles(Guid userId);
         Task<Role[]> GetRoles(string loginOrEmail);
+        Task<User[]> GetByIds(Guid[] ids);
     }
 }

@@ -3,19 +3,29 @@
 
 .dialog-actions
   display: flex
-  width: 33%
+  width: 50%
+  flex-direction: row-reverse
 
 .dialog-number
-  width: 10%
+  width: 6%
 
 .dialog-status
-  width: 10%
+  width: 5%
+
+.dialog-status.active
+  color: #6EB443
+
+.dialog-status.inactive
+  color: #333740
+
+.dialog-status.offline
+  color: #3757A1
 
 .dialog-date-created
-  width: 10%
+  width: 6%
 
 .dialog-date-closed
-  width: 10%
+  width: 6%
 
 .dialog-client
   width: 27%
@@ -25,3 +35,14 @@
     top: 1em
     bottom: 1em
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.15)
+
+.rao-button
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAFBFF 100%)
+  border: 1px solid #D5DDED
+  box-sizing: border-box
+  border-radius: 3px
+  width: 190px
+  height: 50px
+  margin:
+    left: 5px
+    right: 5px

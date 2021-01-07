@@ -29,6 +29,11 @@ namespace Chatbot.Core.Services
             return _userRepository.GetById(id);
         }
 
+        public Task<User[]> GetByIds(Guid[] ids)
+        {
+            return _userRepository.GetByIds(ids);
+        }
+
         public Task<User> GetByLoginOrEmail(string loginOrEmail)
         {
             return _userRepository.GetByLoginOrEmail(loginOrEmail);

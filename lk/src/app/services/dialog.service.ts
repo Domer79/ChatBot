@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {environment} from "../../environments/environment";
 import {BehaviorSubject, Observable, Subject} from "rxjs";
-import MessageDialog from "../contracts/message-dialog";
+import MessageDialog, {DialogStatus} from "../contracts/message-dialog";
 import {TokenService} from "./token.service";
+import Message from "../../abstracts/message";
+import Page from "../contracts/Page";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DialogService {
   private connection: HubConnection;
-  private dialogCreated$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private dialogCreated$: Subject<string> = new Subject<string>();
   public dialogCreated: Observable<string> = this.dialogCreated$.asObservable();
   private dialogClosed$: Subject<string> = new Subject<string>();
   public dialogClosed: Observable<string> = this.dialogClosed$.asObservable();
@@ -25,6 +27,8 @@ export class DialogService {
             { accessTokenFactory: () => this.tokenService.tokenId ?? '' })
         .withAutomaticReconnect()
         .build();
+    this.connection.serverTimeoutInMilliseconds = 120000;
+
     this.startConnection().then(() => {
       this.addDialogCreatedListener();
     });
@@ -44,7 +48,20 @@ export class DialogService {
     });
   }
 
-  getDialogs(): Observable<MessageDialog[]>{
-    return this.httpClient.get<MessageDialog[]>("api/Dialog/GetStartedOrActiveDialogs");
+  getMessages(messageDialogId: string): Observable<Message[]>{
+    return this.httpClient.get<Message[]>("api/Message/GetMessages", { params: {messageDialogId} });
+  }
+
+  getDialogs(dialogStatus: DialogStatus, page: number, size: number): Observable<Page<MessageDialog>>{
+    return this.httpClient.get<Page<MessageDialog>>(
+        `api/Dialog/GetDialogsByStatus?status=${dialogStatus}&number=${page}&size=${size}`);
+  }
+
+  async activate(dlg: MessageDialog) {
+    await this.httpClient.post("api/Dialog/Activate", { messageDialogId: dlg.id }).toPromise();
+  }
+
+  async reject(dlg: MessageDialog) {
+    await this.httpClient.post("api/Dialog/Reject", { messageDialogId: dlg.id }).toPromise();
   }
 }

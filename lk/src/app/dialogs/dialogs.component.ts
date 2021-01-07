@@ -2,10 +2,12 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Security} from "../security.decorator";
 import {DialogService} from "../services/dialog.service";
 import {merge, Observable, of, Subscription} from "rxjs";
-import MessageDialog from "../contracts/message-dialog";
+import MessageDialog, {DialogStatus, LinkType} from "../contracts/message-dialog";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ClientChatDialogComponent} from "../client-chat-dialog/client-chat-dialog.component";
 import {catchError} from "rxjs/operators";
+import {ActivatedRoute} from "@angular/router";
+import Page from "../contracts/Page";
 
 @Component({
   selector: 'app-dialogs',
@@ -15,27 +17,32 @@ import {catchError} from "rxjs/operators";
 @Security('DialogPage')
 export class DialogsComponent implements OnInit, OnDestroy {
   private dialogCreatedSubscription: Subscription;
-  private dialogClosedSubscription: Subscription;
 
-  dialogs: Observable<MessageDialog[]>;
+  dialogPageSize: number = 10;
+  dialogCurrentPage: number = 1;
+  dialogPage: Page<MessageDialog>;
+  dialogs: MessageDialog[];
+  dialogCount: number;
+  private status: DialogStatus;
 
   constructor(
       private dialogService: DialogService,
+      private route: ActivatedRoute,
       public dialog: MatDialog
   ) {
-    this.dialogCreatedSubscription = this.dialogService.dialogCreated.pipe(catchError(err => {
-      debugger;
-      console.error(err);
-      return of(err);
-    })).subscribe(dialogId => {
-      this.dialogs = this.dialogService.getDialogs();
+    this.status = Number(route.snapshot.paramMap.get('id')) || LinkType.all;
+
+    debugger;
+    this.dialogService.getDialogs(this.status, this.dialogCurrentPage, this.dialogPageSize).subscribe(p => {
+      this.dialogCount = p.totalCount;
+      this.dialogs = p.items;
     });
-    this.dialogClosedSubscription = this.dialogService.dialogClosed.pipe(catchError(err => {
-      debugger;
-      console.error(err);
-      return of(err);
-    })).subscribe(dialogId => {
-      this.dialogs = this.dialogService.getDialogs();
+
+    this.dialogCreatedSubscription = this.dialogService.dialogCreated.subscribe(dialogId => {
+      this.dialogService.getDialogs(this.status, this.dialogCurrentPage, this.dialogPageSize).subscribe(p => {
+        this.dialogCount = p.totalCount;
+        this.dialogs = p.items;
+      });
     });
   }
 
@@ -44,7 +51,6 @@ export class DialogsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.dialogCreatedSubscription.unsubscribe();
-    this.dialogClosedSubscription.unsubscribe();
   }
 
   openChat(messageDialog: MessageDialog) {
@@ -53,5 +59,16 @@ export class DialogsComponent implements OnInit, OnDestroy {
     dialogConfig.height = '510px';
     dialogConfig.data = messageDialog;
     this.dialog.open(ClientChatDialogComponent, dialogConfig);
+  }
+
+  async activate(dlg: MessageDialog) {
+    await this.dialogService.activate(dlg);
+    const p = await this.dialogService.getDialogs(this.status, this.dialogCurrentPage, this.dialogPageSize).toPromise();
+    this.dialogCount = p.totalCount;
+    this.dialogs = p.items;
+  }
+
+  async reject(dlg: MessageDialog) {
+    await this.dialogService.reject(dlg);
   }
 }

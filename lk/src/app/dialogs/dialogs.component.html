@@ -1,28 +1,30 @@
 <p>dialogs works!</p>
 
-<mat-card *ngFor="let dialog of dialogs | async; index as i" tabindex="i" class="card">
+<mat-card *ngFor="let dialog of dialogs; index as i" tabindex="i" class="card">
     <mat-card-subtitle>{{dialog.firstMessage}}</mat-card-subtitle>
     <mat-card-content>
         <div class="dialog-info-container">
-            <div class="dialog-number">{{dialog.number}}</div>
-            <div class="dialog-status">{{dialog.dialogStatus.toString()}}</div>
+            <div class="dialog-number">№{{dialog.number}}</div>
+            <div class="dialog-status {{dialog.dialogStatus | dialogStatus:'color'}}">{{dialog.dialogStatus | dialogStatus}}</div>
             <div class="dialog-date-created">{{dialog.dateCreated | date }}</div>
             <div class="dialog-date-closed">{{dialog.dateCompleted | date}}</div>
-            <div class="dialog-client">{{dialog.clientId}}</div>
+            <div class="dialog-client">{{dialog.client | userFio}}</div>
             <div class="dialog-actions">
-                <div class="dialog-work">
-                    <button mat-button>Взять в работу</button>
+                <div class="dialog-open">
+                    <button mat-button (click)="openChat(dialog)">
+                        <mat-icon svgIcon="res-chat"></mat-icon>
+                    </button>
                 </div>
                 <div class="dialog-close">
-                    <button mat-button>Отклонить</button>
+                    <button mat-button class="rao-button" (click)="reject(dialog)">Отклонить</button>
                 </div>
-                <div class="dialog-close">
-                    <button mat-button (click)="openChat(dialog)">Открыть</button>
+                <div class="dialog-work" (click)="activate(dialog)">
+                    <button mat-button class="rao-button">Взять в работу</button>
                 </div>
             </div>
         </div>
     </mat-card-content>
-<!--    <mat-card-actions align="end">-->
-<!--        -->
-<!--    </mat-card-actions>-->
 </mat-card>
+<mat-paginator [length]="dialogCount" [pageSize]="dialogPageSize" [pageSizeOptions]="[10, 20, 30]">
+
+</mat-paginator>

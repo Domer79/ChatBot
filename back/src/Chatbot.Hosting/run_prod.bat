@@ -1,0 +1,3 @@
+start run_prod_hosting
+timeout 10
+start run_prod_hub

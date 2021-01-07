@@ -26,6 +26,7 @@ export class TokenService {
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Information)
       .build();
+    this.tokenConnection.serverTimeoutInMilliseconds = 120000;
 
     this.tokenConnectionInit();
 

@@ -33,6 +33,9 @@ import { ClientMessageComponent } from './dialog/client-message/client-message.c
 import {MessageService} from "./services/message.service";
 import { registerLocaleData } from "@angular/common";
 import localeRu from '@angular/common/locales/ru';
+import {MatPaginatorModule} from "@angular/material/paginator";
+import { DialogStatusPipe } from './pipes/dialog-status.pipe';
+import { FioPipe } from './pipes/fio.pipe';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -44,7 +47,9 @@ registerLocaleData(localeRu, 'ru');
     DialogsComponent,
     ClientChatDialogComponent,
     OperatorMessageComponent,
-    ClientMessageComponent
+    ClientMessageComponent,
+    DialogStatusPipe,
+    FioPipe
   ],
   imports: [
     BrowserModule,
@@ -64,6 +69,7 @@ registerLocaleData(localeRu, 'ru');
     MatSnackBarModule,
     MatCardModule,
     MatDialogModule,
+    MatPaginatorModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },

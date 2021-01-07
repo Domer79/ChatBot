@@ -1,3 +1,5 @@
+import User from "./user";
+
 export default class MessageDialog{
     constructor(options: any) {
         this.id = options.id;
@@ -19,6 +21,7 @@ export default class MessageDialog{
     operatorId?: string;
     firstMessage?: string;
     clientId?: string;
+    client: User
 }
 
 export enum DialogStatus{
@@ -46,4 +49,12 @@ export enum DialogStatus{
     * Диалог отклонен оператором
     * */
     Rejected = 1 << 4,
+}
+
+export enum LinkType {
+    all = DialogStatus.Started | DialogStatus.Active | DialogStatus.Rejected | DialogStatus.Closed,
+    opened = DialogStatus.Started,
+    rejected = DialogStatus.Rejected,
+    worked = DialogStatus.Active,
+    closed = DialogStatus.Closed,
 }

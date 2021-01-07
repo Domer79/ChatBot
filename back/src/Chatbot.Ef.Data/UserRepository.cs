@@ -78,5 +78,10 @@ namespace Chatbot.Ef.Data
                 .SingleOrDefaultAsync(_ => _.Login == loginOrEmail || _.Email == loginOrEmail);
             return user.Roles.ToArray();
         }
+
+        public Task<User[]> GetByIds(Guid[] ids)
+        {
+            return _context.Users.Where(_ => ids.Contains(_.Id)).ToArrayAsync();
+        }
     }
 }

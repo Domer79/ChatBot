@@ -104,7 +104,7 @@ namespace Chatbot.Hosting.Hubs
 
         protected override async Task OnDisconnected()
         {
-            await HubDispatcher.CloseClientDialog(User.Id);
+            //await HubDispatcher.CloseClientDialog(User.Id);
         }
     }
 }

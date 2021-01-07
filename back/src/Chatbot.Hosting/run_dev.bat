@@ -1,0 +1,3 @@
+start run_dev_hosting
+timeout 5
+start run_dev_hub

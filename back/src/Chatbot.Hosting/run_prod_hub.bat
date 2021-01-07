@@ -1,0 +1,1 @@
+dotnet Chatbot.Hosting.dll --environment prod-hub

@@ -37,6 +37,7 @@ export class ClientMessageService {
         .withAutomaticReconnect()
         .configureLogging(LogLevel.Information)
         .build();
+    this.connection.serverTimeoutInMilliseconds = 120000;
 
     this.connectionInit();
     this.connection.start()

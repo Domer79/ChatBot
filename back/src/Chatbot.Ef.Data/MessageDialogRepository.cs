@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Repositories;
+using Chatbot.Common;
 using Chatbot.Model.DataModel;
 using Chatbot.Model.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -28,9 +29,31 @@ namespace Chatbot.Ef.Data
             return _context.Dialogs.Skip(pageNumber * pageSize - pageSize).Take(pageSize).ToArrayAsync();
         }
 
+        public Task<MessageDialog[]> GetPage(DialogStatus status, int number, int size)
+        {
+            IQueryable<MessageDialog> dialogs = _context.Dialogs.Where(_ => _.Id == Guid.Empty);
+            foreach (var flag in Helper.GetFlags(status))
+            {
+                dialogs = dialogs.Concat(_context.Dialogs.Where(_ => _.DialogStatus == flag));
+            }
+            
+            return dialogs.Include(_ => _.Operator).Skip(number * size - size).Take(size).ToArrayAsync();
+        }
+
         public Task<long> GetTotalCount()
         {
             return _context.Dialogs.LongCountAsync();
+        }
+
+        public Task<long> GetTotalCount(DialogStatus status)
+        {
+            IQueryable<MessageDialog> dialogs = _context.Dialogs.Where(_ => _.Id == Guid.Empty);
+            foreach (var flag in Helper.GetFlags(status))
+            {
+                dialogs = dialogs.Concat(_context.Dialogs.Where(_ => _.DialogStatus == flag));
+            }
+            
+            return dialogs.LongCountAsync();
         }
 
         public Task<MessageDialog[]> GetByStatus(DialogStatus status)

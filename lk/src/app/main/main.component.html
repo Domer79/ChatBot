@@ -30,11 +30,11 @@
         <nav mat-tab-nav-bar [backgroundColor]="'primary'">
             <div class="action-bar">
                 <div>
-                    <a mat-tab-link [active]="activeLink == linkType.all" (click)="activeLink = linkType.all">Все</a>
-                    <a mat-tab-link [active]="activeLink == linkType.opened" (click)="activeLink = linkType.opened">Открытые</a>
-                    <a mat-tab-link [active]="activeLink == linkType.rejected" (click)="activeLink = linkType.rejected">Отклоненные</a>
-                    <a mat-tab-link [active]="activeLink == linkType.worked" (click)="activeLink = linkType.worked">В работе</a>
-                    <a mat-tab-link [active]="activeLink == linkType.closed" (click)="activeLink = linkType.closed">Закрытые</a>
+                    <a mat-tab-link [routerLink]="['dialogs']" [active]="activeLink == linkType.all" (click)="goTo(linkType.all)">Все</a>
+                    <a mat-tab-link [routerLink]="['dialogs/1']" [active]="activeLink == linkType.opened" (click)="goTo(linkType.opened)">Открытые</a>
+                    <a mat-tab-link [routerLink]="['dialogs/16']" [active]="activeLink == linkType.rejected" (click)="goTo(linkType.rejected)">Отклоненные</a>
+                    <a mat-tab-link [routerLink]="['dialogs/2']" [active]="activeLink == linkType.worked" (click)="goTo(linkType.worked)">В работе</a>
+                    <a mat-tab-link [routerLink]="['dialogs/8']" [active]="activeLink == linkType.closed" (click)="goTo(linkType.closed)">Закрытые</a>
                 </div>
                 <div>
                     Additional info

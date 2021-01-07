@@ -8,6 +8,7 @@ namespace Chatbot.Abstractions.Core.Services
     {
         Task<User[]> GetAll();
         Task<User> GetById(Guid id);
+        Task<User[]> GetByIds(Guid[] ids);
         Task<User> GetByLoginOrEmail(string loginOrEmail);
         Task<User> Upsert(User user);
         Task<bool> Remove(Guid userId);

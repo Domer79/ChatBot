@@ -13,5 +13,6 @@ namespace Chatbot.Abstractions.Contracts.Responses
         public DialogStatus DialogStatus { get; set; } 
         public Guid? OperatorId { get; set; }
         public string FirstMessage { get; set; }
+        public UserResponse Client { get; set; }
     }
 }
