@@ -15,8 +15,9 @@ export class QuestionsHeaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  stopShowResponse(): void {
-    this.questionsProvider.stopShowResponse();
+  async getBackQuestions(): Promise<void> {
+    const question = this.questionsProvider.getBackQuestions();
+    await this.questionsProvider.loadQuestions(question);
   }
 
   closePage(): void {

@@ -11,5 +11,6 @@ namespace Chatbot.Abstractions.Repositories
         
         Task<QuestionResponse> Upsert(QuestionResponse question);
         Task<bool> Delete(QuestionResponse question);
+        Task<QuestionResponse[]> GetQuestionChildren(Guid parentId);
     }
 }

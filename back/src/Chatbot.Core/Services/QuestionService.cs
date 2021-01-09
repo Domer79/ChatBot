@@ -20,6 +20,11 @@ namespace Chatbot.Core.Services
             return _questionRepository.GetQuestion(questionId);
         }
 
+        public Task<QuestionResponse[]> GetQuestions(Guid parentId)
+        {
+            return _questionRepository.GetQuestionChildren(parentId);
+        }
+
         public Task<QuestionResponse[]> GetAll()
         {
             return _questionRepository.GetAll();

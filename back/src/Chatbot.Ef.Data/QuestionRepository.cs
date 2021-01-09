@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Repositories;
 using Chatbot.Model.DataModel;
@@ -45,6 +46,13 @@ namespace Chatbot.Ef.Data
         {
             _context.Remove(question);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public Task<QuestionResponse[]> GetQuestionChildren(Guid parentId)
+        {
+            return parentId == Guid.Empty
+                ? _context.Questions.Where(_ => _.ParentId == null).ToArrayAsync()
+                : _context.Questions.Where(_ => _.ParentId == parentId).ToArrayAsync();
         }
     }
 }

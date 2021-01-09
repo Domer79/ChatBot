@@ -1,12 +1,12 @@
-<questions-header [responsePreset]="responsePresent" (close)="closePage()"></questions-header>
+<questions-header [responsePreset]="isShowBack" (close)="closePage()"></questions-header>
 <div>
   <div class="main-container questions-container" *ngIf="!responsePresent">
-    <div *ngFor="let question of questions | async" class="question-container">
+    <div *ngFor="let question of questions" class="question-container">
       <div>
         <img src="assets/document.svg" class="document-svg"/>
       </div>
       <div class="question-question-container">
-        <span class="question-question" (click)="showResponse(question)">{{question.question}}</span>
+        <span class="question-question" (click)="showQuestions(question)">{{question.question}}</span>
       </div>
     </div>
   </div>

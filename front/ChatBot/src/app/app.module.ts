@@ -24,6 +24,8 @@ import { PageDispatcherComponent } from './page-dispatcher/page-dispatcher.compo
 import {PageDispatcherService} from './services/page-dispatcher.service';
 import { PageHostDirective } from '../directives/page-host.directive';
 import {TokenService} from './services/token.service';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {ApiInterceptor} from './services/api-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -49,8 +51,10 @@ import {TokenService} from './services/token.service';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    HttpClientModule,
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
     ClientMsgDispatcher,
     QuestionsProviderService,
     PageDispatcherService,

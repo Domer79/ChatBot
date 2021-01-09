@@ -20,8 +20,9 @@ namespace Chatbot.Ef.Configurations
                 .HasColumnName("response");
 
             b.Property(_ => _.ParentId)
-                .HasColumnName("parent_id");
-            
+                .HasColumnName("parent_id")
+                .IsRequired(false);
+
             b.Property(_ => _.DateCreated)
                 .HasColumnName("date_created")
                 .IsRequired()

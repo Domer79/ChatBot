@@ -70,5 +70,8 @@ export class DialogsComponent implements OnInit, OnDestroy {
 
   async reject(dlg: MessageDialog) {
     await this.dialogService.reject(dlg);
+    const p = await this.dialogService.getDialogs(this.status, this.dialogCurrentPage, this.dialogPageSize).toPromise();
+    this.dialogCount = p.totalCount;
+    this.dialogs = p.items;
   }
 }

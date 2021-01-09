@@ -15,8 +15,8 @@ const routes: Routes = [
     redirectTo: '/dialogs',
     pathMatch: 'full'
   },
-  {path: 'dialogs', component: DialogsComponent},
-  {path: 'dialogs/:id', component: DialogsComponent},
+  {path: 'dialogs', component: DialogsComponent, canActivate: [AuthGuard]},
+  {path: 'dialogs/:id', component: DialogsComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
