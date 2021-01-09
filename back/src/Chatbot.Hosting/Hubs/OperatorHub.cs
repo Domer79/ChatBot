@@ -45,35 +45,35 @@ namespace Chatbot.Hosting.Hubs
 
             await Clients.Others.SendAsync("dialogTaken", dialog.Id, dialogOperator.Id);
         }
-
-        protected override async Task SendMeta(MessageInfo messageInfo)
-        {
-            var dialogGroup = await HubDispatcher.GetDialogGroup(messageInfo.MessageDialogId);
-            await Clients.Clients(dialogGroup.Others(User.Id)).SendAsync("setMeta", messageInfo);
-        }
-
-        protected override async Task SendOf(Message message)
-        {
-            var dialogGroup = await HubDispatcher.GetDialogGroup(message.MessageDialogId);
-            if (dialogGroup == null)
-                throw new InvalidOperationException(
-                    $"Group by message dialog id '{message.MessageDialogId}' not found");
-            if (!dialogGroup.UserExist(User))
-            {
-                dialogGroup.AddUser(User);
-            }
-        
-            message.Status = MessageStatus.Saved;
-            message = await MessageService.Add(message);
-            dialogGroup.LastMessageTime = message.Time;
-            
-            await Clients.Caller.SendAsync("setMeta", message);
-        
-            if (dialogGroup.MemberCount > 1)
-            {
-                await Clients.Clients(dialogGroup.Others(User.Id))
-                    .SendAsync("send", _mapper.Map<MessageResponse>(message));
-            }
-        }
+        //
+        // protected override async Task SendMeta(MessageInfo messageInfo)
+        // {
+        //     var dialogGroup = await HubDispatcher.GetDialogGroup(messageInfo.MessageDialogId);
+        //     await Clients.Clients(dialogGroup.Others(User.Id)).SendAsync("setMeta", messageInfo);
+        // }
+        //
+        // protected override async Task SendOf(Message message)
+        // {
+        //     var dialogGroup = await HubDispatcher.GetDialogGroup(message.MessageDialogId);
+        //     if (dialogGroup == null)
+        //         throw new InvalidOperationException(
+        //             $"Group by message dialog id '{message.MessageDialogId}' not found");
+        //     if (!dialogGroup.UserExist(User))
+        //     {
+        //         dialogGroup.AddUser(User);
+        //     }
+        //
+        //     message.Status = MessageStatus.Saved;
+        //     message = await MessageService.Add(message);
+        //     dialogGroup.LastMessageTime = message.Time;
+        //     
+        //     await Clients.Caller.SendAsync("setMeta", message);
+        //
+        //     if (dialogGroup.MemberCount > 1)
+        //     {
+        //         await Clients.Clients(dialogGroup.Others(User.Id))
+        //             .SendAsync("send", _mapper.Map<MessageResponse>(message));
+        //     }
+        // }
     }
 }

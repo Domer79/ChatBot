@@ -95,8 +95,14 @@ namespace Chatbot.Hosting.Hubs
             await SendMeta(messageInfo);
         }
 
-        protected abstract Task SendMeta(MessageInfo messageInfo);
+        protected virtual Task SendMeta(MessageInfo messageInfo)
+        {
+            return Task.CompletedTask;
+        }
 
-        protected abstract Task SendOf(Message message);
+        protected virtual Task SendOf(Message message)
+        {
+            return Task.CompletedTask;
+        }
     }
 }
