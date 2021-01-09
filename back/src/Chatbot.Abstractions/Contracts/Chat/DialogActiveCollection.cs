@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Model.DataModel;
@@ -16,6 +17,7 @@ namespace Chatbot.Abstractions.Contracts.Chat
         private readonly IAppConfig _appConfig;
         private readonly UserSet _userSet;
         private readonly Lazy<List<DialogGroup>> _dialogGroups;
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public DialogActiveCollection(
             IMessageDialogService dialogService,
@@ -37,10 +39,11 @@ namespace Chatbot.Abstractions.Contracts.Chat
             if (messageDialogId == Guid.Empty)
             {
                 var messageDialog = await _dialogService.Start(user.Id);
+                messageDialogId = messageDialog.Id;
                 dialogGroup = new DialogGroup(messageDialog, _userSet, _appConfig.Chat);
                 dialogGroup.AddUser(user);
-                _dialogGroups.Value.Add(dialogGroup);
-                return dialogGroup;
+                // _dialogGroups.Value.Add(dialogGroup);
+                // return dialogGroup;
             }
 
             dialogGroup = await GetDialogGroup(messageDialogId);
@@ -48,18 +51,26 @@ namespace Chatbot.Abstractions.Contracts.Chat
             return dialogGroup;
         }
 
-        public async Task<DialogGroup> GetDialogGroup(Guid messageDialogId)       
+        public async Task<DialogGroup> GetDialogGroup(Guid messageDialogId)
         {
-            var dialogGroup = _dialogGroups.Value.SingleOrDefault(_ => _.MessageDialogId == messageDialogId);
-            if (dialogGroup != null) 
-                return dialogGroup;
+            await _semaphore.WaitAsync();
+            try
+            {
+                var dialogGroup = _dialogGroups.Value.SingleOrDefault(_ => _.MessageDialogId == messageDialogId);
+                if (dialogGroup != null) 
+                    return dialogGroup;
             
-            var dialog = await _dialogService.GetDialog(messageDialogId);
-            var lastMessages = await _messageService.GetLastMessages(new []{ dialog.Id });
-            dialogGroup = new DialogGroup(dialog, _userSet, _appConfig.Chat, lastMessages[0].Time);
-            _dialogGroups.Value.Add(dialogGroup);
+                var dialog = await _dialogService.GetDialog(messageDialogId);
+                var lastMessages = await _messageService.GetLastMessages(new []{ dialog.Id });
+                dialogGroup = new DialogGroup(dialog, _userSet, _appConfig.Chat, lastMessages[0].Time);
+                _dialogGroups.Value.Add(dialogGroup);
 
-            return dialogGroup;
+                return dialogGroup;
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         public DialogGroup[] GetDeprecated()
