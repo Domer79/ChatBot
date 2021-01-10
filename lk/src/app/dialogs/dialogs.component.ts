@@ -6,8 +6,9 @@ import MessageDialog, {DialogStatus, LinkType} from "../contracts/message-dialog
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ClientChatDialogComponent} from "../client-chat-dialog/client-chat-dialog.component";
 import {catchError} from "rxjs/operators";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import Page from "../contracts/Page";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-dialogs',
@@ -16,6 +17,9 @@ import Page from "../contracts/Page";
 })
 @Security('DialogPage')
 export class DialogsComponent implements OnInit, OnDestroy {
+  activeLink = LinkType.all;
+  linkType = LinkType;
+
   private dialogCreatedSubscription: Subscription;
 
   dialogPageSize: number = 10;
@@ -28,11 +32,11 @@ export class DialogsComponent implements OnInit, OnDestroy {
   constructor(
       private dialogService: DialogService,
       private route: ActivatedRoute,
-      public dialog: MatDialog
+      public dialog: MatDialog,
+      private router: Router,
   ) {
     this.status = Number(route.snapshot.paramMap.get('id')) || LinkType.all;
 
-    debugger;
     this.dialogService.getDialogs(this.status, this.dialogCurrentPage, this.dialogPageSize).subscribe(p => {
       this.dialogCount = p.totalCount;
       this.dialogs = p.items;
@@ -73,5 +77,39 @@ export class DialogsComponent implements OnInit, OnDestroy {
     const p = await this.dialogService.getDialogs(this.status, this.dialogCurrentPage, this.dialogPageSize).toPromise();
     this.dialogCount = p.totalCount;
     this.dialogs = p.items;
+  }
+
+  async goTo(linkType: LinkType) {
+    switch (linkType) {
+      case LinkType.all:{
+        this.activeLink = LinkType.all;
+        await this.router.navigate(['dialogs'], { skipLocationChange: true });
+        break;
+      }
+      case LinkType.opened:{
+        this.activeLink = LinkType.opened;
+        await this.router.navigate([`dialogs/${LinkType.opened}`], { skipLocationChange: true });
+        break;
+      }
+      case LinkType.worked:{
+        this.activeLink = LinkType.worked;
+        await this.router.navigate([`dialogs/${LinkType.worked}`], { skipLocationChange: true });
+        break;
+      }
+      case LinkType.rejected:{
+        this.activeLink = LinkType.rejected;
+        await this.router.navigate([`dialogs/${LinkType.rejected}`], { skipLocationChange: true });
+        break;
+      }
+      case LinkType.closed:{
+        this.activeLink = LinkType.closed;
+        await this.router.navigate([`dialogs/${LinkType.closed}`], { skipLocationChange: true });
+        break;
+      }
+    }
+  }
+
+  getPage($event: PageEvent) {
+
   }
 }

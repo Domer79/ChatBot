@@ -1,4 +1,17 @@
-<p>dialogs works!</p>
+<nav mat-tab-nav-bar [backgroundColor]="'primary'">
+    <div class="action-bar">
+        <div>
+            <a mat-tab-link [routerLink]="['dialogs']" [active]="activeLink == linkType.all" (click)="goTo(linkType.all)">Все</a>
+            <a mat-tab-link [routerLink]="['dialogs/1']" [active]="activeLink == linkType.opened" (click)="goTo(linkType.opened)">Открытые</a>
+            <a mat-tab-link [routerLink]="['dialogs/16']" [active]="activeLink == linkType.rejected" (click)="goTo(linkType.rejected)">Отклоненные</a>
+            <a mat-tab-link [routerLink]="['dialogs/2']" [active]="activeLink == linkType.worked" (click)="goTo(linkType.worked)">В работе</a>
+            <a mat-tab-link [routerLink]="['dialogs/8']" [active]="activeLink == linkType.closed" (click)="goTo(linkType.closed)">Закрытые</a>
+        </div>
+        <div>
+            Additional info
+        </div>
+    </div>
+</nav>
 
 <mat-card *ngFor="let dialog of dialogs; index as i" tabindex="i" class="card">
     <mat-card-subtitle>{{dialog.firstMessage}}</mat-card-subtitle>
@@ -25,6 +38,6 @@
         </div>
     </mat-card-content>
 </mat-card>
-<mat-paginator [length]="dialogCount" [pageSize]="dialogPageSize" [pageSizeOptions]="[10, 20, 30]">
+<mat-paginator [length]="dialogCount" [pageSize]="dialogPageSize" [pageSizeOptions]="[10, 20, 30]" (page)="getPage($event)">
 
 </mat-paginator>
