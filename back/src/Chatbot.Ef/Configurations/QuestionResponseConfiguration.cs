@@ -12,6 +12,12 @@ namespace Chatbot.Ef.Configurations
 
             b.Property(_ => _.Id)
                 .HasColumnName("question_id");
+
+            b.Property(_ => _.Number)
+                .HasColumnName("number")
+                .IsRequired()
+                .ValueGeneratedOnAdd();
+
             b.Property(_ => _.Question)
                 .HasColumnName("question")
                 .IsRequired();
@@ -31,6 +37,8 @@ namespace Chatbot.Ef.Configurations
             b.ToTable("question_response");
             b.HasKey(_ => _.Id);
             b.HasIndex(_ => _.Question).IsUnique();
+            b.HasIndex(_ => _.Number)
+                .IsUnique();
             b.HasOne(_ => _.Parent)
                 .WithMany(_ => _.Children)
                 .HasForeignKey(_ => _.ParentId)

@@ -6,6 +6,7 @@ namespace Chatbot.Model.DataModel
     public class QuestionResponse
     {
         public Guid Id { get; set; }
+        public int Number { get; set; }
         public string Question { get; set; }
         public string Response { get; set; }
         public Guid? ParentId { get; set; }
