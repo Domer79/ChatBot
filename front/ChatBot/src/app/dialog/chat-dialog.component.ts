@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import Message from '../../abstracts/message';
 import {Subscription} from 'rxjs';
+import {MessageService} from '../services/message.service';
 
 @Component({
   selector: 'chat-dialog',
@@ -12,9 +13,14 @@ export class ChatDialogComponent implements OnInit, OnDestroy {
   metaSubscription: Subscription;
   messages: Message[] = [];
 
-  constructor(private clientMsgDispatcher: ClientMsgDispatcher) { }
+  constructor(
+    private clientMsgDispatcher: ClientMsgDispatcher,
+  ) {
+  }
 
   ngOnInit(): void {
+    debugger;
+    this.clientMsgDispatcher.loadMessages();
     this.clientMsgDispatcher.receive(msg => {
       this.messages.push(msg);
     });

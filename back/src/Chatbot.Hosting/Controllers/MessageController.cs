@@ -7,12 +7,12 @@ using Chatbot.Hosting.Hubs;
 using Chatbot.Hosting.Misc;
 using Chatbot.Model.DataModel;
 using Chatbot.Model.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Chatbot.Hosting.Controllers
 {
-    [CustomSecurity(SecurityPolicy.ReadMessage)]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class MessageController: ChatControllerBase
@@ -28,6 +28,7 @@ namespace Chatbot.Hosting.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<MessageResponse[]> GetMessages(Guid messageDialogId)
         {

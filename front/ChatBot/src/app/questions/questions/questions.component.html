@@ -1,6 +1,6 @@
 <questions-header [responsePreset]="isShowBack" (close)="closePage()"></questions-header>
 <div>
-  <div class="main-container questions-container" *ngIf="!responsePresent">
+  <div class="main-container questions-container" *ngIf="isShowQuestions | async">
     <div *ngFor="let question of questions" class="question-container">
       <div>
         <img src="assets/document.svg" class="document-svg"/>
@@ -10,10 +10,10 @@
       </div>
     </div>
   </div>
-  <chat-editor></chat-editor>
+<!--  <chat-editor></chat-editor>-->
 </div>
 
-<div *ngIf="responsePresent" class="main-container response-container">
+<div *ngIf="!(isShowQuestions | async)" class="main-container response-container">
   <p class="response-header">
     {{selectedQuestion.question}}
   </p>

@@ -11,6 +11,7 @@ export class TokenService {
   private reject: any;
   private token: string | null = null;
   private token$: Promise<string> = new Promise<string>((resolve, reject) => {
+    debugger;
     if (this.token) {
       resolve(this.token);
     }

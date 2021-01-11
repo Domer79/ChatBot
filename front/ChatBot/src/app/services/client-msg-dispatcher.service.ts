@@ -7,6 +7,7 @@ import {HubConnection, HubConnectionBuilder, LogLevel} from '@microsoft/signalr'
 import {environment} from '../../environments/environment';
 import {NIL as guidEmpty, v4 as uuidv4} from 'uuid';
 import {TokenService} from './token.service';
+import {MessageService} from './message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,10 @@ export class ClientMsgDispatcher {
   public meta: Observable<MessageInfo> = this.meta$.asObservable();
   private messageDialogId: string | null | undefined;
 
-  constructor(private tokenService: TokenService) {
+  constructor(
+    private tokenService: TokenService,
+    private messageService: MessageService,
+  ) {
     this.initHub()
       .then()
       .catch(e => console.log(e));
@@ -66,6 +70,18 @@ export class ClientMsgDispatcher {
       .catch(r => console.log(`Error: ${r}`));
 
     this.messages$.next(message);
+  }
+
+  public loadMessages(): void{
+    if (!this.messageDialogId) {
+      return;
+    }
+
+    this.messageService.getMessages(this.messageDialogId).subscribe(m => {
+      for (const item of m) {
+        this.messages$.next(item);
+      }
+    });
   }
 
   private connectionInit(): void {

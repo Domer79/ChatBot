@@ -12,7 +12,7 @@ export class QuestionsProviderService {
   private questions$: Subject<Question[]> = new Subject<Question[]>();
   public questions: Observable<Question[]> = this.questions$.asObservable();
   private selectedQuestions: Question[] = [];
-  public endQuestions: boolean;
+  public _existQuestions: Observable<boolean>;
 
   constructor(
     private httpClient: HttpClient
@@ -29,10 +29,10 @@ export class QuestionsProviderService {
       this.selectedQuestions.push(question);
     }
 
-    this.endQuestions = !(await this.httpClient
-      .get<boolean>('api/Question/ExistQuestions', {params: {parentId: question.id}})
-      .toPromise());
+    debugger;
+    this._existQuestions = this.httpClient.get<boolean>('api/Question/ExistQuestions', {params: {parentId: question.id}});
 
+    debugger;
     this.httpClient.get<Question[]>('api/Question/GetQuestions', { params: { parentId: question.id } }).subscribe(q => {
       this.questions$.next(q);
     });
@@ -42,8 +42,8 @@ export class QuestionsProviderService {
     this.selectedQuestions.push(question);
   }
 
-  get isShowResponse(): boolean{
-    return this.endQuestions;
+  get existQuestions(): Observable<boolean>{
+    return this._existQuestions;
   }
 
   get isShowBack(): boolean{
