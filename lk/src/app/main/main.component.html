@@ -5,7 +5,7 @@
         </div>
         <div class="main-menu">
             <mat-nav-list>
-                <mat-list-item style="text-align: center">
+                <mat-list-item style="text-align: center" (click)="goto('/dialogs')">
                     <button mat-icon-button class="list-button">
                         <mat-icon svgIcon="res-chat"></mat-icon>&nbsp;&nbsp;
                         <span class="side-nav-menu-caption">Диалоги</span>
@@ -14,10 +14,19 @@
                         <mat-icon class="res-menu-active-icon" svgIcon="res-menu-active"></mat-icon>
                     </div>
                 </mat-list-item>
+                <mat-list-item style="text-align: center" (click)="goto('/questions')">
+                    <button mat-icon-button class="list-button">
+                        <mat-icon svgIcon="res-chat"></mat-icon>&nbsp;&nbsp;
+                        <span class="side-nav-menu-caption">Вопросы</span>
+                    </button>
+                    <div class="arrow-container">
+                        <mat-icon class="res-menu-active-icon" svgIcon="res-menu-active"></mat-icon>
+                    </div>
+                </mat-list-item>
             </mat-nav-list>
         </div>
     </mat-sidenav>
-    <mat-sidenav-content >
+    <mat-sidenav-content>
         <mat-toolbar color="primary">
             <mat-toolbar-row>
                 <span>Диалоги</span>

@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Вопросы/Ответы</h1>
+<div mat-dialog-content>
+    <mat-horizontal-stepper linear #stepper xmlns="http://www.w3.org/1999/html">
+        <mat-step [stepControl]="firstFormGroup">
+            <form [formGroup]="firstFormGroup">
+                <ng-template matStepLabel>Заполните вопрос и ответ</ng-template>
+                <mat-form-field style="width: 100%">
+                    <mat-label>Вопрос</mat-label>
+                    <input matInput placeholder="Введите вопрос" formControlName="questionCtrl" required/>
+                </mat-form-field>
+                <br/>
+                <mat-form-field style="width: 100%; height: 400px">
+                    <mat-label>Ответ</mat-label>
+                    <textarea matInput placeholder="Введите ответ" formControlName="responseCtrl" required></textarea>
+                </mat-form-field>
+                <div mat-dialog-actions>
+                    <button mat-button matStepperNext>Дальше</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup">
+            <form [formGroup]="secondFormGroup">
+                <ng-template matStepLabel>Выберите родительский вопрос</ng-template>
+                <mat-radio-group formControlName="questionParentId">
+                    <mat-radio-button *ngFor="let question of questionsUnlessChild | async" [value]="question.id" class="mat-radio-button">
+                        {{question.question}}
+                    </mat-radio-button>
+                </mat-radio-group>
+                <div mat-dialog-actions>
+                    <button mat-button (click)="saveQuestion()">Сохранить</button>
+                </div>
+            </form>
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

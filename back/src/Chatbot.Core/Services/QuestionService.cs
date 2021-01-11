@@ -39,5 +39,10 @@ namespace Chatbot.Core.Services
         {
             return _questionRepository.Delete(question);
         }
+
+        public Task<QuestionResponse[]> GetAllQuestionsUnlessChild(Guid questionId)
+        {
+            return _questionRepository.GetAllQuestionsUnlessChild(questionId);
+        }
     }
 }

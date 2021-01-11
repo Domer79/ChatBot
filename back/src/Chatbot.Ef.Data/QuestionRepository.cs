@@ -23,7 +23,7 @@ namespace Chatbot.Ef.Data
 
         public Task<QuestionResponse[]> GetAll()
         {
-            return _context.Questions.ToArrayAsync();
+            return _context.Questions.OrderBy(_ => _.Number).ToArrayAsync();
         }
 
         public async Task<QuestionResponse> Upsert(QuestionResponse question)
@@ -35,7 +35,7 @@ namespace Chatbot.Ef.Data
             }
             else
             {
-                _context.Update(question);
+                _context.Update(question).Property(_ => _.Number).IsModified = false;
             }
 
             await _context.SaveChangesAsync();
@@ -51,8 +51,16 @@ namespace Chatbot.Ef.Data
         public Task<QuestionResponse[]> GetQuestionChildren(Guid parentId)
         {
             return parentId == Guid.Empty
-                ? _context.Questions.Where(_ => _.ParentId == null).ToArrayAsync()
-                : _context.Questions.Where(_ => _.ParentId == parentId).ToArrayAsync();
+                ? _context.Questions.Where(_ => _.ParentId == null).OrderBy(_ => _.Number).ToArrayAsync()
+                : _context.Questions.Where(_ => _.ParentId == parentId).OrderBy(_ => _.Number).ToArrayAsync();
+        }
+
+        public Task<QuestionResponse[]> GetAllQuestionsUnlessChild(Guid questionId)
+        {
+            return _context.Questions
+                .Where(_ => _.ParentId != questionId && _.Id != questionId)
+                .OrderBy(_ => _.Number)
+                .ToArrayAsync();
         }
     }
 }

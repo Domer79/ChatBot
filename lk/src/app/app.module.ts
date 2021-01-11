@@ -36,6 +36,11 @@ import localeRu from '@angular/common/locales/ru';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import { DialogStatusPipe } from './pipes/dialog-status.pipe';
 import { FioPipe } from './pipes/fio.pipe';
+import { QuestionsPageComponent } from './questions/questions-page/questions-page.component';
+import { EditQuestionDialogComponent } from './questions/edit-question-dialog/edit-question-dialog.component';
+import {MatStepperModule} from "@angular/material/stepper";
+import {MatRadioModule} from "@angular/material/radio";
+import { ConfirmComponent } from './dialogs/confirm/confirm.component';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -49,7 +54,10 @@ registerLocaleData(localeRu, 'ru');
     OperatorMessageComponent,
     ClientMessageComponent,
     DialogStatusPipe,
-    FioPipe
+    FioPipe,
+    QuestionsPageComponent,
+    EditQuestionDialogComponent,
+    ConfirmComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +65,7 @@ registerLocaleData(localeRu, 'ru');
     BrowserAnimationsModule,
     HttpClientModule,
     RouterModule,
+    FormsModule,
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
@@ -70,6 +79,8 @@ registerLocaleData(localeRu, 'ru');
     MatCardModule,
     MatDialogModule,
     MatPaginatorModule,
+    MatStepperModule,
+    MatRadioModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },

@@ -15,5 +15,6 @@ namespace Chatbot.Abstractions.Core.Services
         Task<QuestionResponse> Upsert(QuestionResponse question);
         
         Task<bool> Delete(QuestionResponse question);
+        Task<QuestionResponse[]> GetAllQuestionsUnlessChild(Guid questionId);
     }
 }

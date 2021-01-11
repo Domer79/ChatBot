@@ -5,6 +5,7 @@ import {MainComponent} from "./main/main.component";
 import {AuthGuard} from "./services/auth-guard.service";
 import {AccessDeniedComponent} from "./access-denied/access-denied.component";
 import {DialogsComponent} from "./dialogs/dialogs.component";
+import {QuestionsPageComponent} from "./questions/questions-page/questions-page.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -17,6 +18,7 @@ const routes: Routes = [
   },
   {path: 'dialogs', component: DialogsComponent, canActivate: [AuthGuard]},
   {path: 'dialogs/:id', component: DialogsComponent, canActivate: [AuthGuard]},
+  {path: 'questions', component: QuestionsPageComponent}
 ];
 
 @NgModule({
