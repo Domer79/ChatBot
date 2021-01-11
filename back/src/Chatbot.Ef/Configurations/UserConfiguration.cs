@@ -1,4 +1,5 @@
-﻿using Chatbot.Model.DataModel;
+﻿using Chatbot.Ef.Migrations;
+using Chatbot.Model.DataModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -48,6 +49,9 @@ namespace Chatbot.Ef.Configurations
 
             b.Property(_ => _.IsActive)
                 .HasColumnName("is_active");
+
+            b.Property(_ => _.IsOperator)
+                .HasColumnName("is_operator");
             
             b.HasKey(_ => _.Id);
 
@@ -67,6 +71,7 @@ namespace Chatbot.Ef.Configurations
 
             b.HasIndex(_ => _.Login).IsUnique();
             b.HasIndex(_ => _.Email).IsUnique();
+            b.HasIndex(_ => _.IsOperator);
         }
     }
 }

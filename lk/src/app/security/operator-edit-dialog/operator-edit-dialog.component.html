@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>
+    {{action}} пользователя
+</h1>
+<div mat-dialog-content>
+    <mat-horizontal-stepper>
+        <mat-step [stepControl]="userEditStepGroup">
+            <form [formGroup]="userEditStepGroup" (ngSubmit)="userInfoSave()">
+                <ng-template matStepLabel>Общая информация</ng-template>
+                <mat-form-field>
+                    <mat-label>Фамилия</mat-label>
+                    <input matInput placeholder="Фамилия" formControlName="lastName" required />
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Имя</mat-label>
+                    <input matInput placeholder="Имя" formControlName="firstName" required />
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Отчество</mat-label>
+                    <input matInput placeholder="Отчество" formControlName="middleName" />
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Логин</mat-label>
+                    <input matInput placeholder="Логин" formControlName="login" required />
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Электронная почта</mat-label>
+                    <input matInput placeholder="Электронная почта" formControlName="email" required />
+                </mat-form-field>
+                <button type="submit" mat-raised-button color="primary" [disabled]="userInfoIsSubmit">Сохранить</button>
+            </form>
+            <div mat-dialog-actions>
+                <button mat-button matStepperNext>Дальше</button>
+            </div>
+        </mat-step>
+        <mat-step [stepControl]="passwordGroup">
+            <form [formGroup]="passwordGroup" >
+                <ng-template matStepLabel>Установка пароля</ng-template>
+
+            </form>
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

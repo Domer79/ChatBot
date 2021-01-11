@@ -41,6 +41,8 @@ import { EditQuestionDialogComponent } from './questions/edit-question-dialog/ed
 import {MatStepperModule} from "@angular/material/stepper";
 import {MatRadioModule} from "@angular/material/radio";
 import { ConfirmComponent } from './dialogs/confirm/confirm.component';
+import { OperatorsComponent } from './security/operators/operators.component';
+import { OperatorEditDialogComponent } from './security/operator-edit-dialog/operator-edit-dialog.component';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -57,7 +59,9 @@ registerLocaleData(localeRu, 'ru');
     FioPipe,
     QuestionsPageComponent,
     EditQuestionDialogComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    OperatorsComponent,
+    OperatorEditDialogComponent
   ],
   imports: [
     BrowserModule,

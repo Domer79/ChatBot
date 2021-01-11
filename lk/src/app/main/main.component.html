@@ -23,6 +23,15 @@
                         <mat-icon class="res-menu-active-icon" svgIcon="res-menu-active"></mat-icon>
                     </div>
                 </mat-list-item>
+                <mat-list-item style="text-align: center" (click)="goto('/operators')">
+                    <button mat-icon-button class="list-button">
+                        <mat-icon svgIcon="res-chat"></mat-icon>&nbsp;&nbsp;
+                        <span class="side-nav-menu-caption">Операторы</span>
+                    </button>
+                    <div class="arrow-container">
+                        <mat-icon class="res-menu-active-icon" svgIcon="res-menu-active"></mat-icon>
+                    </div>
+                </mat-list-item>
             </mat-nav-list>
         </div>
     </mat-sidenav>

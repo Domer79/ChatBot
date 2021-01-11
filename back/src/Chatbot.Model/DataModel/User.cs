@@ -14,6 +14,7 @@ namespace Chatbot.Model.DataModel
         public DateTime DateCreated { get; set; }
         public byte[] Password { get; set; }
         public bool IsActive { get; set; }
+        public bool IsOperator { get; set; }
         public HashSet<Role> Roles { get; set; }
         public HashSet<UserRole> UserRoles { get; set; }
         public HashSet<Token> Tokens { get; set; }
