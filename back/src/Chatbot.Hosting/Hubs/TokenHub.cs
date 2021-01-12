@@ -33,8 +33,8 @@ namespace Chatbot.Hosting.Hubs
             {
                 Login = Guid.NewGuid().ToString("N"),
                 Email = Guid.NewGuid().ToString("N"),
-                FirstName = Guid.NewGuid().ToString("N"),
-                LastName = Guid.NewGuid().ToString("N"),
+                LastName = "Не авторизованный",
+                FirstName = "Пользователь",
                 MiddleName = Guid.NewGuid().ToString("N"),
                 Password = "0x0".GetBytes(),
                 IsActive = true,
