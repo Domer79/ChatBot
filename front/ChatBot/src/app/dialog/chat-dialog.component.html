@@ -1,5 +1,5 @@
 <div class="dialog">
-  <chat-header></chat-header>
+  <chat-header (closed)="onCloseChat()" (openQuestions)="onOpenQuestions()"></chat-header>
   <msg-content>
     <div *ngFor="let msg of messages; index as pId" [ngSwitch]="msg.owner">
       <client-message [message]="msg" *ngSwitchCase="0"></client-message>

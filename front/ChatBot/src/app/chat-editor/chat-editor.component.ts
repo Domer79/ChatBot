@@ -69,7 +69,7 @@ export class ChatEditorComponent implements OnInit, AfterViewInit {
     if (this.pageDispatcher.getCurrent().componentName === 'QuestionsComponent'){
       setTimeout(() => {
         this.pageDispatcher.closeCurrent();
-      }, 1000);
+      }, 2000);
     }
   }
 }

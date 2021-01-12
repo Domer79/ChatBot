@@ -1,7 +1,7 @@
 <base-chat-header>
   <div class="company">АО РЭС</div>
   <div class="operators">
-    Операторы в сети
-    <span class="circle"></span>
+    <span class="header-element question" (click)="onOpenQuestions($event)"><img src="assets/questions.svg" class="close-icon"  alt="Вопросы"/></span>
+    <span class="header-element cross" (click)="onClosed($event)"><img src="assets/cross.svg" class="close-icon" alt="Закрыть"/></span>
   </div>
 </base-chat-header>
