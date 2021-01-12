@@ -1,14 +1,24 @@
 export default class MainMenu{
-    public static Dialogs: PageInfo = {
-        link: '/dialogs',
-        name: 'Диалоги',
-        code: 'dialogs'
-    };
-    public static Questions: PageInfo = {
-        link: '/questions',
-        name: 'Вопросы',
-        code: 'questions'
-    };
+    private static pages: PageInfo[] = [
+        {
+            link: '/dialogs',
+            name: 'Диалоги',
+            code: 'dialogs'
+        },
+        {
+            link: '/questions',
+            name: 'Вопросы',
+            code: 'questions'
+        }
+    ];
+
+    public static getPageInfo(code: string): PageInfo{
+        const pages = MainMenu.pages.filter(pi => pi.code === code);
+        if (pages.length === 0)
+            throw new Error(`Page with code ${code} not found`);
+
+        return pages[0];
+    }
 }
 
 export interface PageInfo{
