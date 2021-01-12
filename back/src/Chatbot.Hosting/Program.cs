@@ -31,12 +31,8 @@ namespace Chatbot.Hosting
                     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                     .ConfigureLogging((hostingContext, logging) =>
                     {
-                        // logging.ClearProviders();
                         logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                         logging.SetMinimumLevel(LogLevel.Trace);
-                        // logging.AddDebug();
-                        // logging.AddNLog();
-                        // logging.AddProvider(new MyLoggerProvider());
                     })
                     .UseNLog(nlogOptions)
                     .ConfigureWebHostDefaults(builder =>

@@ -35,7 +35,7 @@ namespace Chatbot.Hosting.Hubs
                 Email = Guid.NewGuid().ToString("N"),
                 LastName = "Не авторизованный",
                 FirstName = "Пользователь",
-                MiddleName = Guid.NewGuid().ToString("N"),
+                MiddleName = "",
                 Password = "0x0".GetBytes(),
                 IsActive = true,
             };
