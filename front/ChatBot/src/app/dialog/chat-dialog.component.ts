@@ -19,7 +19,6 @@ export class ChatDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    debugger;
     this.clientMsgDispatcher.loadMessages();
     this.clientMsgDispatcher.receive(msg => {
       this.messages.push(msg);

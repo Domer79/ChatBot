@@ -18,10 +18,8 @@ export class QuestionsComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    debugger;
     await this.questionsProvider.loadQuestions(undefined);
     this.questionsProvider.questions.subscribe(q => {
-      debugger;
       this.questions = q;
     });
   }

@@ -29,10 +29,8 @@ export class QuestionsProviderService {
       this.selectedQuestions.push(question);
     }
 
-    debugger;
     this._existQuestions = this.httpClient.get<boolean>('api/Question/ExistQuestions', {params: {parentId: question.id}});
 
-    debugger;
     this.httpClient.get<Question[]>('api/Question/GetQuestions', { params: { parentId: question.id } }).subscribe(q => {
       this.questions$.next(q);
     });

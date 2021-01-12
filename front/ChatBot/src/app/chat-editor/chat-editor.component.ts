@@ -1,6 +1,8 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import {MessageType} from '../../misc/message-type';
+import {PageDispatcherService} from '../services/page-dispatcher.service';
+import {QuestionsComponent} from '../questions/questions/questions.component';
 
 @Component({
   selector: 'chat-editor',
@@ -14,7 +16,10 @@ export class ChatEditorComponent implements OnInit, AfterViewInit {
   message = '';
   private originalClientHeight: number;
 
-  constructor(private clientMsgDispatcher: ClientMsgDispatcher) {
+  constructor(
+    private clientMsgDispatcher: ClientMsgDispatcher,
+    private pageDispatcher: PageDispatcherService
+    ) {
   }
 
   ngOnInit(): void {
@@ -60,5 +65,11 @@ export class ChatEditorComponent implements OnInit, AfterViewInit {
     this.message = '';
     this.editorElement.nativeElement.innerHTML = '';
     this.chatEditorElement.nativeElement.style.height = `${this.originalClientHeight}px`;
+
+    if (this.pageDispatcher.getCurrent().componentName === 'QuestionsComponent'){
+      setTimeout(() => {
+        this.pageDispatcher.closeCurrent();
+      }, 1000);
+    }
   }
 }

@@ -92,7 +92,6 @@ export class ClientMsgDispatcher {
     });
 
     this.connection.on('setMeta', (message: MessageInfo) => {
-      debugger;
       this.messageDialogId = message.messageDialogId;
       this.meta$.next(message);
     });

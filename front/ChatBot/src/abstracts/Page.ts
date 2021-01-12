@@ -6,6 +6,6 @@ export default class Page{
   }
 
   get componentName(): string{
-    return this.component.toString();
+    return this.component.name;
   }
 }

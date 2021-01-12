@@ -33,7 +33,6 @@ export class ApiInterceptor implements HttpInterceptor, OnDestroy {
           setHeaders: { token: tokenId ?? '' },
         });
 
-        debugger;
         next.handle(cloneRequest).subscribe(_ => subject.next(_));
         return;
       }
