@@ -14,7 +14,7 @@
       <div *ngSwitchCase="2" class="svg">
         <img src="assets/received.svg" style="width: 20px;height: 12px"/>
       </div>
-      <span>{{timeStatus}} {{message.time | date: 'shortTime'}}</span>
+      <span>{{message.time | chatDate }}</span>
     </div>
   </div>
 </div>

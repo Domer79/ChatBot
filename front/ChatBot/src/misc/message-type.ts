@@ -23,3 +23,9 @@ export enum PageEvent{
   update
 }
 
+export enum TimeStatus{
+  None,
+  JustNow,
+  Today,
+  Yesterday,
+}

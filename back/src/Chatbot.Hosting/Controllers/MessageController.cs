@@ -28,7 +28,7 @@ namespace Chatbot.Hosting.Controllers
             _mapper = mapper;
         }
 
-        [AllowAnonymous]
+        [CustomSecurity(SecurityPolicy.ReadMessage)]
         [HttpGet]
         public async Task<MessageResponse[]> GetMessages(Guid messageDialogId)
         {
@@ -37,6 +37,14 @@ namespace Chatbot.Hosting.Controllers
             {
                 message.Status = MessageStatus.Received;
             }
+            return _mapper.Map<MessageResponse[]>(messages);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<MessageResponse[]> GetMessagesForUser(Guid messageDialogId)
+        {
+            var messages = await _messageService.GetDialogMessages(messageDialogId);
             return _mapper.Map<MessageResponse[]>(messages);
         }
     }

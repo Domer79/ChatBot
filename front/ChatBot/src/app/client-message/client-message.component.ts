@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import Message from '../../abstracts/message';
 import Helper from '../../misc/Helper';
+import {TimeStatus} from '../../misc/message-type';
 
 @Component({
   selector: 'client-message',
@@ -17,9 +18,5 @@ export class ClientMessageComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.msgView.nativeElement.innerHTML = this.message.content;
-  }
-
-  public get timeStatus(): string{
-    return Helper.getTimeStatus(this.message.time);
   }
 }
