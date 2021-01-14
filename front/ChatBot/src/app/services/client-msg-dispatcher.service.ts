@@ -46,14 +46,6 @@ export class ClientMsgDispatcher {
       .catch(err => console.log('Error while starting connection: ' + err));
   }
 
-  public receive(subscribeCallback: SubscribeCallBack): void {
-    this.messages$.subscribe(subscribeCallback);
-  }
-
-  public stop(): void {
-    this.messages$.complete();
-  }
-
   public setMessage(type: MessageType, msg: string): void{
     const message: Message = {
       id: uuidv4(),

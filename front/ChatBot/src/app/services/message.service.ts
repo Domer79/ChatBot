@@ -13,6 +13,6 @@ export class MessageService {
   ) { }
 
   getMessages(messageDialogId: string): Observable<Message[]>{
-    return this.httpClient.get<Message[]>('api/Message/GetMessages', {params: {messageDialogId}});
+    return this.httpClient.get<Message[]>('api/Message/GetMessagesForUser', {params: {messageDialogId}});
   }
 }

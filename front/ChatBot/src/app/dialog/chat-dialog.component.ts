@@ -13,9 +13,10 @@ import {QuestionsComponent} from '../questions/questions/questions.component';
   styleUrls: ['./dialog.component.sass']
 })
 export class ChatDialogComponent implements OnInit, OnDestroy, CloseChat {
-  metaSubscription: Subscription;
-  messages: Message[] = [];
+  private metaSubscription: Subscription;
+  private messageSubscription: Subscription;
   private closedEmitter = new EventEmitter<void>();
+  messages: Message[] = [];
 
   constructor(
     private clientMsgDispatcher: ClientMsgDispatcher,
@@ -25,7 +26,7 @@ export class ChatDialogComponent implements OnInit, OnDestroy, CloseChat {
 
   ngOnInit(): void {
     this.clientMsgDispatcher.loadMessages();
-    this.clientMsgDispatcher.receive(msg => {
+    this.messageSubscription = this.clientMsgDispatcher.messages.subscribe(msg => {
       this.messages.push(msg);
     });
     this.metaSubscription = this.clientMsgDispatcher.meta.subscribe((msg) => {
@@ -38,7 +39,7 @@ export class ChatDialogComponent implements OnInit, OnDestroy, CloseChat {
 
   ngOnDestroy(): void {
     this.metaSubscription.unsubscribe();
-    this.clientMsgDispatcher.stop();
+    this.messageSubscription.unsubscribe();
   }
 
   passClosedEmitter(closed: EventEmitter<void>): void {
