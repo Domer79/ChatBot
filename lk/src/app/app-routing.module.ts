@@ -6,6 +6,7 @@ import {AuthGuard} from "./services/auth-guard.service";
 import {AccessDeniedComponent} from "./access-denied/access-denied.component";
 import {DialogsComponent} from "./dialogs/dialogs.component";
 import {QuestionsPageComponent} from "./questions/questions-page/questions-page.component";
+import {LinkType} from "./contracts/message-dialog";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -13,11 +14,10 @@ const routes: Routes = [
   {
     path: '',
     canActivateChild: [AuthGuard],
-    redirectTo: '/dialogs',
+    redirectTo: `/dialogs/${LinkType.all}`,
     pathMatch: 'full'
   },
-  {path: 'dialogs', component: DialogsComponent, canActivate: [AuthGuard]},
-  {path: 'dialogs/:id', component: DialogsComponent, canActivate: [AuthGuard]},
+  {path: 'dialogs/:id', component: DialogsComponent, canActivate: [AuthGuard], pathMatch: 'full'},
   {path: 'questions', component: QuestionsPageComponent}
 ];
 

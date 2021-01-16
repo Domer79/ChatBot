@@ -29,10 +29,11 @@ export class MainComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.router.navigate([this.activePageInfo.link])
+
   }
 
   async goto(pageCode: string): Promise<void> {
+    debugger;
     this.activePageInfo = MainMenu.getPageInfo(pageCode);
     await this.router.navigate([this.activePageInfo.link]);
   }

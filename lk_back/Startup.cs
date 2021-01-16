@@ -34,7 +34,10 @@ namespace lk_back
             app.UseStaticFiles();
             if (!env.IsDevelopment())
             {
-                app.UseSpaStaticFiles();
+                app.UseSpaStaticFiles(new StaticFileOptions() 
+                { 
+                    
+                });
             }
  
             app.UseSpa(cfg =>
