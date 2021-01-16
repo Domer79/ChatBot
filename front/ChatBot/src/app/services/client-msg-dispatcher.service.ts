@@ -7,6 +7,7 @@ import {HubConnection, HubConnectionBuilder, LogLevel} from '@microsoft/signalr'
 import {environment} from '../../environments/environment';
 import {NIL as guidEmpty, v4 as uuidv4} from 'uuid';
 import {TokenService} from './token.service';
+import {MessageService} from './message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,10 @@ export class ClientMsgDispatcher {
   public meta: Observable<MessageInfo> = this.meta$.asObservable();
   private messageDialogId: string | null | undefined;
 
-  constructor(private tokenService: TokenService) {
+  constructor(
+    private tokenService: TokenService,
+    private messageService: MessageService,
+  ) {
     this.initHub()
       .then()
       .catch(e => console.log(e));
@@ -42,14 +46,6 @@ export class ClientMsgDispatcher {
       .catch(err => console.log('Error while starting connection: ' + err));
   }
 
-  public receive(subscribeCallback: SubscribeCallBack): void {
-    this.messages$.subscribe(subscribeCallback);
-  }
-
-  public stop(): void {
-    this.messages$.complete();
-  }
-
   public setMessage(type: MessageType, msg: string): void{
     const message: Message = {
       id: uuidv4(),
@@ -68,6 +64,18 @@ export class ClientMsgDispatcher {
     this.messages$.next(message);
   }
 
+  public loadMessages(): void{
+    if (!this.messageDialogId) {
+      return;
+    }
+
+    this.messageService.getMessages(this.messageDialogId).subscribe(m => {
+      for (const item of m) {
+        this.messages$.next(item);
+      }
+    });
+  }
+
   private connectionInit(): void {
     this.connection.on('send', async (message: Message) => {
       message.status = MessageStatus.received;
@@ -76,7 +84,6 @@ export class ClientMsgDispatcher {
     });
 
     this.connection.on('setMeta', (message: MessageInfo) => {
-      debugger;
       this.messageDialogId = message.messageDialogId;
       this.meta$.next(message);
     });

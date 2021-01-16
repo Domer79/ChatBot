@@ -21,12 +21,15 @@ namespace Chatbot.Ef.Data
 
         public Task<MessageDialog[]> GetAll()
         {
-            return _context.Dialogs.ToArrayAsync();
+            return _context.Dialogs.OrderByDescending(_ => _.DateCreated).ToArrayAsync();
         }
 
         public Task<MessageDialog[]> GetPage(int pageNumber, int pageSize)
         {
-            return _context.Dialogs.Skip(pageNumber * pageSize - pageSize).Take(pageSize).ToArrayAsync();
+            return _context.Dialogs
+                .OrderByDescending(_ => _.DateCreated)
+                .Skip(pageNumber * pageSize - pageSize)
+                .Take(pageSize).ToArrayAsync();
         }
 
         public Task<MessageDialog[]> GetPage(DialogStatus status, int number, int size)
@@ -37,7 +40,12 @@ namespace Chatbot.Ef.Data
                 dialogs = dialogs.Concat(_context.Dialogs.Where(_ => _.DialogStatus == flag));
             }
             
-            return dialogs.Include(_ => _.Operator).Skip(number * size - size).Take(size).ToArrayAsync();
+            return dialogs
+                .Include(_ => _.Operator)
+                .OrderByDescending(_ => _.DateCreated)
+                .Skip(number * size - size)
+                .Take(size)
+                .ToArrayAsync();
         }
 
         public Task<long> GetTotalCount()
@@ -58,7 +66,10 @@ namespace Chatbot.Ef.Data
 
         public Task<MessageDialog[]> GetByStatus(DialogStatus status)
         {
-            return _context.Dialogs.Where(_ => _.DialogStatus == status).ToArrayAsync();
+            return _context.Dialogs
+                .Where(_ => _.DialogStatus == status)
+                .OrderByDescending(_ => _.DateCreated)
+                .ToArrayAsync();
         }
 
         public async Task<MessageDialog> Upsert(MessageDialog dialog)

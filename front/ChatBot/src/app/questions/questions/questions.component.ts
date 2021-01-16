@@ -32,8 +32,8 @@ export class QuestionsComponent implements OnInit {
     this.questionsProvider.showQuestionResponse(question);
   }
 
-  get responsePresent(): boolean{
-    return this.questionsProvider.isShowResponse;
+  get isShowQuestions(): Observable<boolean>{
+    return this.questionsProvider.existQuestions;
   }
 
   get isShowBack(): boolean{

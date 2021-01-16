@@ -106,10 +106,10 @@ export class ClientChatDialogComponent implements OnInit {
       }
     })).subscribe(m => this.messages = m.sort((a:Message, b: Message) => {
       if (a.time < b.time)
-        return 1;
+        return -1;
 
       if (a.time > b.time)
-        return -1;
+        return 1;
 
       return 0;
     }));

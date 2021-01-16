@@ -37,7 +37,10 @@ namespace Chatbot.Ef.Data
 
         public Task<Message[]> GetDialogMessages(Guid dialogId)
         {
-            return _context.Messages.Where(_ => _.MessageDialogId == dialogId).ToArrayAsync();
+            return _context.Messages
+                .Where(_ => _.MessageDialogId == dialogId)
+                .OrderBy(_ => _.Time)
+                .ToArrayAsync();
         }
 
         public Task<Message[]> GetFirstMessages(Guid[] dialogIds)

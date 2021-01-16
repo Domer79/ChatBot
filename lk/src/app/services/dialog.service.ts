@@ -52,7 +52,7 @@ export class DialogService {
     return this.httpClient.get<Message[]>("api/Message/GetMessages", { params: {messageDialogId} });
   }
 
-  getDialogs(dialogStatus: DialogStatus, page: number, size: number): Observable<Page<MessageDialog>>{
+  getDialogs(dialogStatus: number, page: number, size: number): Observable<Page<MessageDialog>>{
     return this.httpClient.get<Page<MessageDialog>>(
         `api/Dialog/GetDialogsByStatus?status=${dialogStatus}&number=${page}&size=${size}`);
   }

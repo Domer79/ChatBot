@@ -1,22 +1,24 @@
+import {TimeStatus} from './message-type';
+
 export default class Helper{
-  public static getTimeStatus(time: Date): string{
+  public static getTimeStatus(time: Date): TimeStatus{
     const now = new Date();
     // @ts-ignore
     let elapsed = now - time;
     elapsed = Math.round(elapsed / 1000 / 60);
     if (elapsed < 5) {
-      return 'только что';
+      return TimeStatus.JustNow; // 'только что';
     }
 
     if (elapsed < 1440) {
-      return 'сегодня';
+      return TimeStatus.Today; // 'сегодня';
     }
 
     if (elapsed < 2880) {
-      return 'Вчера';
+      return TimeStatus.Yesterday; // 'Вчера';
     }
 
-    return '';
+    return TimeStatus.None; // ''
   }
 
   public static guidEmpty(): string{

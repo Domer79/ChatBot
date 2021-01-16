@@ -1,19 +1,22 @@
 <nav mat-tab-nav-bar [backgroundColor]="'primary'">
-    <div class="action-bar">
-        <div>
-            <a mat-tab-link [routerLink]="['dialogs']" [active]="activeLink == linkType.all" (click)="goTo(linkType.all)">Все</a>
-            <a mat-tab-link [routerLink]="['dialogs/1']" [active]="activeLink == linkType.opened" (click)="goTo(linkType.opened)">Открытые</a>
-            <a mat-tab-link [routerLink]="['dialogs/16']" [active]="activeLink == linkType.rejected" (click)="goTo(linkType.rejected)">Отклоненные</a>
-            <a mat-tab-link [routerLink]="['dialogs/2']" [active]="activeLink == linkType.worked" (click)="goTo(linkType.worked)">В работе</a>
-            <a mat-tab-link [routerLink]="['dialogs/8']" [active]="activeLink == linkType.closed" (click)="goTo(linkType.closed)">Закрытые</a>
-        </div>
-        <div>
-            Additional info
-        </div>
-    </div>
+    <a mat-tab-link [routerLink]="['/dialogs/', linkType.all]" routerLinkActive #rla="routerLinkActive"
+       [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.all"
+       (click)="activeLink = linkType.all">Все</a>
+    <a mat-tab-link [routerLink]="['/dialogs/', linkType.opened]" routerLinkActive #rla="routerLinkActive"
+       [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.opened"
+       (click)="activeLink = linkType.opened">Открытые</a>
+    <a mat-tab-link [routerLink]="['/dialogs/', linkType.rejected]" routerLinkActive #rla="routerLinkActive"
+       [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.rejected"
+       (click)="activeLink = linkType.rejected">Отклоненные</a>
+    <a mat-tab-link [routerLink]="['/dialogs/', linkType.worked]" routerLinkActive #rla="routerLinkActive"
+       [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.worked"
+       (click)="activeLink = linkType.worked">В работе</a>
+    <a mat-tab-link [routerLink]="['/dialogs/', linkType.closed]" routerLinkActive #rla="routerLinkActive"
+       [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.closed"
+       (click)="activeLink = linkType.closed">Закрытые</a>
 </nav>
 
-<mat-card *ngFor="let dialog of dialogs; index as i" tabindex="i" class="card">
+<mat-card *ngFor="let dialog of dialogs | async; index as i" tabindex="i" class="card">
     <mat-card-subtitle>{{dialog.firstMessage}}</mat-card-subtitle>
     <mat-card-content>
         <div class="dialog-info-container">

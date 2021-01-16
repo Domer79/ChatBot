@@ -26,6 +26,7 @@ import { PageHostDirective } from '../directives/page-host.directive';
 import {TokenService} from './services/token.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ApiInterceptor} from './services/api-interceptor.service';
+import { ChatDatePipe } from './chatdate.pipe';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import {ApiInterceptor} from './services/api-interceptor.service';
     QuestionsComponent,
     PageDispatcherComponent,
     PageHostDirective,
+    ChatDatePipe,
   ],
   imports: [
     BrowserModule,

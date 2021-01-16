@@ -2,7 +2,7 @@
   <div class="header-container">
     <div *ngIf="!responsePreset" class="header-element header-message">Вероятный ответ на ваш вопрос</div>
     <div *ngIf="responsePreset">
-      <button (click)="getBackQuestions()" class="header-element header-message back-btn"><img src="assets/left_arrow.svg"/> &nbsp; Назад</button>
+      <div (click)="getBackQuestions()" class="header-element header-message back-btn"><img src="assets/left_arrow.svg"/> &nbsp; Назад</div>
     </div>
 
     <div class="close-container">

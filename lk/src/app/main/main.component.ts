@@ -3,7 +3,7 @@ import {MatIconRegistry} from "@angular/material/icon";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Security} from "../security.decorator";
 import {Router} from "@angular/router";
-import MainMenu from "../../abstracts/MainMenu";
+import MainMenu, {PageInfo} from "../../abstracts/MainMenu";
 
 @Component({
   selector: 'main',
@@ -13,7 +13,7 @@ import MainMenu from "../../abstracts/MainMenu";
 @Security("MainPage")
 export class MainComponent implements OnInit {
   title = 'lk';
-  activeMenu: string = MainMenu.Dialogs.link;
+  activePageInfo: PageInfo = MainMenu.getPageInfo('dialogs');
 
   constructor(
       private matIconRegistry: MatIconRegistry,
@@ -29,12 +29,13 @@ export class MainComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.router.navigate([this.activeMenu])
+
   }
 
-  async goto(link  : string): Promise<void> {
-    this.activeMenu = link;
-    await this.router.navigate([this.activeMenu]);
+  async goto(pageCode: string): Promise<void> {
+    debugger;
+    this.activePageInfo = MainMenu.getPageInfo(pageCode);
+    await this.router.navigate([this.activePageInfo.link]);
   }
 }
 

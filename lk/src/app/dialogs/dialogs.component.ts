@@ -1,14 +1,15 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Security} from "../security.decorator";
 import {DialogService} from "../services/dialog.service";
-import {merge, Observable, of, Subscription} from "rxjs";
-import MessageDialog, {DialogStatus, LinkType} from "../contracts/message-dialog";
+import {Observable, Subscription} from "rxjs";
+import MessageDialog, {LinkType} from "../contracts/message-dialog";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ClientChatDialogComponent} from "../client-chat-dialog/client-chat-dialog.component";
-import {catchError} from "rxjs/operators";
 import {ActivatedRoute, Router} from "@angular/router";
 import Page from "../contracts/Page";
 import {PageEvent} from "@angular/material/paginator";
+import {map, tap} from "rxjs/operators";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-dialogs',
@@ -17,44 +18,53 @@ import {PageEvent} from "@angular/material/paginator";
 })
 @Security('DialogPage')
 export class DialogsComponent implements OnInit, OnDestroy {
+  @ViewChild('rla') rlaElement: ElementRef;
   activeLink = LinkType.all;
   linkType = LinkType;
-
-  private dialogCreatedSubscription: Subscription;
-
   dialogPageSize: number = 10;
   dialogCurrentPage: number = 1;
   dialogPage: Page<MessageDialog>;
-  dialogs: MessageDialog[];
+  dialogs: Observable<MessageDialog[]>;
   dialogCount: number;
-  private status: DialogStatus;
+
+  private dialogCreatedSubscription: Subscription;
+  private paramsSubscription: Subscription;
 
   constructor(
       private dialogService: DialogService,
       private route: ActivatedRoute,
       public dialog: MatDialog,
       private router: Router,
+      private activeRoute: ActivatedRoute,
+      private matSnackBar: MatSnackBar,
   ) {
-    this.status = Number(route.snapshot.paramMap.get('id')) || LinkType.all;
+    this.activeLink = Number(route.snapshot.paramMap.get('id')) || LinkType.all;
 
-    this.dialogService.getDialogs(this.status, this.dialogCurrentPage, this.dialogPageSize).subscribe(p => {
-      this.dialogCount = p.totalCount;
-      this.dialogs = p.items;
-    });
+    this.updateDialogs();
 
     this.dialogCreatedSubscription = this.dialogService.dialogCreated.subscribe(dialogId => {
-      this.dialogService.getDialogs(this.status, this.dialogCurrentPage, this.dialogPageSize).subscribe(p => {
-        this.dialogCount = p.totalCount;
-        this.dialogs = p.items;
-      });
+      this.matSnackBar.open('Создан диалог ', `/dialogs/${this.linkType.opened}`)
     });
   }
 
+  updateDialogs(linkType?: LinkType){
+    this.dialogs = this.dialogService.getDialogs(linkType ?? this.activeLink, this.dialogCurrentPage, this.dialogPageSize).pipe(tap(p => {
+      this.dialogCount = p.totalCount;
+    }), map(p => {
+      return p.items
+    }));
+  }
+
   ngOnInit(): void {
+    this.paramsSubscription = this.activeRoute.params.subscribe(p => {
+      this.activeLink = p.id;
+      this.updateDialogs();
+    })
   }
 
   ngOnDestroy(): void {
     this.dialogCreatedSubscription.unsubscribe();
+    this.paramsSubscription.unsubscribe();
   }
 
   openChat(messageDialog: MessageDialog) {
@@ -67,49 +77,18 @@ export class DialogsComponent implements OnInit, OnDestroy {
 
   async activate(dlg: MessageDialog) {
     await this.dialogService.activate(dlg);
-    const p = await this.dialogService.getDialogs(this.status, this.dialogCurrentPage, this.dialogPageSize).toPromise();
-    this.dialogCount = p.totalCount;
-    this.dialogs = p.items;
+    await this.updateDialogs();
   }
 
   async reject(dlg: MessageDialog) {
     await this.dialogService.reject(dlg);
-    const p = await this.dialogService.getDialogs(this.status, this.dialogCurrentPage, this.dialogPageSize).toPromise();
-    this.dialogCount = p.totalCount;
-    this.dialogs = p.items;
-  }
-
-  async goTo(linkType: LinkType) {
-    switch (linkType) {
-      case LinkType.all:{
-        this.activeLink = LinkType.all;
-        await this.router.navigate(['dialogs'], { skipLocationChange: true });
-        break;
-      }
-      case LinkType.opened:{
-        this.activeLink = LinkType.opened;
-        await this.router.navigate([`dialogs/${LinkType.opened}`], { skipLocationChange: true });
-        break;
-      }
-      case LinkType.worked:{
-        this.activeLink = LinkType.worked;
-        await this.router.navigate([`dialogs/${LinkType.worked}`], { skipLocationChange: true });
-        break;
-      }
-      case LinkType.rejected:{
-        this.activeLink = LinkType.rejected;
-        await this.router.navigate([`dialogs/${LinkType.rejected}`], { skipLocationChange: true });
-        break;
-      }
-      case LinkType.closed:{
-        this.activeLink = LinkType.closed;
-        await this.router.navigate([`dialogs/${LinkType.closed}`], { skipLocationChange: true });
-        break;
-      }
-    }
+    await this.updateDialogs();
   }
 
   getPage($event: PageEvent) {
-
+    console.log($event);
+    this.dialogCurrentPage = $event.pageIndex + 1;
+    this.dialogPageSize = $event.pageSize;
+    this.updateDialogs();
   }
 }
