@@ -25,5 +25,10 @@ namespace Chatbot.Ef.Data
                 .SelectMany(_ => _.Permissions)
                 .ToArrayAsync();
         }
+
+        public Task<Role[]> GetAll()
+        {
+            return _context.Roles.ToArrayAsync();
+        }
     }
 }

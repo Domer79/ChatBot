@@ -9,6 +9,11 @@ export default class MainMenu{
             link: '/questions',
             name: 'Вопросы',
             code: 'questions'
+        },
+        {
+            link: '/operators',
+            name: 'Операторы',
+            code: 'operators'
         }
     ];
 

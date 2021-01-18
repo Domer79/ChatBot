@@ -12,5 +12,6 @@ namespace Chatbot.Abstractions.Contracts.Responses
         public string MiddleName { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsActive { get; set; }
+        public bool IsOperator { get; set; }
     }
 }

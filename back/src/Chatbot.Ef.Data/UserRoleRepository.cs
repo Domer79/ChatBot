@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Repositories;
 using Chatbot.Model.DataModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chatbot.Ef.Data
 {
@@ -39,6 +41,11 @@ namespace Chatbot.Ef.Data
             {
                 return false;
             }
+        }
+
+        public Task<bool> Check(Guid userId, Guid roleId)
+        {
+            return _context.UserRoles.AnyAsync(_ => _.UserId == userId && _.RoleId == roleId);
         }
     }
 }

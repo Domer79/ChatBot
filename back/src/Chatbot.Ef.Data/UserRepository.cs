@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Repositories;
+using Chatbot.Common;
 using Chatbot.Model.DataModel;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,7 @@ namespace Chatbot.Ef.Data
             {
                 user.Id = Guid.NewGuid();
                 user.IsActive = true;
+                user.Password = "0x0".GetBytes();
                 _context.Add(user);
             }
             else
@@ -82,6 +84,24 @@ namespace Chatbot.Ef.Data
         public Task<User[]> GetByIds(Guid[] ids)
         {
             return _context.Users.Where(_ => ids.Contains(_.Id)).ToArrayAsync();
+        }
+
+        public Task<User[]> GetPage(int pageNumber, int pageSize, bool? isActive)
+        {
+            var query = _context.Users.Where(_ => _.IsOperator);
+            if (isActive.HasValue)
+                query = query.Where(_ => _.IsActive == isActive);
+
+            return query.Skip(pageNumber * pageSize - pageSize).Take(pageSize).ToArrayAsync();
+        }
+
+        public Task<long> GetTotalCount(bool? isActive)
+        {
+            var query = _context.Users.Where(_ => _.IsOperator);
+            if (isActive.HasValue)
+                query = query.Where(_ => _.IsActive == isActive);
+
+            return query.LongCountAsync();
         }
     }
 }

@@ -7,5 +7,6 @@ namespace Chatbot.Abstractions.Repositories
     public interface IRoleRepository
     {
         Task<Permission[]> GetPermissions(Guid[] roleIds);
+        Task<Role[]> GetAll();
     }
 }

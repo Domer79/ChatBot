@@ -22,6 +22,8 @@ namespace Chatbot.Hosting.Misc
                 cfg.CreateMap<MessageDialog, MessageDialogResponse>();
                 cfg.CreateMap<Message, MessageResponse>();
                 cfg.CreateMap<QuestionResponse, QuestionResponseObject>();
+                cfg.CreateMap<Role, RoleResponse>();
+                cfg.CreateMap<Role, UserRoleResponse>();
             });
 
             return config.CreateMapper();

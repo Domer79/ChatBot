@@ -1,17 +1,17 @@
 <nav mat-tab-nav-bar [backgroundColor]="'primary'">
-    <a mat-tab-link [routerLink]="['/dialogs/', linkType.all]" routerLinkActive #rla="routerLinkActive"
+    <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.all]]" routerLinkActive #rla="routerLinkActive"
        [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.all"
        (click)="activeLink = linkType.all">Все</a>
-    <a mat-tab-link [routerLink]="['/dialogs/', linkType.opened]" routerLinkActive #rla="routerLinkActive"
+    <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.opened]]" routerLinkActive #rla="routerLinkActive"
        [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.opened"
        (click)="activeLink = linkType.opened">Открытые</a>
-    <a mat-tab-link [routerLink]="['/dialogs/', linkType.rejected]" routerLinkActive #rla="routerLinkActive"
+    <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.rejected]]" routerLinkActive #rla="routerLinkActive"
        [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.rejected"
        (click)="activeLink = linkType.rejected">Отклоненные</a>
-    <a mat-tab-link [routerLink]="['/dialogs/', linkType.worked]" routerLinkActive #rla="routerLinkActive"
+    <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.worked]]" routerLinkActive #rla="routerLinkActive"
        [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.worked"
        (click)="activeLink = linkType.worked">В работе</a>
-    <a mat-tab-link [routerLink]="['/dialogs/', linkType.closed]" routerLinkActive #rla="routerLinkActive"
+    <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.closed]]" routerLinkActive #rla="routerLinkActive"
        [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.closed"
        (click)="activeLink = linkType.closed">Закрытые</a>
 </nav>

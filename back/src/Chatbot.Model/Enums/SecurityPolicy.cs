@@ -31,8 +31,11 @@ namespace Chatbot.Model.Enums
         [Description("Подключение оператора")]
         OperatorConnection = 7,
 
-        [Description("Работа с вопросами")]
-        OperationsWithQuestions = 8,
+        [Description("Управление вопросами")]
+        QuestionManager = 8,
+        
+        [Description("Управление операторами")]
+        OperatorManager = 9,
         
         #endregion
     }

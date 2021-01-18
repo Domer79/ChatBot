@@ -50,7 +50,7 @@ namespace Chatbot.Hosting.Controllers
             return questions.Length > 0;
         }
 
-        [CustomSecurity(SecurityPolicy.OperationsWithQuestions)]
+        [CustomSecurity(SecurityPolicy.QuestionManager)]
         [HttpGet]
         public async Task<QuestionResponseObject[]> GetAllQuestionsUnlessChild(Guid? questionId)
         {
@@ -65,7 +65,7 @@ namespace Chatbot.Hosting.Controllers
             return _mapper.Map<QuestionResponseObject[]>(questions);
         }
 
-        [CustomSecurity(SecurityPolicy.OperationsWithQuestions)]
+        [CustomSecurity(SecurityPolicy.QuestionManager)]
         [HttpPost]
         public async Task Save(QuestionResponse question)
         {
@@ -73,7 +73,7 @@ namespace Chatbot.Hosting.Controllers
             await _questionService.Upsert(question);
         }
 
-        [CustomSecurity(SecurityPolicy.OperationsWithQuestions)]
+        [CustomSecurity(SecurityPolicy.QuestionManager)]
         [HttpDelete]
         public async Task Delete(Guid questionId)
         {

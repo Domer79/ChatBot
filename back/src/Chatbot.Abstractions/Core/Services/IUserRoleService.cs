@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Chatbot.Abstractions.Repositories
+namespace Chatbot.Abstractions.Core.Services
 {
-    public interface IUserRoleRepository
+    public interface IUserRoleService
     {
         Task Add(Guid userId, Guid roleId);
         Task<bool> Delete(Guid userId, Guid roleId);

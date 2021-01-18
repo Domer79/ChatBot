@@ -15,5 +15,7 @@ namespace Chatbot.Abstractions.Repositories
         Task<Role[]> GetRoles(Guid userId);
         Task<Role[]> GetRoles(string loginOrEmail);
         Task<User[]> GetByIds(Guid[] ids);
+        Task<User[]> GetPage(int pageNumber, int pageSize, bool? isActive);
+        Task<long> GetTotalCount(bool? isActive);
     }
 }

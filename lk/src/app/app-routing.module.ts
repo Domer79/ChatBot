@@ -6,6 +6,7 @@ import {AuthGuard} from "./services/auth-guard.service";
 import {AccessDeniedComponent} from "./access-denied/access-denied.component";
 import {DialogsComponent} from "./dialogs/dialogs.component";
 import {QuestionsPageComponent} from "./questions/questions-page/questions-page.component";
+import {OperatorsComponent} from "./security/operators/operators.component";
 import {LinkType} from "./contracts/message-dialog";
 
 const routes: Routes = [
@@ -14,11 +15,18 @@ const routes: Routes = [
   {
     path: '',
     canActivateChild: [AuthGuard],
-    redirectTo: `/dialogs/${LinkType.all}`,
+    redirectTo: `/dialogs/${LinkType[LinkType.all]}`,
+    pathMatch: 'full'
+  },
+  {
+    path: 'dialogs',
+    canActivateChild: [AuthGuard],
+    redirectTo: `dialogs/${LinkType[LinkType.all]}`,
     pathMatch: 'full'
   },
   {path: 'dialogs/:id', component: DialogsComponent, canActivate: [AuthGuard], pathMatch: 'full'},
-  {path: 'questions', component: QuestionsPageComponent}
+  {path: 'questions', component: QuestionsPageComponent, canActivate: [AuthGuard]},
+  {path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
