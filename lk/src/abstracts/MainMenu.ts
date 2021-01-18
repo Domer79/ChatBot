@@ -1,7 +1,7 @@
 export default class MainMenu{
     private static pages: PageInfo[] = [
         {
-            link: '/dialogs/27',
+            link: '/dialogs',
             name: 'Диалоги',
             code: 'dialogs'
         },

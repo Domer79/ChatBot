@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Chatbot.Abstractions.Contracts;
 using Chatbot.Model.DataModel;
 
 namespace Chatbot.Abstractions.Core.Services
@@ -9,6 +10,7 @@ namespace Chatbot.Abstractions.Core.Services
         Task<User[]> GetAll();
         Task<User> GetById(Guid id);
         Task<User[]> GetByIds(Guid[] ids);
+        Task<Page<User>> GetPage(int pageNumber, int pageSize, bool? isActive);
         Task<User> GetByLoginOrEmail(string loginOrEmail);
         Task<User> Upsert(User user);
         Task<bool> Remove(Guid userId);

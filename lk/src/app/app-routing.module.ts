@@ -18,6 +18,12 @@ const routes: Routes = [
     redirectTo: `/dialogs/${LinkType[LinkType.all]}`,
     pathMatch: 'full'
   },
+  {
+    path: 'dialogs',
+    canActivateChild: [AuthGuard],
+    redirectTo: `dialogs/${LinkType[LinkType.all]}`,
+    pathMatch: 'full'
+  },
   {path: 'dialogs/:id', component: DialogsComponent, canActivate: [AuthGuard], pathMatch: 'full'},
   {path: 'questions', component: QuestionsPageComponent, canActivate: [AuthGuard]},
   {path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard]},

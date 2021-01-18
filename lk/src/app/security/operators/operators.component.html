@@ -7,3 +7,42 @@
         </div>
     </div>
 </nav>
+
+<div class="questions-list">
+    <div class="questions-title">
+        <div style="width: 12%">№ Вопроса</div>
+        <div>Вопрос/Ответ</div>
+    </div>
+    <mat-card *ngFor="let operator of operators | async" class="card-question">
+        <mat-dialog-content>
+            <div class="question-info-container">
+                <div class="question-number">
+                    {{operator.login}}
+                </div>
+                <div class="question-info">
+                    <div class="question-question">
+                        <div style="width: 10%">Вопрос:</div>
+                        <div>
+                            {{operator.lastName}}
+                        </div>
+                    </div>
+                    <div class="question-response">
+                        <div style="width: 10%">Ответ:</div>
+                        <div>
+                            {{operator.firstName}} {{operator.middleName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="question-actions">
+                    <div class="question-edit">
+                        <button class="question-edit-btn" (click)="operatorEdit(operator)">Редактировать</button>
+                    </div>
+                    <div class="question-delete">
+                        <button class="question-delete-btn" (click)="activateOrBlock(operator)">{{operator.isActive ? 'Заблокировать' : 'Разблокировать'}}</button>
+                    </div>
+                </div>
+            </div>
+        </mat-dialog-content>
+    </mat-card>
+</div>
+

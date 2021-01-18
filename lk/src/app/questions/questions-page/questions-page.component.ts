@@ -6,12 +6,14 @@ import {Observable} from "rxjs";
 import {QuestionService} from "../../services/question.service";
 import {MessageBoxService} from "../../services/message-box.service";
 import {DialogResult} from "../../../abstracts/DialogResult";
+import {Security} from "../../security.decorator";
 
 @Component({
   selector: 'app-questions-page',
   templateUrl: './questions-page.component.html',
   styleUrls: ['./questions-page.component.sass']
 })
+@Security('QuestionManager')
 export class QuestionsPageComponent implements OnInit {
   questions: Observable<Question[]>
 

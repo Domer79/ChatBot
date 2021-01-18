@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Chatbot.Abstractions.Contracts;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Abstractions.Repositories;
 using Chatbot.Common;
@@ -22,6 +23,18 @@ namespace Chatbot.Core.Services
         public Task<User[]> GetAll()
         {
             return _userRepository.GetAll();
+        }
+
+        public async Task<Page<User>> GetPage(int pageNumber, int pageSize, bool? isActive)
+        {
+            User[] users = await _userRepository.GetPage(pageNumber, pageSize, isActive);
+            long totalCount = await _userRepository.GetTotalCount(isActive);
+
+            return new Page<User>()
+            {
+                Items = users,
+                TotalCount = totalCount
+            };
         }
 
         public Task<User> GetById(Guid id)

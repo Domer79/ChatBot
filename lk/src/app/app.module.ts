@@ -43,6 +43,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import { ConfirmComponent } from './dialogs/confirm/confirm.component';
 import { OperatorsComponent } from './security/operators/operators.component';
 import { OperatorEditDialogComponent } from './security/operator-edit-dialog/operator-edit-dialog.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 registerLocaleData(localeRu, 'ru');
 
@@ -85,6 +86,7 @@ registerLocaleData(localeRu, 'ru');
     MatPaginatorModule,
     MatStepperModule,
     MatRadioModule,
+    MatCheckboxModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },

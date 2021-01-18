@@ -2,7 +2,7 @@
     {{action}} пользователя
 </h1>
 <div mat-dialog-content>
-    <mat-horizontal-stepper>
+    <mat-horizontal-stepper linear #stepper xmlns="http://www.w3.org/1999/html">
         <mat-step [stepControl]="userEditStepGroup">
             <form [formGroup]="userEditStepGroup" (ngSubmit)="userInfoSave()">
                 <ng-template matStepLabel>Общая информация</ng-template>
@@ -26,17 +26,33 @@
                     <mat-label>Электронная почта</mat-label>
                     <input matInput placeholder="Электронная почта" formControlName="email" required />
                 </mat-form-field>
-                <button type="submit" mat-raised-button color="primary" [disabled]="userInfoIsSubmit">Сохранить</button>
+                <button type="submit" mat-raised-button color="primary" [disabled]="!userInfoIsSubmit">Сохранить</button>
             </form>
             <div mat-dialog-actions>
                 <button mat-button matStepperNext>Дальше</button>
             </div>
         </mat-step>
         <mat-step [stepControl]="passwordGroup">
-            <form [formGroup]="passwordGroup" >
+            <form [formGroup]="passwordGroup" (ngSubmit)="setPassword()">
                 <ng-template matStepLabel>Установка пароля</ng-template>
-
+                <mat-form-field>
+                    <mat-label>Пароль</mat-label>
+                    <input matInput type="password" placeholder="Пароль" formControlName="password" />
+                </mat-form-field>
+                <button type="submit" mat-raised-button color="primary" [disabled]="!isAllowSetPassword">Сохранить</button>
             </form>
+            <div mat-dialog-actions>
+                <button mat-button matStepperPrevious>Назад</button>
+                <button mat-button matStepperNext>Дальше</button>
+            </div>
+        </mat-step>
+        <mat-step>
+            <div>
+                <ng-template matStepLabel>Установка ролей</ng-template>
+                <div *ngFor="let role of roles | async">
+                    <mat-checkbox (change)="roleChange(role, $event)" [checked]="role.setted">{{role.name}}</mat-checkbox>
+                </div>
+            </div>
         </mat-step>
     </mat-horizontal-stepper>
 </div>
