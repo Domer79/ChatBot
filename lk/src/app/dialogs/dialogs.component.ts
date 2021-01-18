@@ -38,9 +38,7 @@ export class DialogsComponent implements OnInit, OnDestroy {
       private activeRoute: ActivatedRoute,
       private matSnackBar: MatSnackBar,
   ) {
-    this.activeLink = Number(route.snapshot.paramMap.get('id')) || LinkType.all;
-
-    this.updateDialogs();
+    this.activeLink = LinkType[route.snapshot.paramMap.get('id')];
 
     this.dialogCreatedSubscription = this.dialogService.dialogCreated.subscribe(dialogId => {
       this.matSnackBar.open('Создан диалог ', `/dialogs/${this.linkType.opened}`)
@@ -57,7 +55,8 @@ export class DialogsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.paramsSubscription = this.activeRoute.params.subscribe(p => {
-      this.activeLink = p.id;
+      let pid: "all" | "opened" | "rejected" | "worked" | "closed" = p.id;
+      this.activeLink = LinkType[pid];
       this.updateDialogs();
     })
   }

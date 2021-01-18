@@ -33,7 +33,6 @@ export class MainComponent implements OnInit {
   }
 
   async goto(pageCode: string): Promise<void> {
-    debugger;
     this.activePageInfo = MainMenu.getPageInfo(pageCode);
     await this.router.navigate([this.activePageInfo.link]);
   }

@@ -15,7 +15,7 @@ const routes: Routes = [
   {
     path: '',
     canActivateChild: [AuthGuard],
-    redirectTo: `/dialogs/${LinkType.all}`,
+    redirectTo: `/dialogs/${LinkType[LinkType.all]}`,
     pathMatch: 'full'
   },
   {path: 'dialogs/:id', component: DialogsComponent, canActivate: [AuthGuard], pathMatch: 'full'},
