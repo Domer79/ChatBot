@@ -1,26 +1,31 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {environment} from "../../environments/environment";
-import {BehaviorSubject, Observable, Subject} from "rxjs";
-import MessageDialog, {DialogStatus} from "../contracts/message-dialog";
+import {BehaviorSubject, Observable, Subject, Subscription} from "rxjs";
+import MessageDialog, {DialogStatus, LinkType} from "../contracts/message-dialog";
 import {TokenService} from "./token.service";
 import Message from "../../abstracts/message";
 import Page from "../contracts/Page";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
-export class DialogService {
+export class DialogService implements OnDestroy{
   private connection: HubConnection;
   private dialogCreated$: Subject<string> = new Subject<string>();
   public dialogCreated: Observable<string> = this.dialogCreated$.asObservable();
   private dialogClosed$: Subject<string> = new Subject<string>();
   public dialogClosed: Observable<string> = this.dialogClosed$.asObservable();
+  private snackBarActionSubscription: Subscription[] = [];
 
   constructor(
       private httpClient: HttpClient,
-      private tokenService: TokenService
+      private tokenService: TokenService,
+      private matSnackBar: MatSnackBar,
+      private router: Router,
   ) {
     this.connection = new HubConnectionBuilder()
         .withUrl(`${environment.hubUrl}/dialog?token=${this.tokenService.tokenId}`,
@@ -40,6 +45,12 @@ export class DialogService {
 
   addDialogCreatedListener = () => {
     this.connection.on('dialogCreated', (dialogId: string) => {
+      const openParam = LinkType[LinkType.opened];
+      const snackBarRef = this.matSnackBar.open('Создан диалог ', 'Перейти в диалоги');
+      this.snackBarActionSubscription.push(snackBarRef.onAction().subscribe((p) => {
+        this.router.navigate([`/dialogs/`, openParam]);
+      }));
+
       this.dialogCreated$.next(dialogId);
     });
 
@@ -63,5 +74,11 @@ export class DialogService {
 
   async reject(dlg: MessageDialog) {
     await this.httpClient.post("api/Dialog/Reject", { messageDialogId: dlg.id }).toPromise();
+  }
+
+  ngOnDestroy(): void {
+    for (const s of this.snackBarActionSubscription){
+      s.unsubscribe();
+    }
   }
 }

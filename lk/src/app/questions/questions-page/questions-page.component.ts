@@ -7,6 +7,7 @@ import {QuestionService} from "../../services/question.service";
 import {MessageBoxService} from "../../services/message-box.service";
 import {DialogResult} from "../../../abstracts/DialogResult";
 import {Security} from "../../security.decorator";
+import {DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'app-questions-page',
@@ -20,7 +21,8 @@ export class QuestionsPageComponent implements OnInit {
   constructor(
       private dialog: MatDialog,
       private questionService: QuestionService,
-      private messageBoxService: MessageBoxService
+      private messageBoxService: MessageBoxService,
+      private dialogService: DialogService,
   ) {
     this.questions = this.questionService.getAll();
   }

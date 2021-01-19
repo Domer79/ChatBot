@@ -8,6 +8,7 @@ import {Observable, Subscription} from "rxjs";
 import {Security} from "../../security.decorator";
 import {ActivatedRoute} from "@angular/router";
 import {map, tap} from "rxjs/operators";
+import {DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'app-operators',
@@ -28,6 +29,7 @@ export class OperatorsComponent implements OnInit, OnDestroy {
       private userDialog: MatDialog,
       private operatorService: OperatorService,
       private route: ActivatedRoute,
+      private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {

@@ -41,7 +41,6 @@ export class DialogsComponent implements OnInit, OnDestroy {
     this.activeLink = LinkType[route.snapshot.paramMap.get('id')];
 
     this.dialogCreatedSubscription = this.dialogService.dialogCreated.subscribe(dialogId => {
-      this.matSnackBar.open('Создан диалог ', `/dialogs/${this.linkType.opened}`)
     });
   }
 
