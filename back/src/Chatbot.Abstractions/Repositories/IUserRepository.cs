@@ -9,6 +9,7 @@ namespace Chatbot.Abstractions.Repositories
         Task<User[]> GetAll();
         Task<User> GetById(Guid id);
         Task<User> Upsert(User user);
+        Task<User> SetPassword(User user);
         Task<bool> Remove(Guid userId);
         Task<bool> Remove(User user);
         Task<User> GetByLoginOrEmail(string loginOrEmail);

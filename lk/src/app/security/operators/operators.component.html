@@ -1,37 +1,58 @@
 <!--<div class="curtain"></div>-->
 <nav mat-tab-nav-bar [backgroundColor]="'primary'">
     <div class="action-bar">
-        <div></div>
         <div>
-            <button mat-button class="add-operator-btn" (click)="openUserEditor()">Добавить оператора</button>
+            <a mat-tab-link [routerLink]="['/operators']" [queryParams]="{ page: 1, size: size }"
+               routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]="{ exact: true }"
+               [active]="isActive === undefined" (click)="isActive = undefined">Все</a>
+
+            <a mat-tab-link [routerLink]="['/operators']" [queryParams]="{ page: 1, size: size, isactive: 'true' }"
+               routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]="{ exact: true }"
+               [active]="isActive === 'true'" (click)="isActive = undefined">Активные</a>
+
+            <a mat-tab-link [routerLink]="['/operators']" [queryParams]="{ page: 1, size: size, isactive: 'false' }"
+               routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]="{ exact: true }"
+               [active]="isActive === 'false'" (click)="isActive = undefined">Заблокированные</a>
+        </div>
+        <div>
+            <button mat-button class="add-operator-btn" (click)="openUserEditor()">
+                <mat-icon>add</mat-icon>
+                Добавить оператора
+            </button>
         </div>
     </div>
 </nav>
 
 <div class="questions-list">
     <div class="questions-title">
-        <div style="width: 12%">№ Вопроса</div>
-        <div>Вопрос/Ответ</div>
+        <div class="operator-number">Номер</div>
+        <div class="fio">ФИО</div>
+        <div class="operator-status">Статус</div>
+        <div class="operator-date">Дата регистрации</div>
+        <div class="operator-date">Дата блокировки</div>
     </div>
     <mat-card *ngFor="let operator of operators | async" class="card-question">
         <mat-dialog-content>
             <div class="question-info-container">
-                <div class="question-number">
-                    {{operator.login}}
+                <div class="operator-number">
+                    №{{operator.number}}
                 </div>
-                <div class="question-info">
+                <div class="fio">
                     <div class="question-question">
-                        <div style="width: 10%">Вопрос:</div>
-                        <div>
-                            {{operator.lastName}}
-                        </div>
+                        {{operator.lastName}}
                     </div>
                     <div class="question-response">
-                        <div style="width: 10%">Ответ:</div>
-                        <div>
-                            {{operator.firstName}} {{operator.middleName}}
-                        </div>
+                        {{operator.firstName}} {{operator.middleName}}
                     </div>
+                </div>
+                <div class="operator-status" [ngClass]="operator.isActive ? 'active' : 'block'">
+                    {{operator.isActive ? 'Активен' : 'Заблокирован'}}
+                </div>
+                <div class="operator-date">
+                    {{operator.dateCreated | date:'dd.MM.yyyy'}}
+                </div>
+                <div class="operator-date">
+                    {{operator.dateBlocked | date:'dd.MM.yyyy'}}
                 </div>
                 <div class="question-actions">
                     <div class="question-edit">
@@ -44,5 +65,8 @@
             </div>
         </mat-dialog-content>
     </mat-card>
+    <mat-paginator [length]="totalCount" [pageSize]="size" [pageSizeOptions]="[10, 20, 30]" (page)="getPage($event)">
+
+    </mat-paginator>
 </div>
 

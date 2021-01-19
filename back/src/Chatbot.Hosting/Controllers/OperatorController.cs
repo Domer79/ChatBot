@@ -48,15 +48,16 @@ namespace Chatbot.Hosting.Controllers
         }
 
         [HttpPut]
-        public async Task Block(Guid userId)
+        public async Task Block([FromQuery]Guid userId)
         {
             var user = await _userService.GetById(userId);
             user.IsActive = false;
+            user.DateBlocked = DateTime.UtcNow;
             await _userService.Upsert(user);
         }
 
         [HttpPut]
-        public async Task Activate(Guid userId)
+        public async Task Activate([FromQuery]Guid userId)
         {
             var user = await _userService.GetById(userId);
             user.IsActive = true;

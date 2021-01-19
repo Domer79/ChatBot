@@ -14,16 +14,26 @@ export class OperatorService {
       private httpClient: HttpClient
   ) { }
 
-  getPage(number: number, size: number, isActive?: boolean): Observable<Page<User>>{
-    const options = { params: new HttpParams().set('number', ''+number).set('size', ''+size) };
+  getPage(number: number, size: number, isActive?: string): Observable<Page<User>>{
+    const options = { params: new HttpParams().append('number', ''+number).append('size', ''+size) };
     if (isActive){
-      options.params.set('isActive', isActive.toString());
+      options.params = options.params.append('isActive', isActive);
     }
-    return this.httpClient.get<Page<User>>('api/User/GetPage', options);
+    return this.httpClient.get<Page<User>>('api/Operator/GetPage', options);
   }
 
   upsert(user: User): Promise<User>{
     return this.httpClient.post<User>('api/Operator/Upsert', user).toPromise();
+  }
+
+  block(user: User): Promise<void>{
+    return this.httpClient.put<void>('api/Operator/Block', null, { params: {userId: user.id} })
+        .toPromise();
+  }
+
+  activate(user: User): Promise<void>{
+    return this.httpClient.put<void>('api/Operator/Activate', null, { params: {userId: user.id} })
+        .toPromise();
   }
 
   setPassword(userId: string, password: string): Promise<boolean>{

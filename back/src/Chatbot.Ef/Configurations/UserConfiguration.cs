@@ -15,6 +15,11 @@ namespace Chatbot.Ef.Configurations
             
             b.Property(_ => _.Id)
                 .HasColumnName("user_id");
+            
+            b.Property(_ => _.Number)
+                .HasColumnName("number")
+                .IsRequired()
+                .ValueGeneratedOnAdd();
 
             b.Property(_ => _.Login)
                 .HasColumnName("login")
@@ -42,6 +47,9 @@ namespace Chatbot.Ef.Configurations
                 .HasColumnName("date_created")
                 .IsRequired()
                 .HasDefaultValueSql("GETDATE()");
+
+            b.Property(_ => _.DateBlocked)
+                .HasColumnName("date_blocked");
 
             b.Property(_ => _.Password)
                 .HasColumnName("password")
@@ -72,6 +80,7 @@ namespace Chatbot.Ef.Configurations
             b.HasIndex(_ => _.Login).IsUnique();
             b.HasIndex(_ => _.Email).IsUnique();
             b.HasIndex(_ => _.IsOperator);
+            b.HasIndex(_ => _.Number).IsUnique();
         }
     }
 }

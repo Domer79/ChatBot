@@ -39,10 +39,18 @@ namespace Chatbot.Ef.Data
             }
             else
             {
-                _context.Attach(user);
-                _context.Entry(user).State = EntityState.Modified;
+                var entityEntry = _context.Update(user);
+                entityEntry.Property(_ => _.Number).IsModified = false;
+                entityEntry.Property(_ => _.Password).IsModified = false;
             }
 
+            await _context.SaveChangesAsync();
+            return user;
+        }
+
+        public async Task<User> SetPassword(User user)
+        {
+            _context.Update(user).Property(_ => _.Number).IsModified = false;
             await _context.SaveChangesAsync();
             return user;
         }

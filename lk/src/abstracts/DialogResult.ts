@@ -2,5 +2,6 @@ export enum DialogResult{
     Yes,
     No,
     Ok,
-    Cancel
+    Cancel,
+    Error,
 }

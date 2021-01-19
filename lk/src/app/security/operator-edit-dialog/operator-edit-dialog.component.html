@@ -37,7 +37,7 @@
                 <ng-template matStepLabel>Установка пароля</ng-template>
                 <mat-form-field>
                     <mat-label>Пароль</mat-label>
-                    <input matInput type="password" placeholder="Пароль" formControlName="password" />
+                    <input matInput placeholder="Пароль" formControlName="password" />
                 </mat-form-field>
                 <button type="submit" mat-raised-button color="primary" [disabled]="!isAllowSetPassword">Сохранить</button>
             </form>
@@ -55,4 +55,10 @@
             </div>
         </mat-step>
     </mat-horizontal-stepper>
+    <div class="close-form">
+        <div class="close-form-space"></div>
+        <div class="close-form-btn">
+            <button mat-button color="primary" (click)="closeDialog()">Закрыть</button>
+        </div>
+    </div>
 </div>

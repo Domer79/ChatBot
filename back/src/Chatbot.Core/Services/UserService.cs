@@ -128,7 +128,7 @@ namespace Chatbot.Core.Services
                 var hashPassword = password.GetSHA1HashBytes();
                 hashPassword = hashPassword.Concat(PasswordSalt.GetSHA1HashBytes()).ToArray().GetSHA1HashBytes();
                 user.Password = hashPassword;
-                await Upsert(user);
+                await _userRepository.SetPassword(user);
                 return true;
             }
             catch (Exception ex)

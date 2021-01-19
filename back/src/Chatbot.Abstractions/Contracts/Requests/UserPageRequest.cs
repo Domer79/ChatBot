@@ -2,8 +2,8 @@
 {
     public class UserPageRequest
     {
-        public bool? IsActive { get; set; }
         public int Number { get; set; }
         public int Size { get; set; }
+        public bool? IsActive { get; set; }
     }
 }

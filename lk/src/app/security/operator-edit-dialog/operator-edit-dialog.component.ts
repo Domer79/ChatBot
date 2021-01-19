@@ -1,16 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import { v4 as uuidv4 } from 'uuid';
-import { NIL as guidEmpty } from 'uuid';
+import {NIL as guidEmpty} from 'uuid';
 import User from "../../contracts/user";
-import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {userIdValidator} from "./user-id-validator";
 import {OperatorService} from "../../services/operator.service";
-import {tryCatch} from "rxjs/internal-compatibility";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable} from "rxjs";
 import {Role} from "../../contracts/role";
 import {MatCheckboxChange} from "@angular/material/checkbox";
+import {DialogResult} from "../../../abstracts/DialogResult";
 
 @Component({
   selector: 'app-operator-edit-dialog',
@@ -24,6 +23,7 @@ export class OperatorEditDialogComponent implements OnInit {
   roles: Observable<Role[]>;
   private isChanged: boolean;
   private passwordChanged: boolean;
+  dialogResult: DialogResult;
 
   constructor(
       public dialogRef: MatDialogRef<OperatorEditDialogComponent>,
@@ -31,10 +31,12 @@ export class OperatorEditDialogComponent implements OnInit {
       private _formBuilder: FormBuilder,
       private operatorService: OperatorService,
       private snackBar: MatSnackBar,
-  ) { }
+  ) {
+    this.dialogRef.disableClose = true;
+  }
 
   ngOnInit(): void {
-    this.action = this.data ? 'Реактирование' : 'Создание';
+    this.action = this.getAction();
     this.userEditStepGroup = this._formBuilder.group({
       id: [this.data.id ?? guidEmpty, userIdValidator()],
       firstName: [this.data.firstName, Validators.required],
@@ -56,6 +58,21 @@ export class OperatorEditDialogComponent implements OnInit {
     })
 
     this.roles = this.operatorService.getRoles(this.userEditStepGroup.controls.id.value);
+  }
+
+  private getAction(): string{
+    if (!this.data){
+      return 'Создание';
+    }
+
+    if (!this.data.id || this.data.id === guidEmpty){
+      return 'Создание';
+    }
+
+    if (this.data.id.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i))
+      return "Редактирование";
+
+    return 'Создание';
   }
 
   get userInfoIsSubmit(){
@@ -93,8 +110,11 @@ export class OperatorEditDialogComponent implements OnInit {
         middleName: this.userEditStepGroup.controls.middleName.value,
         login: this.userEditStepGroup.controls.login.value,
         email: this.userEditStepGroup.controls.email.value,
-        isActive: true,
-        isOperator: true,
+        isActive: this.data.isActive ?? true,
+        isOperator: this.data.isOperator ?? true,
+        dateCreated: this.data.dateCreated,
+        dateBlocked: this.data.dateBlocked,
+        number: this.data.number,
       });
 
       const savedUser = await this.operatorService.upsert(user);
@@ -102,10 +122,13 @@ export class OperatorEditDialogComponent implements OnInit {
       this.userEditStepGroup.updateValueAndValidity();
 
       this.isChanged = false;
+      this.snackBar.open("Сведения сохранены");
+      this.dialogResult = DialogResult.Ok;
     }
     catch (err: any){
       console.error(err);
       this.snackBar.open(err.message);
+      this.dialogResult = DialogResult.Error;
     }
   }
 
@@ -115,17 +138,27 @@ export class OperatorEditDialogComponent implements OnInit {
           this.passwordGroup.controls.password.value);
       this.passwordGroup.controls.password.setValue('');
       this.passwordChanged = false;
+      this.snackBar.open('Пароль сохранен');
     }
     catch(err: any){
       console.error(err);
       this.snackBar.open(err.message);
+      this.dialogResult = DialogResult.Error;
     }
   }
 
   async roleChange(role: Role, $event: MatCheckboxChange) {
     const setted = await this.operatorService.setRole(role.id, this.userEditStepGroup.controls.id.value, $event.checked);
     if (setted){
-      this.snackBar.open('Операция выполнена');
+      this.snackBar.open($event.checked ? 'Роль установлена' : 'Роль снята');
     }
+    else{
+      console.log('Не получилось установить роль');
+      this.dialogResult = DialogResult.Error;
+    }
+  }
+
+  closeDialog() {
+    this.dialogRef.close(this.dialogResult);
   }
 }
