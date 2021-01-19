@@ -29,7 +29,6 @@ export class OperatorsComponent implements OnInit, OnDestroy {
       private userDialog: MatDialog,
       private operatorService: OperatorService,
       private route: ActivatedRoute,
-      private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {

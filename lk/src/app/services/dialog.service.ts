@@ -19,12 +19,10 @@ export class DialogService implements OnDestroy{
   public dialogCreated: Observable<string> = this.dialogCreated$.asObservable();
   private dialogClosed$: Subject<string> = new Subject<string>();
   public dialogClosed: Observable<string> = this.dialogClosed$.asObservable();
-  private snackBarActionSubscription: Subscription[] = [];
 
   constructor(
       private httpClient: HttpClient,
       private tokenService: TokenService,
-      private matSnackBar: MatSnackBar,
       private router: Router,
   ) {
     this.connection = new HubConnectionBuilder()
@@ -45,12 +43,6 @@ export class DialogService implements OnDestroy{
 
   addDialogCreatedListener = () => {
     this.connection.on('dialogCreated', (dialogId: string) => {
-      const openParam = LinkType[LinkType.opened];
-      const snackBarRef = this.matSnackBar.open('Создан диалог ', 'Перейти в диалоги');
-      this.snackBarActionSubscription.push(snackBarRef.onAction().subscribe((p) => {
-        this.router.navigate([`/dialogs/`, openParam]);
-      }));
-
       this.dialogCreated$.next(dialogId);
     });
 
@@ -77,8 +69,5 @@ export class DialogService implements OnDestroy{
   }
 
   ngOnDestroy(): void {
-    for (const s of this.snackBarActionSubscription){
-      s.unsubscribe();
-    }
   }
 }

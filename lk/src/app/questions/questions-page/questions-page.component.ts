@@ -22,7 +22,6 @@ export class QuestionsPageComponent implements OnInit {
       private dialog: MatDialog,
       private questionService: QuestionService,
       private messageBoxService: MessageBoxService,
-      private dialogService: DialogService,
   ) {
     this.questions = this.questionService.getAll();
   }

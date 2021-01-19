@@ -36,11 +36,12 @@ export class DialogsComponent implements OnInit, OnDestroy {
       public dialog: MatDialog,
       private router: Router,
       private activeRoute: ActivatedRoute,
-      private matSnackBar: MatSnackBar,
   ) {
     this.activeLink = LinkType[route.snapshot.paramMap.get('id')];
 
     this.dialogCreatedSubscription = this.dialogService.dialogCreated.subscribe(dialogId => {
+      const openParam = LinkType[LinkType.opened];
+      this.router.navigate([`/dialogs/`, openParam]);
     });
   }
 
