@@ -6,14 +6,13 @@ import Token from "../contracts/token";
 })
 export class TokenService {
   private token: Token = null;
-  exist: boolean = false;
 
   constructor() {
     this.refreshToken();
   }
 
   get tokenId(): string | null{
-    if (!this.exist)
+    if (!this.exist())
       return null;
 
     return this.token.tokenId;
@@ -37,7 +36,16 @@ export class TokenService {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    this.exist = true;
     this.token = new Token(JSON.parse(token));
+  }
+
+  exist(): boolean{
+    const token = localStorage.getItem('token');
+    return token != null;
+  }
+
+  clear() {
+    this.token = null;
+    localStorage.removeItem('token');
   }
 }
