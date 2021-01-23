@@ -19,7 +19,7 @@ export class AuthService {
   ) { }
 
   get isLoggedIn(): boolean{
-      return this.tokenService.exist;
+      return this.tokenService.exist();
   }
 
   checkAccess(policy: string): Observable<boolean>{
