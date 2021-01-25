@@ -53,7 +53,7 @@ export class EditQuestionDialogComponent implements OnInit {
     const regex = /<link>(.+)<\/link>/i;
     if (this.data.response.match(regex)){
       debugger;
-      this.data.response = this.data.response.replace(regex, '<a href="$1">$1</a>')
+      this.data.response = this.data.response.replace(regex, '<a href="$1" target="_blank">$1</a>')
     }
 
     await this.questionService.saveQuestion(this.data);

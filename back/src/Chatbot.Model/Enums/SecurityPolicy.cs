@@ -36,6 +36,9 @@ namespace Chatbot.Model.Enums
         
         [Description("Управление операторами")]
         OperatorManager = 9,
+
+        [Description("Управление настройками")]
+        SettingsManager = 10,
         
         #endregion
     }
