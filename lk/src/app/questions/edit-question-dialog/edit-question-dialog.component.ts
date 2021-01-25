@@ -50,6 +50,12 @@ export class EditQuestionDialogComponent implements OnInit {
     this.data.response = this.firstFormGroup.controls.responseCtrl.value;
     this.data.parentId = this.secondFormGroup.controls.questionParentId.value;
 
+    const regex = /<link>(.+)<\/link>/i;
+    if (this.data.response.match(regex)){
+      debugger;
+      this.data.response = this.data.response.replace(regex, '<a href="$1">$1</a>')
+    }
+
     await this.questionService.saveQuestion(this.data);
     this.dialogRef.close('ok');
   }

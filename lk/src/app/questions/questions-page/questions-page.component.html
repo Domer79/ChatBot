@@ -13,7 +13,7 @@
 
 <div class="questions-list">
     <div class="questions-title">
-        <div style="width: 12%">№ Вопроса</div>
+        <div style="width:6em">№ п/п</div>
         <div>Вопрос/Ответ</div>
     </div>
     <mat-card *ngFor="let question of questions | async" class="card-question">
@@ -24,14 +24,14 @@
                 </div>
                 <div class="question-info">
                     <div class="question-question">
-                        <div style="width: 10%">Вопрос:</div>
-                        <div>
+                        <div style="width:5em">Вопрос:</div>
+                        <div style="padding-left: 1em">
                             {{question.question}}
                         </div>
                     </div>
                     <div class="question-response">
-                        <div style="width: 10%">Ответ:</div>
-                        <div>
+                        <div style="width:50px">Ответ:</div>
+                        <div style="padding-left: 1em">
                             {{question.response}}
                         </div>
                     </div>

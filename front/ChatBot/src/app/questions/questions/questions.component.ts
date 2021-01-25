@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import {QuestionsProviderService} from '../../services/questions-provider.service';
 import {Observable} from 'rxjs';
 import Question from '../../../abstracts/Question';

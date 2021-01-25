@@ -17,7 +17,7 @@
   <p class="response-header">
     {{selectedQuestion.question}}
   </p>
-  <p class="response-body">
-    {{selectedQuestion.response}}
+  <p class="response-body" [innerHTML]="selectedQuestion.response">
+
   </p>
 </div>
