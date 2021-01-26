@@ -10,7 +10,6 @@ export class ChatDatePipe implements PipeTransform {
   transform(value: Date): string {
     const valueDate = new Date(value);
     if (Helper.getTimeStatus(valueDate) === TimeStatus.None){
-      debugger;
       return `${this.getTimeStatus(valueDate)} ${valueDate.toLocaleDateString('ru-Ru')}`;
     }
 

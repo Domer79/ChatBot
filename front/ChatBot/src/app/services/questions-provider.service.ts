@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Question from '../../abstracts/Question';
-import {Observable, of, Subject} from 'rxjs';
+import {AsyncSubject, Observable, of, Subject} from 'rxjs';
 import {TokenService} from './token.service';
 import {HttpClient} from '@angular/common/http';
 import {NIL as guidEmpty, v4 as uuidv4} from 'uuid';
@@ -10,15 +10,17 @@ import {NIL as guidEmpty, v4 as uuidv4} from 'uuid';
 })
 export class QuestionsProviderService {
   private questions$: Subject<Question[]> = new Subject<Question[]>();
+  private existQuestions$: Subject<boolean> = new Subject<boolean>();
   public questions: Observable<Question[]> = this.questions$.asObservable();
+  public existQuestions = this.existQuestions$.asObservable();
   private selectedQuestions: Question[] = [];
-  public _existQuestions: Observable<boolean>;
+  private existQuestionCache: { [key: string]: boolean | undefined } = {};
 
   constructor(
     private httpClient: HttpClient
   ) { }
 
-  async loadQuestions(question: Question | undefined): Promise<void>{
+  loadQuestions(question: Question | undefined): void{
     if (!question)
     {
       question = new Question();
@@ -29,7 +31,20 @@ export class QuestionsProviderService {
       this.selectedQuestions.push(question);
     }
 
-    this._existQuestions = this.httpClient.get<boolean>('api/Question/ExistQuestions', {params: {parentId: question.id}});
+    if (!this.existQuestionCache.hasOwnProperty(question.id)){
+      try {
+        this.httpClient.get<boolean>('api/Question/ExistQuestions', {params: {parentId: question.id}}).subscribe(res => {
+          this.existQuestionCache[question.id] = res;
+          this.existQuestions$.next(res);
+        });
+      }
+      catch (err){
+        console.log(err);
+      }
+    }
+    else{
+      this.existQuestions$.next(this.existQuestionCache[question.id]);
+    }
 
     this.httpClient.get<Question[]>('api/Question/GetQuestions', { params: { parentId: question.id } }).subscribe(q => {
       this.questions$.next(q);
@@ -38,10 +53,6 @@ export class QuestionsProviderService {
 
   showQuestionResponse(question: Question): void {
     this.selectedQuestions.push(question);
-  }
-
-  get existQuestions(): Observable<boolean>{
-    return this._existQuestions;
   }
 
   get isShowBack(): boolean{

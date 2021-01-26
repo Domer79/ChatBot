@@ -3,6 +3,7 @@ import {QuestionsProviderService} from '../../services/questions-provider.servic
 import {Observable} from 'rxjs';
 import Question from '../../../abstracts/Question';
 import {PageDispatcherService} from '../../services/page-dispatcher.service';
+import {tap} from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -12,6 +13,7 @@ import {PageDispatcherService} from '../../services/page-dispatcher.service';
 })
 export class QuestionsComponent implements OnInit {
   questions: Question[] = [];
+  private isShowQuestions$: boolean;
   constructor(private questionsProvider: QuestionsProviderService,
               private pageDispatcher: PageDispatcherService
               ) {
@@ -19,6 +21,12 @@ export class QuestionsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.questionsProvider.loadQuestions(undefined);
+    this.questionsProvider.existQuestions.pipe(tap(t => {
+      console.log(t);
+    })).subscribe(res => {
+      this.isShowQuestions$ = res;
+    });
+
     this.questionsProvider.questions.subscribe(q => {
       this.questions = q;
     });
@@ -32,8 +40,9 @@ export class QuestionsComponent implements OnInit {
     this.questionsProvider.showQuestionResponse(question);
   }
 
-  get isShowQuestions(): Observable<boolean>{
-    return this.questionsProvider.existQuestions;
+  get isShowQuestions(): boolean{
+    console.log(this.isShowQuestions$);
+    return this.isShowQuestions$;
   }
 
   get isShowBack(): boolean{
