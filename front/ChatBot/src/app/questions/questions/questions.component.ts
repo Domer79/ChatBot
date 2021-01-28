@@ -21,9 +21,7 @@ export class QuestionsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.questionsProvider.loadQuestions(undefined);
-    this.questionsProvider.existQuestions.pipe(tap(t => {
-      console.log(t);
-    })).subscribe(res => {
+    this.questionsProvider.existQuestions.subscribe(res => {
       this.isShowQuestions$ = res;
     });
 
@@ -41,7 +39,6 @@ export class QuestionsComponent implements OnInit {
   }
 
   get isShowQuestions(): boolean{
-    console.log(this.isShowQuestions$);
     return this.isShowQuestions$;
   }
 

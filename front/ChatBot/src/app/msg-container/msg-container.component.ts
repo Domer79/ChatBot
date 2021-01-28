@@ -19,7 +19,7 @@ import {QuestionsComponent} from '../questions/questions/questions.component';
       })),
       state('closed', style({
         opacity: 0,
-        bottom: '-510px'
+        bottom: '-640px'
       })),
       transition('open => closed', [
         animate('0.3s ease-out')

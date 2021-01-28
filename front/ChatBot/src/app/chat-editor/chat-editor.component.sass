@@ -1,10 +1,12 @@
+@import ../../common/styles/variables
+
 .chat-editor
   position: absolute
   bottom: 0
   width: 100%
-  min-height: 50px
+  min-height: $chatEditorMinHeight
   background-color: white
-  max-height: 100px
+  max-height: $chatEditorMaxHeight
   overflow-y: auto
 
 .chat-editor::-webkit-scrollbar
