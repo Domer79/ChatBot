@@ -62,5 +62,11 @@ namespace Chatbot.Ef.Data
                 .OrderBy(_ => _.Number)
                 .ToArrayAsync();
         }
+
+        public Task<QuestionResponse[]> GetQuestionsByQuery(string query)
+        {
+            return _context.Questions.Where(_ => _.Question.Contains(query) || _.Response.Contains(query))
+                .ToArrayAsync();
+        }
     }
 }

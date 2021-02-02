@@ -44,5 +44,10 @@ namespace Chatbot.Core.Services
         {
             return _questionRepository.GetAllQuestionsUnlessChild(questionId);
         }
+
+        public Task<QuestionResponse[]> GetQuestionsByQuery(string query)
+        {
+            return _questionRepository.GetQuestionsByQuery(query);
+        }
     }
 }

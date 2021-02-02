@@ -13,5 +13,6 @@ namespace Chatbot.Abstractions.Repositories
         Task<bool> Delete(QuestionResponse question);
         Task<QuestionResponse[]> GetQuestionChildren(Guid parentId);
         Task<QuestionResponse[]> GetAllQuestionsUnlessChild(Guid questionId);
+        Task<QuestionResponse[]> GetQuestionsByQuery(string query);
     }
 }
