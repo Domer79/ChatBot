@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Contracts.Responses;
 using Chatbot.Abstractions.Core.Services;
@@ -102,6 +103,14 @@ namespace Chatbot.Hosting.Controllers
         {
             var questions = await _questionService.GetAll();
             return _mapper.Map<QuestionResponseObject[]>(questions);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<QuestionResponseObject[]> GetQuestionsByQuery(string query)
+        {
+            var questions = await _questionService.GetQuestionsByQuery(query);
+            return _mapper.Map<QuestionResponseObject[]>(questions.Take(5));
         }
     }
 }

@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {PageDispatcherService} from '../../services/page-dispatcher.service';
-import {Observable, Subscription} from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
 import Question from '../../../abstracts/Question';
 import {QuestionsProviderService} from '../../services/questions-provider.service';
 import {QuestionsComponent} from '../questions/questions.component';
@@ -22,7 +22,7 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit 
 
   constructor(
     private pageDispatcher: PageDispatcherService,
-    private questionsProviderService: QuestionsProviderService,
+    private questionsProvider: QuestionsProviderService,
     private backService: MainQuestionsComponentBackService,
     private mainBackService: MainBackService
   ) {
@@ -30,7 +30,7 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit 
 
   ngOnInit(): void {
     this.mainBackService.setComponent(MainQuestionsComponent);
-    this.questions = this.questionsProviderService.getShortParentQuestions();
+    this.questions = this.questionsProvider.getShortParentQuestions();
     if (!this.data){
       this.data = new MainQuestionsState();
     }
@@ -39,6 +39,7 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit 
   ngAfterViewInit(): void {
     if (this.data.searchQuery){
       this.searchEditor.nativeElement.innerHTML = this.data.searchQuery;
+      this.questionsProvider.setSearchQuery(this.data.searchQuery);
       this.searchQuestion();
     }
   }
@@ -53,10 +54,13 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit 
 
   searchQuestion(): void {
     console.log(this.data.searchQuery);
+    this.questionsProvider.setSearchQuery(this.data.searchQuery);
+    this.isSearchQueryInput = true;
   }
 
   inputSearchQuery(eventTarget: EventTarget | any): void {
     this.data.searchQuery = eventTarget.innerHTML;
+    this.questionsProvider.setSearchQuery(eventTarget.innerHTML);
     // this.isSearchQueryInput = true; TODO: пока не удалять
   }
 

@@ -11,8 +11,10 @@ import {NIL as guidEmpty, v4 as uuidv4} from 'uuid';
 export class QuestionsProviderService {
   private questions$: Subject<Question[]> = new Subject<Question[]>();
   private existQuestions$: Subject<boolean> = new Subject<boolean>();
+  private searchQuery$: Subject<string> = new Subject<string>();
   public questions: Observable<Question[]> = this.questions$.asObservable();
   public existQuestions = this.existQuestions$.asObservable();
+  public searchQuery: Observable<string> = this.searchQuery$.asObservable();
   private selectedQuestions: Question[] = [];
   private existQuestionCache: { [key: string]: boolean | undefined } = {};
 
@@ -80,5 +82,13 @@ export class QuestionsProviderService {
 
   getShortParentQuestions(): Observable<Question[]>{
     return this.httpClient.get<Question[]>('api/question/GetShortParentQuestions');
+  }
+
+  searchQuestions(searchQuery: string): Observable<Question[]>{
+    return this.httpClient.get<Question[]>('api/Question/GetQuestionsByQuery', { params: {query: searchQuery} });
+  }
+
+  setSearchQuery(searchQuery: string): void {
+    this.searchQuery$.next(searchQuery);
   }
 }
