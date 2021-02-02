@@ -1,0 +1,25 @@
+<main-questions-header (close)="closePage()">
+</main-questions-header>
+
+<div>
+  <div class="main-questions-block">
+    Здравствуйте. Я чат бот АО РЭС, могу ответить на популярные вопросы.
+  </div>
+  <div class="main-questions-block search">
+    <div
+      #searchEditor
+      [contentEditable]="true"
+      class="main-questions-block-search"
+      (keypress)="enter($event)"
+      (input)="inputSearchQuery($event.target)"
+      (keydown.enter)="onKeydownEnter($event)"
+    ></div>
+    <div class="search-icon" (click)="searchQuestionClick()">
+      <img src="assets/search.svg"/>
+    </div>
+    <div class="search-autocomplete" *ngIf="isSearchQueryInput"></div>
+  </div>
+  <div class="main-questions-block elements">
+    <first-questions *ngFor="let question of questions | async" [question]="question" (select)="selectQuestion($event)"></first-questions>
+  </div>
+</div>

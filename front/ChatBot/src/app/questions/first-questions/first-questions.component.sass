@@ -1,0 +1,26 @@
+@use "src/common/styles/common"
+
+.first-questions-element
+  width: 160px
+  height: 130px
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAFBFF 100%)
+  border: 1px solid #DADEE5
+  box-sizing: border-box
+  border-radius: 5px
+  cursor: pointer
+  margin:
+    left: 0.3em
+    right: 0.3em
+
+.first-questions-element:hover
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1)
+
+.first-questions-element.first-questions-parent
+  display: flex
+  justify-content: center
+  align-items: center
+
+.first-questions-text
+  width: 60%
+  @include common.font-roboto(15px, 140%)
+  color: #3757A1

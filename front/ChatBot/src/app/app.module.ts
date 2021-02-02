@@ -27,6 +27,10 @@ import {TokenService} from './services/token.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ApiInterceptor} from './services/api-interceptor.service';
 import { ChatDatePipe } from './chatdate.pipe';
+import { MainQuestionsComponent } from './questions/main-questions/main-questions.component';
+import { MainQuestionsHeaderComponent } from './questions/main-questions-header/main-questions-header.component';
+import { FirstQuestionsComponent } from './questions/first-questions/first-questions.component';
+import { BackService } from '../abstracts/BackService';
 
 @NgModule({
   declarations: [
@@ -48,6 +52,9 @@ import { ChatDatePipe } from './chatdate.pipe';
     PageDispatcherComponent,
     PageHostDirective,
     ChatDatePipe,
+    MainQuestionsComponent,
+    MainQuestionsHeaderComponent,
+    FirstQuestionsComponent,
   ],
   imports: [
     BrowserModule,

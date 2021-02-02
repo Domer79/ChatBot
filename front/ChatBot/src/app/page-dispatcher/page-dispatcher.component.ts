@@ -27,6 +27,7 @@ export class PageDispatcherComponent implements OnInit, OnDestroy {
     const viewContainerRef = this.pageHost.viewContainerRef;
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent(componentFactory);
+    componentRef.instance.data = page.data;
     const closedEmitter = (componentRef.instance as CloseChat).passClosedEmitter;
     if (closedEmitter !== undefined){
       (componentRef.instance as CloseChat).passClosedEmitter(this.closed);

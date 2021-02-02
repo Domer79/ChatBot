@@ -6,6 +6,7 @@ import {MessageService} from '../services/message.service';
 import CloseChat from '../../abstracts/CloseChat';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
+import {MainQuestionsComponent} from '../questions/main-questions/main-questions.component';
 
 @Component({
   selector: 'chat-dialog',

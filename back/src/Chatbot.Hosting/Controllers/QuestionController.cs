@@ -44,6 +44,20 @@ namespace Chatbot.Hosting.Controllers
 
         [AllowAnonymous]
         [HttpGet]
+        public async Task<QuestionResponseObject[]> GetShortParentQuestions()
+        {
+            var questions = await _questionService.GetQuestions(Guid.Empty);
+            var questionResponseObjects = _mapper.Map<QuestionResponseObject[]>(questions);
+            foreach (var responseObject in questionResponseObjects)
+            {
+                responseObject.Question = responseObject.Question.Substring(0, 40) + "...";
+            }
+
+            return questionResponseObjects;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
         public async Task<bool> ExistQuestions(Guid parentId)
         {
             var questions = await GetQuestions(parentId);

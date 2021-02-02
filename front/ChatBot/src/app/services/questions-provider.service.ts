@@ -77,4 +77,8 @@ export class QuestionsProviderService {
 
     return this.selectedQuestions[this.selectedQuestions.length - 1];
   }
+
+  getShortParentQuestions(): Observable<Question[]>{
+    return this.httpClient.get<Question[]>('api/question/GetShortParentQuestions');
+  }
 }

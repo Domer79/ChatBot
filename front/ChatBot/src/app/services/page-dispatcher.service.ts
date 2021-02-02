@@ -22,8 +22,9 @@ export class PageDispatcherService {
     return this.stackPage[this.stackPage.length - 1];
   }
 
-  showPage(component: Type<any>): void{
+  showPage(component: Type<any>, data: any = null): void{
     const page = this.pages.filter(_ => _.component === component)[0];
+    page.data = data;
     this.stackPage.push(page);
     this.update();
   }

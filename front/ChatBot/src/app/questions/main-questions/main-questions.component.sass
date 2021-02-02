@@ -1,0 +1,33 @@
+@use "src/common/styles/common"
+
+.main-questions-container
+  padding: 1em
+
+.main-questions-block
+  padding: 1em
+  @include common.font-roboto(20px, 140%, 500)
+  color: #333740
+
+.main-questions-block.search
+  display: flex
+  position: relative
+
+.main-questions-block-search
+  width: 97%
+  border-bottom: 1px solid #DADEE5
+  outline: none
+
+.search-icon
+  border-bottom: 1px solid #DADEE5
+  cursor: pointer
+
+.search-autocomplete
+  position: absolute
+  background-color: #D3D6DE
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1)
+  width: 93%
+  height: 150px
+  top: 50px
+
+.main-questions-block.elements
+  display: flex

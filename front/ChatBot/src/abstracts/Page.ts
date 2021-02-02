@@ -5,6 +5,8 @@ export default class Page{
 
   }
 
+  public data: any = null;
+
   get componentName(): string{
     return this.component.name;
   }
