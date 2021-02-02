@@ -6,6 +6,7 @@ using Chatbot.Abstractions.Contracts.Responses;
 using Chatbot.Abstractions.Core;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Common;
+using Chatbot.Core.Common;
 using Chatbot.Hosting.Misc;
 using Chatbot.Model.DataModel;
 using Chatbot.Model.Enums;

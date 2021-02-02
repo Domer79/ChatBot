@@ -1,19 +1,39 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import Message from '../../abstracts/message';
-import Helper from '../../misc/Helper';
-import {TimeStatus} from '../../misc/message-type';
+import {MessageType} from '../../misc/message-type';
+import Question from '../../abstracts/Question';
+import {PageDispatcherService} from '../services/page-dispatcher.service';
+import {QuestionsComponent} from '../questions/questions/questions.component';
 
 @Component({
   selector: 'operator-message',
   templateUrl: './operator-message.component.html',
-  styleUrls: ['./operator-message.component.sass']
+  styleUrls: ['./operator-message.component.sass'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OperatorMessageComponent implements AfterViewInit {
+  private question: Question;
   @Input() message: Message;
-  @ViewChild('msg') msgView: ElementRef;
-  constructor() { }
+
+  messageType = MessageType;
+
+  constructor(
+    private pageDispatcher: PageDispatcherService
+  ) { }
 
   ngAfterViewInit(): void {
-    this.msgView.nativeElement.innerHTML = this.message.content;
+    if (this.message.type === MessageType.Question){
+      this.question = new Question();
+      this.question.id = this.message.questionId;
+      this.question.question = this.message.question;
+    }
+  }
+
+  showQuestion(): void {
+    this.pageDispatcher.showPage(QuestionsComponent, this.question);
+  }
+
+  fillAuthForm(): void {
+
   }
 }

@@ -9,6 +9,8 @@ export default interface Message{
   status: MessageStatus;
   messageDialogId: string;
   sender?: string;
+  questionId: string;
+  question: string;
 }
 
 export interface MessageInfo{

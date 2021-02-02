@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Contracts.Responses;
 using Chatbot.Abstractions.Core.Services;
+using Chatbot.Core.Common;
 using Chatbot.Hosting.Authentication;
 using Chatbot.Hosting.Hubs;
 using Chatbot.Hosting.Misc;

@@ -23,3 +23,29 @@
   text-align: right
   color: #7E8999
   @include common.font-roboto(12px, 14px)
+
+.operator-message.question-message
+  flex-direction: row-reverse
+  cursor: pointer
+
+.msg-left.question-left
+  color: #3757A1
+
+.operator-message.button-message
+  flex-direction: row-reverse
+  cursor: pointer
+
+.msg-left.button-left
+  background: linear-gradient(0deg, #3757A1, #3757A1), linear-gradient(180deg, #FFFFFF 0%, #FAFBFF 100%)
+  border-radius: 5px
+  width: 40%
+  height: 40px
+  @include common.font-roboto(11px, 13px, 500)
+  text-transform: uppercase
+  color: #FFFFFF
+  justify-content: center
+  align-items: center
+  display: flex
+
+.right-block.button-right
+  width: 60%

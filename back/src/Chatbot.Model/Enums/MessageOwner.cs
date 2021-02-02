@@ -2,6 +2,7 @@
 {
     public enum MessageOwner{
         Client = 0,
-        Operator = 1
+        Operator = 1,
+        ChatbotHelper = 2,
     }
 }

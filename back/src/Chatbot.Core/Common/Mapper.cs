@@ -2,7 +2,7 @@
 using Chatbot.Abstractions.Contracts.Responses;
 using Chatbot.Model.DataModel;
 
-namespace Chatbot.Hosting.Misc
+namespace Chatbot.Core.Common
 {
     public class Mapper
     {

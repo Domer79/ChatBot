@@ -1,9 +1,23 @@
-<div class="operator-message">
+<div class="operator-message" *ngIf="message.type == messageType.String">
   <div class="msg-left">
-    <div #msg></div>
+    <div>{{message.content}}</div>
     <div class="msg-status">
       <span>{{message.time | chatDate}}</span>
     </div>
   </div>
   <div class="right-block"></div>
+</div>
+
+<div class="operator-message question-message" *ngIf="message.type == messageType.Question" (click)="showQuestion()">
+  <div class="msg-left question-left">
+    <div>{{message.content}}</div>
+  </div>
+  <div class="right-block"></div>
+</div>
+
+<div class="operator-message button-message" *ngIf="message.type == messageType.ButtonForForm" (click)="fillAuthForm()">
+  <div class="msg-left button-left">
+    <div>{{message.content}}</div>
+  </div>
+  <div class="right-block button-right"></div>
 </div>

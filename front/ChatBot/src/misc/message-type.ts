@@ -1,6 +1,8 @@
 export enum MessageType{
   String,
-  File
+  File,
+  Question,
+  ButtonForForm,
 }
 
 export enum MessageStatus{
@@ -16,7 +18,8 @@ export enum MessageStatus{
 
 export enum MessageOwner{
   client,
-  operator
+  operator,
+  chatbotHelper,
 }
 
 export enum PageEvent{

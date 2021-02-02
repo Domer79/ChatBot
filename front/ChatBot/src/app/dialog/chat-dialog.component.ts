@@ -2,11 +2,11 @@ import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import Message from '../../abstracts/message';
 import {Subscription} from 'rxjs';
-import {MessageService} from '../services/message.service';
 import CloseChat from '../../abstracts/CloseChat';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
-import {MainQuestionsComponent} from '../questions/main-questions/main-questions.component';
+import {map} from 'rxjs/operators';
+import {MessageType} from '../../misc/message-type';
 
 @Component({
   selector: 'chat-dialog',
@@ -27,7 +27,16 @@ export class ChatDialogComponent implements OnInit, OnDestroy, CloseChat {
 
   ngOnInit(): void {
     this.clientMsgDispatcher.loadMessages();
-    this.messageSubscription = this.clientMsgDispatcher.messages.subscribe(msg => {
+    this.messageSubscription = this.clientMsgDispatcher.messages.pipe(map(_ => {
+      if (_.type === MessageType.Question){
+        const question = JSON.parse(_.content);
+        _.questionId = question.Id;
+        _.question = question.Question;
+        _.content = question.Question;
+      }
+
+      return _;
+    })).subscribe(msg => {
       this.messages.push(msg);
     });
     this.metaSubscription = this.clientMsgDispatcher.meta.subscribe((msg) => {

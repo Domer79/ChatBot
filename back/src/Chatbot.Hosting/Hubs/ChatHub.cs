@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Chatbot.Abstractions;
 using Chatbot.Abstractions.Contracts;
 using Chatbot.Abstractions.Contracts.Chat;
 using Chatbot.Abstractions.Contracts.Responses;
+using Chatbot.Abstractions.Core;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Abstractions.Repositories;
 using Chatbot.Common;
+using Chatbot.Core.Common;
 using Chatbot.Hosting.Authentication;
 using Chatbot.Hosting.Misc;
 using Chatbot.Model.DataModel;
@@ -27,6 +30,7 @@ namespace Chatbot.Hosting.Hubs
         private readonly ITokenService _tokenService;
         private readonly IHubContext<OperatorHub> _operatorHubContext;
         private readonly IOperatorLogService _logService;
+        private readonly IChatBotHelper _chatBotHelper;
         private readonly Mapper _mapper;
 
         public ChatHub(IMessageService messageService,
@@ -38,12 +42,14 @@ namespace Chatbot.Hosting.Hubs
             IOperatorLogService logService,
             ILogger<ChatHub> logger,
             UserSet userSet,
+            IChatBotHelper chatBotHelper,
             Mapper mapper)
         : base(userService, hubDispatcher, messageDialogService, messageService, userSet, logger)
         {
             _tokenService = tokenService;
             _operatorHubContext = operatorHubContext;
             _logService = logService;
+            _chatBotHelper = chatBotHelper;
             _mapper = mapper;
         }
 
@@ -59,8 +65,18 @@ namespace Chatbot.Hosting.Hubs
             if (message.MessageDialogId.IsEmpty())
             {
                 message.MessageDialogId = dialogGroup.MessageDialogId;
+                message.Status = MessageStatus.Received;
                 dialogGroup.ClientId = User.Id;
                 await _operatorHubContext.Clients.All.SendAsync("dialogCreated", dialogGroup.MessageDialogId);
+                await Clients.Caller.SendAsync("send", await _chatBotHelper.GetResponse(message));
+                Thread.Sleep(10);
+                await Clients.Caller.SendAsync("sendQuestions", await _chatBotHelper.GetQuestionMessages(message));
+                Thread.Sleep(10);
+                await Clients.Caller.SendAsync("sendButton", await _chatBotHelper.GetButtonForForm(message));
+            }
+            else
+            {
+                message.Status = MessageStatus.Saved;
             }
         
             if (dialogGroup == null)
@@ -71,7 +87,6 @@ namespace Chatbot.Hosting.Hubs
                 throw new InvalidOperationException($"User {User.Login} not connected in chat room");
             }
         
-            message.Status = MessageStatus.Saved;
             message = await MessageService.Add(message);
             dialogGroup.LastMessageTime = message.Time;
             

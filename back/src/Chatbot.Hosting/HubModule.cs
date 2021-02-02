@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Chatbot.Abstractions;
 using Chatbot.Abstractions.Contracts.Chat;
+using Chatbot.Core.Common;
 using Chatbot.Hosting.Hubs;
 using Chatbot.Hosting.Misc;
 using Microsoft.Extensions.Logging;

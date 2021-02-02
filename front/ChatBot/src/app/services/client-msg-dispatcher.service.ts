@@ -8,6 +8,7 @@ import {environment} from '../../environments/environment';
 import {NIL as guidEmpty, v4 as uuidv4} from 'uuid';
 import {TokenService} from './token.service';
 import {MessageService} from './message.service';
+import Question from '../../abstracts/Question';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,8 @@ export class ClientMsgDispatcher {
       status: MessageStatus.sending,
       time: new Date(),
       messageDialogId: this.messageDialogId ?? guidEmpty,
+      questionId: null,
+      question: null,
     };
 
     this.connection.invoke('Send', message)
@@ -97,8 +100,20 @@ export class ClientMsgDispatcher {
         status: MessageStatus.received,
         time: new Date(),
         messageDialogId: this.messageDialogId ?? guidEmpty,
+        questionId: null,
+        question: null,
       });
       this.messageDialogId = undefined;
+    });
+
+    this.connection.on('sendQuestions', (messages: Message[]) => {
+      for (const message of messages){
+        this.messages$.next(message);
+      }
+    });
+
+    this.connection.on('sendButton', (message: Message) => {
+      this.messages$.next(message);
     });
   }
 }
