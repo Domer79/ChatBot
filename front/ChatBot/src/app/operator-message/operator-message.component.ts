@@ -4,6 +4,7 @@ import {MessageType} from '../../misc/message-type';
 import Question from '../../abstracts/Question';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
+import {AuthFormComponent} from '../auth-form/auth-form.component';
 
 @Component({
   selector: 'operator-message',
@@ -34,6 +35,6 @@ export class OperatorMessageComponent implements AfterViewInit {
   }
 
   fillAuthForm(): void {
-
+    this.pageDispatcher.showPage(AuthFormComponent);
   }
 }

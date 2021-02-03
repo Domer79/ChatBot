@@ -32,6 +32,8 @@ import { MainQuestionsHeaderComponent } from './questions/main-questions-header/
 import { FirstQuestionsComponent } from './questions/first-questions/first-questions.component';
 import { BackService } from '../abstracts/BackService';
 import { SearchQuestionsComponent } from './questions/search-questions/search-questions.component';
+import { AuthFormComponent } from './auth-form/auth-form.component';
+import { AuthFormHederComponent } from './auth-form-heder/auth-form-heder.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,8 @@ import { SearchQuestionsComponent } from './questions/search-questions/search-qu
     MainQuestionsHeaderComponent,
     FirstQuestionsComponent,
     SearchQuestionsComponent,
+    AuthFormComponent,
+    AuthFormHederComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,41 @@
+<chat-header (closed)="onCloseChat()" (openQuestions)="onOpenQuestions()"></chat-header>
+<div class="form-container">
+  <div class="form-input-container">
+    <div
+      contenteditable="true"
+      class="form-input fio editable-placeholder"
+      placeholder="Укажите ФИО"
+      [ngClass]="{'placeholder-active': fio === ''}"
+      (keypress)="fioEnter($event)"
+      (input)="fioInput($event.target)"
+      (keydown.enter)="fioOnKeydownEnter($event)"
+    ></div>
+  </div>
+  <div class="form-input-container">
+    <div
+      contenteditable="true"
+      class="form-input editable-placeholder"
+      placeholder="Укажите свой email"
+      [ngClass]="{'placeholder-active': email === ''}"
+      (keypress)="emailEnter($event)"
+      (input)="emailInput($event.target)"
+      (keydown.enter)="emailOnKeydownEnter($event)"
+    ></div>
+  </div>
+  <div class="form-input-container">
+    <div
+      contenteditable="true"
+      class="form-input editable-placeholder"
+      placeholder="Укажите свой телефон"
+      [ngClass]="{'placeholder-active': phone === ''}"
+      (keypress)="phoneEnter($event)"
+      (input)="phoneInput($event.target)"
+      (keydown.enter)="phoneOnKeydownEnter($event)"
+    ></div>
+  </div>
+  <div class="form-input-container" (click)="sendAuthData()">
+    <div class="form-submit">
+      Начать чат с оператором
+    </div>
+  </div>
+</div>

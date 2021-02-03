@@ -1,0 +1,45 @@
+@use "src/common/styles/common"
+
+.form-container
+  padding: 2em
+
+.form-input-container
+  display: flex
+  justify-content: center
+  margin:
+    bottom: 1.7em
+
+.form-input
+  outline: none
+  width: 70%
+  height: 60px
+  background: #FFFFFF
+  border: 1px solid #D8DCE2
+  box-sizing: border-box
+  border-radius: 5px
+  padding-top: 1.1em
+  padding-left: 1em
+
+.form-input.fio
+  margin-top: 3em
+
+.form-input.editable-placeholder[contentEditable="true"]:empty:before
+  content: attr(placeholder)
+  cursor: text
+
+.placeholder-active
+  color: gray
+  //@include common.font-roboto(15px, 160%)
+
+.form-submit
+  width: 40%
+  height: 40px
+  background: linear-gradient(0deg, #3757A1, #3757A1), linear-gradient(180deg, #FFFFFF 0%, #FAFBFF 100%)
+  border-radius: 5px
+  @include common.font-roboto(11px, 13px, 500)
+  text-transform: uppercase
+  color: #FFFFFF
+  justify-content: center
+  align-items: center
+  display: flex
+  cursor: pointer
