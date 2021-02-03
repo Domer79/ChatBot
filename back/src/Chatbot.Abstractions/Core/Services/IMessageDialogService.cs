@@ -16,6 +16,7 @@ namespace Chatbot.Abstractions.Core.Services
         Task<MessageDialog> Activate(Guid actionsRequestMessageDialogId, Guid messageDialogId);
         Task<MessageDialog> Reject(Guid messageDialogId);
         Task<MessageDialog> Close(Guid messageDialogId);
+        Task<MessageDialog> SetOffline(Guid messageDialogId);
         
         Task<MessageDialog[]> GetAll();
         Task<MessageDialog[]> GetStarted();

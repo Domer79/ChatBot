@@ -42,6 +42,10 @@ namespace Chatbot.Ef.Configurations
             b.Property(_ => _.ClientId)
                 .HasColumnName("client_id");
 
+            b.Property(_ => _.Offline)
+                .HasColumnName("offline")
+                .HasDefaultValue(false);
+
             b.HasKey(_ => _.Id);
 
             b.HasIndex(_ => _.Number)

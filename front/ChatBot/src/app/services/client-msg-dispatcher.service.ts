@@ -19,7 +19,7 @@ export class ClientMsgDispatcher {
   private meta$: Subject<MessageInfo> = new Subject<MessageInfo>();
   public messages: Observable<Message> = this.messages$.asObservable();
   public meta: Observable<MessageInfo> = this.meta$.asObservable();
-  private messageDialogId: string | null | undefined;
+  messageDialogId: string | null | undefined;
 
   constructor(
     private tokenService: TokenService,

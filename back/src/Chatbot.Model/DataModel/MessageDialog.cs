@@ -14,6 +14,7 @@ namespace Chatbot.Model.DataModel
         public DialogStatus DialogStatus { get; set; } 
         public Guid? OperatorId { get; set; }
         public Guid? ClientId { get; set; }
+        public bool Offline { get; set; }
         public HashSet<Message> Messages { get; set; }
         
         public User Operator { get; set; }

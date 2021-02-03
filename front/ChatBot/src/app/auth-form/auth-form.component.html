@@ -33,9 +33,20 @@
       (keydown.enter)="phoneOnKeydownEnter($event)"
     ></div>
   </div>
-  <div class="form-input-container" (click)="sendAuthData()">
+  <div class="form-input-container" *ngIf="!isShift">
+    <div
+      contenteditable="true"
+      class="form-input msg editable-placeholder"
+      placeholder="Укажите свой вопрос"
+      [ngClass]="{'placeholder-active': message === ''}"
+      (keypress)="messageEnter($event)"
+      (input)="messageInput($event.target)"
+      (keydown.enter)="messageOnKeydownEnter($event)"
+    ></div>
+  </div>
+  <div class="form-input-container" (click)="sendData()">
     <div class="form-submit">
-      Начать чат с оператором
+      {{!isShift ? 'Отправить сообщение' : 'Начать чат с оператором'}}
     </div>
   </div>
 </div>

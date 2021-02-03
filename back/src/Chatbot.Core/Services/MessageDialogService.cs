@@ -76,6 +76,13 @@ namespace Chatbot.Core.Services
             return await Close(dialog);
         }
 
+        public async Task<MessageDialog> SetOffline(Guid messageDialogId)
+        {
+            var dialog = await GetDialog(messageDialogId);
+            dialog.Offline = true;
+            return await _dialogRepository.Upsert(dialog);
+        }
+
         public Task<MessageDialog[]> GetAll()
         {
             return _dialogRepository.GetAll();

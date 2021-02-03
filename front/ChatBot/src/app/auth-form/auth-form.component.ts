@@ -4,6 +4,9 @@ import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {AuthService} from '../services/auth.service';
 import User from '../../abstracts/User';
 import {Subscription} from 'rxjs';
+import {CommonService} from '../services/common.service';
+import {MessageService} from '../services/message.service';
+import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 
 @Component({
   selector: 'app-auth-form',
@@ -14,11 +17,16 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   fio = '';
   email = '';
   phone = '';
+  message = '';
   private sendAuthDataSubscription: Subscription;
+  private sendOfflineMessageSubscription: Subscription;
 
   constructor(
     private pageDispatcher: PageDispatcherService,
-    private authService: AuthService
+    private authService: AuthService,
+    private commonService: CommonService,
+    private messageService: MessageService,
+    private clientMsgDispatcher: ClientMsgDispatcher
   ) { }
 
   ngOnInit(): void {
@@ -33,11 +41,28 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   }
 
   sendAuthData(): void {
-    debugger;
     this.sendAuthDataSubscription = this.authService.sendAuthData(this.fio, this.email, this.phone).subscribe(_ => {
-      console.log(_);
-      this.pageDispatcher.closeCurrent();
+      if (this.isShift){
+        this.pageDispatcher.closeCurrent();
+      }
     });
+  }
+
+  private sendOfflineMessage(): void {
+    this.sendOfflineMessageSubscription = this.messageService.sendOfflineMessage(this.message, this.clientMsgDispatcher.messageDialogId)
+      .subscribe(msg => {
+        alert('Сообщение доставлено');
+      });
+  }
+
+  sendData(): void{
+    if (this.isShift){
+      this.sendAuthData();
+    }
+    else{
+      this.sendAuthData();
+      this.sendOfflineMessage();
+    }
   }
 
   fioEnter($event: KeyboardEvent): void {
@@ -109,7 +134,38 @@ export class AuthFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  messageEnter($event: KeyboardEvent): void {
+    if (this.message === '' && ($event.code === 'Enter' && $event.shiftKey)){
+      $event.preventDefault();
+    }
+  }
+
+  messageInput(target: EventTarget | any): void {
+    this.message = target.innerHTML;
+  }
+
+  messageOnKeydownEnter($event: any): void {
+    const event = $event as KeyboardEvent;
+    if (this.message === ''){
+      event.preventDefault();
+      return;
+    }
+
+    if (!event.shiftKey)
+    {
+      $event.preventDefault();
+    }
+  }
+
+  get isShift(): boolean{
+    const now = new Date();
+    const beginDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), this.commonService.beginShift.hours, 0, 0);
+    const closeDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), this.commonService.closingShift.hours, 0, 0);
+    return beginDate < now && now < closeDate;
+  }
+
   ngOnDestroy(): void {
     this.sendAuthDataSubscription.unsubscribe();
+    this.sendOfflineMessageSubscription.unsubscribe();
   }
 }
