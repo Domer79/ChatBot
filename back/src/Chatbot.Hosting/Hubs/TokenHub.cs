@@ -37,7 +37,7 @@ namespace Chatbot.Hosting.Hubs
                 FirstName = "Пользователь",
                 MiddleName = "",
                 Password = "0x0".GetBytes(),
-                IsActive = true,
+                IsActive = false,
             };
         }
     }

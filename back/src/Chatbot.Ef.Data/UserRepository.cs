@@ -33,7 +33,6 @@ namespace Chatbot.Ef.Data
             if (user.Id == Guid.Empty)
             {
                 user.Id = Guid.NewGuid();
-                user.IsActive = true;
                 user.Password = "0x0".GetBytes();
                 _context.Add(user);
             }

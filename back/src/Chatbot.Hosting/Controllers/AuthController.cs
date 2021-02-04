@@ -77,6 +77,7 @@ namespace Chatbot.Hosting.Controllers
             user.FirstName = strings.Length > 1 ? strings[1] : user.FirstName;
             user.MiddleName = strings.Length > 2 ? strings[2] : user.MiddleName;
             user.Email = request.Email;
+            user.IsActive = true;
 
             user = await _userService.Upsert(user);
             return _mapper.Map<UserResponse>(user);
