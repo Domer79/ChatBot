@@ -2,6 +2,7 @@
 <div class="form-container">
   <div class="form-input-container">
     <div
+      #fioEditor
       contenteditable="true"
       class="form-input fio editable-placeholder"
       placeholder="Укажите ФИО"
@@ -13,6 +14,7 @@
   </div>
   <div class="form-input-container">
     <div
+      #emailEditor
       contenteditable="true"
       class="form-input editable-placeholder"
       placeholder="Укажите свой email"
@@ -24,6 +26,7 @@
   </div>
   <div class="form-input-container">
     <div
+      #phoneEditor
       contenteditable="true"
       class="form-input editable-placeholder"
       placeholder="Укажите свой телефон"
@@ -35,6 +38,7 @@
   </div>
   <div class="form-input-container" *ngIf="!isShift">
     <div
+      #messageEditor
       contenteditable="true"
       class="form-input msg editable-placeholder"
       placeholder="Укажите свой вопрос"

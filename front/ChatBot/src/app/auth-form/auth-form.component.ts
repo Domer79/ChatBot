@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 import {QuestionsComponent} from '../questions/questions/questions.component';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {AuthService} from '../services/auth.service';
@@ -20,6 +20,7 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   message = '';
   private sendAuthDataSubscription: Subscription;
   private sendOfflineMessageSubscription: Subscription;
+  private fioEditor: ElementRef;
 
   constructor(
     private pageDispatcher: PageDispatcherService,
@@ -170,5 +171,9 @@ export class AuthFormComponent implements OnInit, OnDestroy {
     if (this.sendOfflineMessageSubscription){
       this.sendOfflineMessageSubscription.unsubscribe();
     }
+  }
+
+  private removeBr(element: ElementRef): void{
+    element.nativeElement.querySelector()
   }
 }

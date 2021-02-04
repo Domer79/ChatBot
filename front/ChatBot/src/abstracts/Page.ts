@@ -9,6 +9,10 @@ export default class Page{
   public instance: ComponentRef<any> = null;
 
   get componentName(): string{
+    if (this.component['__customName']){
+      return this.component['__customName'];
+    }
+
     return this.component.name;
   }
 }
