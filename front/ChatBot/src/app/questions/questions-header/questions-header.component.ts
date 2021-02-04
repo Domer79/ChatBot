@@ -8,8 +8,6 @@ import {PageHeaderService} from '../../services/page-header.service';
   styleUrls: ['./questions-header.component.sass']
 })
 export class QuestionsHeaderComponent implements OnInit {
-  @Input() responsePreset: boolean;
-
   constructor() { }
 
   ngOnInit(): void {

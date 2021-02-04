@@ -1,20 +1,24 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import {MessageType} from '../../misc/message-type';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
+import {of, Subscription} from 'rxjs';
+import {timeout} from 'rxjs/operators';
 
 @Component({
   selector: 'chat-editor',
   templateUrl: './chat-editor.component.html',
   styleUrls: ['./chat-editor.component.sass']
 })
-export class ChatEditorComponent implements OnInit, AfterViewInit {
-  @ViewChild('editor') editorElement: ElementRef;
-  @ViewChild('chatEditor') chatEditorElement: ElementRef;
+export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
+  private originalClientHeight: number;
+  private closeCurrentTimeoutSubscription: Subscription;
 
   message = '';
-  private originalClientHeight: number;
+
+  @ViewChild('editor') editorElement: ElementRef;
+  @ViewChild('chatEditor') chatEditorElement: ElementRef;
 
   constructor(
     private clientMsgDispatcher: ClientMsgDispatcher,
@@ -67,9 +71,15 @@ export class ChatEditorComponent implements OnInit, AfterViewInit {
     this.chatEditorElement.nativeElement.style.height = `${this.originalClientHeight}px`;
 
     if (this.pageDispatcher.getCurrent().componentName === 'MainQuestionsComponent'){
-      setTimeout(() => {
+      this.closeCurrentTimeoutSubscription = of(1).pipe(timeout(300)).subscribe(() => {
         this.pageDispatcher.closeCurrent();
-      }, 300);
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.closeCurrentTimeoutSubscription){
+      this.closeCurrentTimeoutSubscription.unsubscribe();
     }
   }
 }
