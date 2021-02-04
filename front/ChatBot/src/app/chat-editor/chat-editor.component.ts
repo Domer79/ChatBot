@@ -7,6 +7,7 @@ import {Observable, of, Subscription} from 'rxjs';
 import {timeout} from 'rxjs/operators';
 import {ShowChatEditor} from '../../abstracts/ShowChatEditor';
 import {AuthService} from '../services/auth.service';
+import {ChatEditorService} from '../services/chat-editor.service';
 
 @Component({
   selector: 'chat-editor',
@@ -25,10 +26,15 @@ export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private clientMsgDispatcher: ClientMsgDispatcher,
     private pageDispatcher: PageDispatcherService,
+    private chatEditorService: ChatEditorService
     ) {
   }
 
   ngOnInit(): void {
+  }
+
+  get canShow(): Observable<boolean>{
+    return this.chatEditorService.canShow();
   }
 
   enter($event: KeyboardEvent): void {

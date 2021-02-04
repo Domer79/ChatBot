@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import User from '../../abstracts/User';
-import {Observable, Subject} from 'rxjs';
+import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly user$: Subject<User>;
+  private readonly user$: ReplaySubject<User>;
   private readonly user: Observable<User>;
 
   constructor(
     private httpClient: HttpClient
   ) {
-    this.user$ = new Subject<User>();
+    this.user$ = new ReplaySubject<User>(1);
     this.user = this.user$.asObservable();
   }
 
