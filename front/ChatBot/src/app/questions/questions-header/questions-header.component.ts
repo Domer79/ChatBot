@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {QuestionsProviderService} from '../../services/questions-provider.service';
-import {MainBackService} from '../../services/main-back.service';
+import {PageHeaderService} from '../../services/page-header.service';
 
 @Component({
   selector: 'questions-header',
@@ -13,14 +13,12 @@ export class QuestionsHeaderComponent implements OnInit {
 
   constructor(
     private questionsProvider: QuestionsProviderService,
-    private mainBackService: MainBackService
   ) { }
 
   ngOnInit(): void {
   }
 
   async getBackQuestions(): Promise<void> {
-    this.mainBackService.goBack();
     const question = this.questionsProvider.getSelectedQuestion();
     await this.questionsProvider.loadQuestions(question);
   }

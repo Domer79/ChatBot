@@ -1,12 +1,5 @@
 <base-chat-header>
   <div class="header-container">
     <div *ngIf="!responsePreset" class="header-element header-message">Вероятный ответ на ваш вопрос</div>
-    <div *ngIf="responsePreset">
-      <div (click)="getBackQuestions()" class="header-element header-message back-btn"><img src="assets/left_arrow.svg"/> &nbsp; Назад</div>
-    </div>
-
-    <div class="close-container">
-      <span class="close-btn" (click)="closePage()"><img src="assets/cross.svg" class="header-element close-icon"/></span>
-    </div>
   </div>
 </base-chat-header>

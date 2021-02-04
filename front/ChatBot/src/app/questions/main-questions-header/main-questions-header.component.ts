@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {MainBackService} from '../../services/main-back.service';
+import {PageHeaderService} from '../../services/page-header.service';
 
 @Component({
   selector: 'main-questions-header',
@@ -9,22 +9,9 @@ import {MainBackService} from '../../services/main-back.service';
 export class MainQuestionsHeaderComponent implements OnInit {
   @Output() close: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(
-    private mainBackService: MainBackService
-  ) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
 
-  closePage(): void {
-    this.close.emit();
-  }
-
-  isShowBack(): boolean {
-    return this.mainBackService.isShowBack();
-  }
-
-  getBackQuestions(): void {
-    return this.mainBackService.goBack();
-  }
 }

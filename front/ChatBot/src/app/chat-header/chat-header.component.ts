@@ -7,7 +7,6 @@ import {PageDispatcherService} from '../services/page-dispatcher.service';
   styleUrls: ['./chat-header.component.sass']
 })
 export class ChatHeaderComponent implements OnInit {
-  @Output() closed = new EventEmitter<void>();
   @Output() openQuestions = new EventEmitter<void>();
 
   constructor() { }
@@ -17,9 +16,5 @@ export class ChatHeaderComponent implements OnInit {
 
   onOpenQuestions($event: MouseEvent): void {
     this.openQuestions.emit();
-  }
-
-  onClosed($event: MouseEvent): void {
-    this.closed.emit();
   }
 }

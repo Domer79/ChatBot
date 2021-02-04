@@ -1,3 +1,9 @@
 <div class="base-chat-header">
+  <div *ngIf="hasBack">
+    <div (click)="goBack()" class="header-element header-message back-btn"><img src="assets/left_arrow.svg"/> &nbsp; Назад</div>
+  </div>
   <ng-content></ng-content>
+  <div class="close-container">
+    <span class="close-btn" (click)="closePage()"><img src="assets/cross.svg" class="header-element close-icon"/></span>
+  </div>
 </div>

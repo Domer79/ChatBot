@@ -1,4 +1,4 @@
-import {Injectable, Type} from '@angular/core';
+import {ComponentRef, Injectable, Type} from '@angular/core';
 import Page from '../../abstracts/Page';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {PageSource} from './PageSource';
@@ -7,13 +7,22 @@ import {PageSource} from './PageSource';
   providedIn: 'root'
 })
 export class PageDispatcherService {
-  private pages$: BehaviorSubject<Page>;
-  private pages: Page[] = PageSource.getPages();
-
-  private stackPage: Page[] = [];
+  private readonly page$: BehaviorSubject<Page>;
+  private readonly page: Observable<Page>;
+  private readonly pageWithInstance$: Subject<Page>;
+  private readonly pageWithInstance: Observable<Page>;
+  private readonly closeChat$: Subject<void>;
+  private readonly closeChat: Observable<void>;
+  private readonly pages: Page[] = PageSource.getPages();
+  private readonly stackPage: Page[] = [];
 
   constructor() {
-    this.pages$ = new BehaviorSubject<Page>(this.pages[0]);
+    this.page$ = new BehaviorSubject<Page>(this.pages[0]);
+    this.page = this.page$.asObservable();
+    this.pageWithInstance$ = new Subject<Page>();
+    this.pageWithInstance = this.pageWithInstance$.asObservable();
+    this.closeChat$ = new Subject<void>();
+    this.closeChat = this.closeChat$.asObservable();
     this.stackPage.push(this.pages[0]);
     this.update();
   }
@@ -34,15 +43,37 @@ export class PageDispatcherService {
       throw new Error('The dialogue cannot be closed');
     }
 
+    if (this.stackPage.length === 1){
+
+      return;
+    }
+
     this.stackPage.pop();
     this.update();
   }
 
-  private update(): void{
-    this.pages$.next(this.getCurrent());
+  getPage(): Observable<Page>{
+    return this.page;
   }
 
-  getPage(): Observable<Page>{
-    return this.pages$.asObservable();
+  getPageWithInstance(): Observable<Page>{
+    return this.pageWithInstance;
+  }
+
+  getCloseChatEvent(): Observable<void>{
+    return this.closeChat;
+  }
+
+  setCurPageInstance(instance: ComponentRef<any>): void{
+    this.getCurrent().instance = instance;
+    this.updateWithInstance();
+  }
+
+  private update(): void{
+    this.page$.next(this.getCurrent());
+  }
+
+  private updateWithInstance(): void {
+    this.pageWithInstance$.next(this.getCurrent());
   }
 }

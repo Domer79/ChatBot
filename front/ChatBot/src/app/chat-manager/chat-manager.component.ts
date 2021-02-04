@@ -6,18 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat-manager.component.sass'],
 })
 export class ChatManagerComponent implements OnInit {
-  opened: boolean = false;
+  opened = false;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  onToggle() {
+  onToggle(): void {
     this.opened = !this.opened;
   }
 
-  onClosed() {
+  onClosed(): void {
     this.opened = false;
   }
 }

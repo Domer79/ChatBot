@@ -4,21 +4,25 @@ import {Observable, Subscription} from 'rxjs';
 import Question from '../../../abstracts/Question';
 import {PageDispatcherService} from '../../services/page-dispatcher.service';
 import {tap} from 'rxjs/operators';
-import {MainBackService} from '../../services/main-back.service';
+import {PageHeaderService} from '../../services/page-header.service';
+import {CustomNamed} from '../../decoratotrs/custom-named.decorator';
+import {QuestionComponentBackService} from '../../services/question-component-back.service';
+import {BackService, HasBackService} from '../../../abstracts/BackService';
 
+@CustomNamed('QuestionsComponent')
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'questions',
   templateUrl: './questions.component.html',
-  styleUrls: ['./questions.component.sass']
+  styleUrls: ['./questions.component.sass'],
 })
-export class QuestionsComponent implements OnInit, OnDestroy {
+export class QuestionsComponent implements OnInit, OnDestroy, HasBackService {
   questions: Question[] = [];
   private isShowQuestions$: boolean;
   private existQuestionSubscription: Subscription;
   constructor(private questionsProvider: QuestionsProviderService,
               private pageDispatcher: PageDispatcherService,
-              private mainBackService: MainBackService
+              private backService: QuestionComponentBackService
               ) {
     this.existQuestionSubscription = this.questionsProvider.existQuestions.subscribe(res => {
       this.isShowQuestions$ = res;
@@ -28,7 +32,6 @@ export class QuestionsComponent implements OnInit, OnDestroy {
   public data: Question;
 
   async ngOnInit(): Promise<void> {
-    this.mainBackService.setComponent(QuestionsComponent);
     await this.questionsProvider.loadQuestions(this.data ?? undefined);
 
     this.questionsProvider.questions.subscribe(q => {
@@ -38,7 +41,6 @@ export class QuestionsComponent implements OnInit, OnDestroy {
 
   async showQuestions(question: Question): Promise<void>{
     await this.questionsProvider.loadQuestions(question);
-    this.mainBackService.setComponent(QuestionsComponent);
   }
 
   showResponse(question: Question): void {
@@ -47,10 +49,6 @@ export class QuestionsComponent implements OnInit, OnDestroy {
 
   get isShowQuestions(): boolean{
     return this.isShowQuestions$;
-  }
-
-  get isShowBack(): boolean{
-    return this.mainBackService.isShowBack();
   }
 
   get selectedQuestion(): Question{
@@ -63,5 +61,9 @@ export class QuestionsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.existQuestionSubscription.unsubscribe();
+  }
+
+  getBackService(): BackService {
+    return this.backService;
   }
 }

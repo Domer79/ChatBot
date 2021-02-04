@@ -1,6 +1,6 @@
-import {Component, Input, Output, EventEmitter, OnInit, ElementRef} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, ElementRef, OnDestroy} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import Message from '../../abstracts/message';
 import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import {map, tap} from 'rxjs/operators';
@@ -31,22 +31,31 @@ import {MainQuestionsComponent} from '../questions/main-questions/main-questions
     ])
   ]
 })
-export class MsgContainerComponent implements OnInit {
+export class MsgContainerComponent implements OnInit, OnDestroy {
   @Input() opened = false;
   @Output() closed = new EventEmitter<void>();
 
   title = 'ChatBot';
+  private closeChatSubscription: Subscription;
 
-  constructor(private pageDispatcher: PageDispatcherService) {
-
+  constructor(
+    private pageDispatcher: PageDispatcherService
+  ) {
+    this.closeChatSubscription = this.pageDispatcher.getCloseChatEvent().subscribe(() => {
+      this.closeChat();
+    });
   }
 
-  onClosed(): void{
+  closeChat(): void{
     this.opened = false;
     this.closed.emit();
   }
 
   ngOnInit(): void{
     this.pageDispatcher.showPage(MainQuestionsComponent);
+  }
+
+  ngOnDestroy(): void {
+    this.closeChatSubscription.unsubscribe();
   }
 }

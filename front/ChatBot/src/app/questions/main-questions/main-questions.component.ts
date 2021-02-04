@@ -6,8 +6,10 @@ import {QuestionsProviderService} from '../../services/questions-provider.servic
 import {QuestionsComponent} from '../questions/questions.component';
 import {MainQuestionsState} from './MainQuestionsState';
 import {MainQuestionsComponentBackService} from '../../services/main-questions-component-back.service';
-import {MainBackService} from '../../services/main-back.service';
+import {PageHeaderService} from '../../services/page-header.service';
+import {CustomNamed} from '../../decoratotrs/custom-named.decorator';
 
+@CustomNamed('MainQuestionsComponent')
 @Component({
   selector: 'app-main-questions',
   templateUrl: './main-questions.component.html',
@@ -23,13 +25,10 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit 
   constructor(
     private pageDispatcher: PageDispatcherService,
     private questionsProvider: QuestionsProviderService,
-    private backService: MainQuestionsComponentBackService,
-    private mainBackService: MainBackService
   ) {
   }
 
   ngOnInit(): void {
-    this.mainBackService.setComponent(MainQuestionsComponent);
     this.questions = this.questionsProvider.getShortParentQuestions();
     if (!this.data){
       this.data = new MainQuestionsState();

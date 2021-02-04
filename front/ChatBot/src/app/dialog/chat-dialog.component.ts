@@ -2,7 +2,6 @@ import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import Message from '../../abstracts/message';
 import {Subscription} from 'rxjs';
-import CloseChat from '../../abstracts/CloseChat';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
 import {map} from 'rxjs/operators';
@@ -13,10 +12,9 @@ import {MessageType} from '../../misc/message-type';
   templateUrl: './chat-dialog.component.html',
   styleUrls: ['./dialog.component.sass']
 })
-export class ChatDialogComponent implements OnInit, OnDestroy, CloseChat {
+export class ChatDialogComponent implements OnInit, OnDestroy {
   private metaSubscription: Subscription;
   private messageSubscription: Subscription;
-  private closedEmitter = new EventEmitter<void>();
   messages: Message[] = [];
 
   constructor(
@@ -50,14 +48,6 @@ export class ChatDialogComponent implements OnInit, OnDestroy, CloseChat {
   ngOnDestroy(): void {
     this.metaSubscription.unsubscribe();
     this.messageSubscription.unsubscribe();
-  }
-
-  passClosedEmitter(closed: EventEmitter<void>): void {
-    this.closedEmitter = closed;
-  }
-
-  onCloseChat(): void {
-    this.closedEmitter.emit();
   }
 
   onOpenQuestions(): void {

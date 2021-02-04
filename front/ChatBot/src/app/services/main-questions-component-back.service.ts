@@ -19,6 +19,6 @@ export class MainQuestionsComponentBackService implements BackService {
   }
 
   isShowBack(): boolean {
-    return true;
+    return false;
   }
 }

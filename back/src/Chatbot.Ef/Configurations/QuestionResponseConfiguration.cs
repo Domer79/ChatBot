@@ -20,6 +20,7 @@ namespace Chatbot.Ef.Configurations
 
             b.Property(_ => _.Question)
                 .HasColumnName("question")
+                .HasMaxLength(800)
                 .IsRequired();
 
             b.Property(_ => _.Response)
@@ -36,7 +37,7 @@ namespace Chatbot.Ef.Configurations
 
             b.ToTable("question_response");
             b.HasKey(_ => _.Id);
-            b.HasIndex(_ => _.Question).IsUnique();
+            b.HasIndex(_ => _.Question);
             b.HasIndex(_ => _.Number)
                 .IsUnique();
             b.HasOne(_ => _.Parent)

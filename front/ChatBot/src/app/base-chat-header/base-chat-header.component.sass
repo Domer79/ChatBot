@@ -1,3 +1,4 @@
+@use "../../common/styles/common"
 @import ../../common/styles/variables
 
 .base-chat-header
@@ -7,3 +8,28 @@
   background-color: #3757A1
   border-radius: 1px
 
+.header-element
+  color: white
+  padding:
+    left: 2em
+    top: 1.6em
+
+.header-message
+  text-transform: uppercase
+  @include common.font-roboto(16px, 19px, bold)
+
+.back-btn
+  background-color: transparent
+  border-radius: 3px
+  border: 1px solid transparent
+  cursor: pointer
+
+.close-icon
+  width: 20px
+  margin-right: 1em
+
+.close-icon:hover
+  width: 22px
+
+.close-btn
+  cursor: pointer

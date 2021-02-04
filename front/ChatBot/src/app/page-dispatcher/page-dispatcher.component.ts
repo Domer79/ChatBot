@@ -1,10 +1,8 @@
 import {Component, ComponentFactoryResolver, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import Page from '../../abstracts/Page';
-import {ChatDialogComponent} from '../dialog/chat-dialog.component';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {PageHostDirective} from '../../directives/page-host.directive';
-import {Observable, Subscription} from 'rxjs';
-import CloseChat from '../../abstracts/CloseChat';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'page-dispatcher',
@@ -12,9 +10,10 @@ import CloseChat from '../../abstracts/CloseChat';
   styleUrls: ['./page-dispatcher.component.sass']
 })
 export class PageDispatcherComponent implements OnInit, OnDestroy {
-  @Output() closed = new EventEmitter<void>();
-  @ViewChild(PageHostDirective, {static: true}) pageHost: PageHostDirective;
   private pageSubscription: Subscription;
+
+  @ViewChild(PageHostDirective, {static: true}) pageHost: PageHostDirective;
+
   constructor(private pageDispatcher: PageDispatcherService,
               private componentFactoryResolver: ComponentFactoryResolver) { }
 
@@ -27,11 +26,8 @@ export class PageDispatcherComponent implements OnInit, OnDestroy {
     const viewContainerRef = this.pageHost.viewContainerRef;
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent(componentFactory);
+    this.pageDispatcher.setCurPageInstance(componentRef.instance);
     componentRef.instance.data = page.data;
-    const closedEmitter = (componentRef.instance as CloseChat).passClosedEmitter;
-    if (closedEmitter !== undefined){
-      (componentRef.instance as CloseChat).passClosedEmitter(this.closed);
-    }
   }
 
   ngOnDestroy(): void {

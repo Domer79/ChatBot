@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {PageHeaderService} from '../services/page-header.service';
 
 @Component({
   selector: 'base-chat-header',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BaseChatHeaderComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private headerService: PageHeaderService
+  ) { }
 
   ngOnInit(): void {
   }
 
+  get hasBack(): boolean{
+    return this.headerService.hasBack();
+  }
+
+  goBack(): void{
+    this.headerService.goBack();
+  }
+
+  closePage(): void{
+    this.headerService.closePage();
+  }
 }
