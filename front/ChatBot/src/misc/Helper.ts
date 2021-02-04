@@ -24,4 +24,13 @@ export default class Helper{
   public static guidEmpty(): string{
     return '00000000-0000-0000-0000-000000000000';
   }
+
+  public static searchQueryFilter(query: string): string{
+    let result: string = query;
+    if (query.match(/(.*)(<br>)$/)){
+      result = query.replace(/(.*)(<br>)$/, '$1');
+    }
+
+    return result;
+  }
 }

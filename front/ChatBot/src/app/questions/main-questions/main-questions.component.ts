@@ -8,6 +8,7 @@ import {MainQuestionsState} from './MainQuestionsState';
 import {MainQuestionsComponentBackService} from '../../services/main-questions-component-back.service';
 import {PageHeaderService} from '../../services/page-header.service';
 import {CustomNamed} from '../../decoratotrs/custom-named.decorator';
+import Helper from '../../../misc/Helper';
 
 @CustomNamed('MainQuestionsComponent')
 @Component({
@@ -60,7 +61,7 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit 
   inputSearchQuery(eventTarget: EventTarget | any): void {
     this.data.searchQuery = eventTarget.innerHTML;
 
-    if (this.data.searchQuery === ''){
+    if (Helper.searchQueryFilter(this.data.searchQuery) === ''){
       this.isSearchQueryInput = false;
     }
 

@@ -4,6 +4,8 @@ import {Observable, Subscription} from 'rxjs';
 import Question from '../../../abstracts/Question';
 import {QuestionsComponent} from '../questions/questions.component';
 import {PageDispatcherService} from '../../services/page-dispatcher.service';
+import {map} from 'rxjs/operators';
+import Helper from '../../../misc/Helper';
 
 @Component({
   selector: 'search-questions',
@@ -12,19 +14,22 @@ import {PageDispatcherService} from '../../services/page-dispatcher.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchQuestionsComponent implements OnInit, OnDestroy {
-  @Input() searchQuery: string;
-  questions: Observable<Question[]>;
-  private searchQuerySubscription: Subscription;
 
   constructor(
     private questionsProvider: QuestionsProviderService,
     private pageDispatcher: PageDispatcherService
   ) {
   }
+  @Input() searchQuery: string;
+  questions: Observable<Question[]>;
+  private searchQuerySubscription: Subscription;
+
 
   ngOnInit(): void {
     this.questions = this.questionsProvider.searchQuestions(this.searchQuery);
-    this.searchQuerySubscription = this.questionsProvider.searchQuery.subscribe(query => {
+    this.searchQuerySubscription = this.questionsProvider.searchQuery.pipe(map(query => {
+      return Helper.searchQueryFilter(query);
+    })).subscribe(query => {
       this.questions = this.questionsProvider.searchQuestions(query);
     });
   }
