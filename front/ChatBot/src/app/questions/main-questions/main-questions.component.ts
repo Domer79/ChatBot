@@ -9,6 +9,8 @@ import {MainQuestionsComponentBackService} from '../../services/main-questions-c
 import {PageHeaderService} from '../../services/page-header.service';
 import {CustomNamed} from '../../decoratotrs/custom-named.decorator';
 import Helper from '../../../misc/Helper';
+import {ShowChatEditor} from '../../../abstracts/ShowChatEditor';
+import {AuthService} from '../../services/auth.service';
 
 @CustomNamed('MainQuestionsComponent')
 @Component({
@@ -16,7 +18,7 @@ import Helper from '../../../misc/Helper';
   templateUrl: './main-questions.component.html',
   styleUrls: ['./main-questions.component.sass']
 })
-export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit, ShowChatEditor {
   isSearchQueryInput: boolean;
   questions: Observable<Question[]>;
   public data: MainQuestionsState = undefined;
@@ -26,6 +28,7 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit 
   constructor(
     private pageDispatcher: PageDispatcherService,
     private questionsProvider: QuestionsProviderService,
+    private authService: AuthService
   ) {
   }
 
@@ -97,5 +100,9 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit 
 
   private search(): void {
     this.searchQuestion();
+  }
+
+  canShowEditor(): Observable<boolean> {
+    return this.authService.isActive();
   }
 }

@@ -8,6 +8,8 @@ import {PageHeaderService} from '../../services/page-header.service';
 import {CustomNamed} from '../../decoratotrs/custom-named.decorator';
 import {QuestionComponentBackService} from '../../services/question-component-back.service';
 import {BackService, HasBackService} from '../../../abstracts/BackService';
+import {ShowChatEditor} from '../../../abstracts/ShowChatEditor';
+import {AuthService} from '../../services/auth.service';
 
 @CustomNamed('QuestionsComponent')
 @Component({
@@ -16,13 +18,14 @@ import {BackService, HasBackService} from '../../../abstracts/BackService';
   templateUrl: './questions.component.html',
   styleUrls: ['./questions.component.sass'],
 })
-export class QuestionsComponent implements OnInit, OnDestroy, HasBackService {
+export class QuestionsComponent implements OnInit, OnDestroy, HasBackService, ShowChatEditor {
   questions: Question[] = [];
   private isShowQuestions$: boolean;
   private existQuestionSubscription: Subscription;
   constructor(private questionsProvider: QuestionsProviderService,
               private pageDispatcher: PageDispatcherService,
-              private backService: QuestionComponentBackService
+              private backService: QuestionComponentBackService,
+              private authService: AuthService
               ) {
     this.existQuestionSubscription = this.questionsProvider.existQuestions.subscribe(res => {
       this.isShowQuestions$ = res;
@@ -65,5 +68,9 @@ export class QuestionsComponent implements OnInit, OnDestroy, HasBackService {
 
   getBackService(): BackService {
     return this.backService;
+  }
+
+  canShowEditor(): Observable<boolean> {
+    return this.authService.isActive();
   }
 }

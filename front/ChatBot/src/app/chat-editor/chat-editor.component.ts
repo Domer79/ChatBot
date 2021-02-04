@@ -3,8 +3,10 @@ import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import {MessageType} from '../../misc/message-type';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
-import {of, Subscription} from 'rxjs';
+import {Observable, of, Subscription} from 'rxjs';
 import {timeout} from 'rxjs/operators';
+import {ShowChatEditor} from '../../abstracts/ShowChatEditor';
+import {AuthService} from '../services/auth.service';
 
 @Component({
   selector: 'chat-editor',
@@ -22,7 +24,7 @@ export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private clientMsgDispatcher: ClientMsgDispatcher,
-    private pageDispatcher: PageDispatcherService
+    private pageDispatcher: PageDispatcherService,
     ) {
   }
 

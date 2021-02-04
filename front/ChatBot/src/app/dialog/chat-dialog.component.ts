@@ -1,26 +1,29 @@
 import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import Message from '../../abstracts/message';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
 import {map} from 'rxjs/operators';
 import {MessageType} from '../../misc/message-type';
 import {MainQuestionsComponent} from '../questions/main-questions/main-questions.component';
+import {ShowChatEditor} from '../../abstracts/ShowChatEditor';
+import {AuthService} from '../services/auth.service';
 
 @Component({
   selector: 'chat-dialog',
   templateUrl: './chat-dialog.component.html',
   styleUrls: ['./dialog.component.sass']
 })
-export class ChatDialogComponent implements OnInit, OnDestroy {
+export class ChatDialogComponent implements OnInit, OnDestroy, ShowChatEditor {
   private metaSubscription: Subscription;
   private messageSubscription: Subscription;
   messages: Message[] = [];
 
   constructor(
     private clientMsgDispatcher: ClientMsgDispatcher,
-    private pageDispatcherService: PageDispatcherService
+    private pageDispatcherService: PageDispatcherService,
+    private authService: AuthService
   ) {
   }
 
@@ -53,5 +56,9 @@ export class ChatDialogComponent implements OnInit, OnDestroy {
 
   onOpenQuestions(): void {
     this.pageDispatcherService.showPage(MainQuestionsComponent);
+  }
+
+  canShowEditor(): Observable<boolean> {
+    return this.authService.isActive();
   }
 }

@@ -8,8 +8,9 @@ import {BackService, HasBackService} from '../../abstracts/BackService';
   providedIn: 'root'
 })
 export class PageHeaderService implements OnDestroy {
-  currentPage: Page;
+  private currentPage: Page;
   private pageSubscription: Subscription;
+
   constructor(
     private pageDispatcher: PageDispatcherService
   ) {
@@ -23,7 +24,7 @@ export class PageHeaderService implements OnDestroy {
   }
 
   hasBack(): boolean{
-    return this.currentPage.instance
+    return this.currentPage && this.currentPage.instance
       && (this.currentPage.instance['getBackService'] && typeof(this.currentPage.instance['getBackService']) === 'function')
       && (this.currentPage.instance as unknown as HasBackService).getBackService().isShowBack();
   }
