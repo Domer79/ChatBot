@@ -17,12 +17,10 @@ export class BaseChatHeaderComponent implements OnInit {
 
   get hasBack(): boolean{
     const result = this.headerService.hasBack();
-    console.log(result);
     return result;
   }
 
   goBack(): void{
-    debugger;
     this.headerService.goBack();
   }
 

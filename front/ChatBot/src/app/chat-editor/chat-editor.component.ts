@@ -66,10 +66,10 @@ export class ChatEditorComponent implements OnInit, AfterViewInit {
     this.editorElement.nativeElement.innerHTML = '';
     this.chatEditorElement.nativeElement.style.height = `${this.originalClientHeight}px`;
 
-    if (this.pageDispatcher.getCurrent().componentName === 'QuestionsComponent'){
+    if (this.pageDispatcher.getCurrent().componentName === 'MainQuestionsComponent'){
       setTimeout(() => {
         this.pageDispatcher.closeCurrent();
-      }, 2000);
+      }, 300);
     }
   }
 }

@@ -59,8 +59,12 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit 
 
   inputSearchQuery(eventTarget: EventTarget | any): void {
     this.data.searchQuery = eventTarget.innerHTML;
+
+    if (this.data.searchQuery === ''){
+      this.isSearchQueryInput = false;
+    }
+
     this.questionsProvider.setSearchQuery(eventTarget.innerHTML);
-    // this.isSearchQueryInput = true; TODO: пока не удалять
   }
 
   enter($event: KeyboardEvent): void {
