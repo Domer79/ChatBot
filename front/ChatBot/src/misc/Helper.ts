@@ -33,4 +33,8 @@ export default class Helper{
 
     return result;
   }
+
+  public static existBr(str: string): any | null{
+    return str.match(/(.*)(<br>)$/);
+  }
 }

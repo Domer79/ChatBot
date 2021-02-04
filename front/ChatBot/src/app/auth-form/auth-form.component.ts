@@ -7,6 +7,8 @@ import {Subscription} from 'rxjs';
 import {CommonService} from '../services/common.service';
 import {MessageService} from '../services/message.service';
 import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
+import Helper from '../../misc/Helper';
+import {browser} from 'protractor';
 
 @Component({
   selector: 'app-auth-form',
@@ -74,6 +76,11 @@ export class AuthFormComponent implements OnInit, OnDestroy {
 
   fioInput(target: EventTarget | any): void {
     this.fio = target.innerHTML;
+    // debugger;
+    // this.fio = Helper.searchQueryFilter(target.innerHTML);
+    // if (this.fio === ''){
+    //   this.removeBr(this.fioEditor);
+    // }
   }
 
   fioOnKeydownEnter($event: any): void {
@@ -174,6 +181,7 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   }
 
   private removeBr(element: ElementRef): void{
-    element.nativeElement.querySelector()
+    debugger;
+    element.nativeElement.querySelector('br');
   }
 }
