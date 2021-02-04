@@ -4,7 +4,7 @@ import {MessageType} from '../../misc/message-type';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
 import {Observable, of, Subscription} from 'rxjs';
-import {timeout} from 'rxjs/operators';
+import {delay, timeout} from 'rxjs/operators';
 import {ShowChatEditor} from '../../abstracts/ShowChatEditor';
 import {AuthService} from '../services/auth.service';
 import {ChatEditorService} from '../services/chat-editor.service';
@@ -79,7 +79,7 @@ export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.chatEditorElement.nativeElement.style.height = `${this.originalClientHeight}px`;
 
     if (this.pageDispatcher.getCurrent().componentName === 'MainQuestionsComponent'){
-      this.closeCurrentTimeoutSubscription = of(1).pipe(timeout(300)).subscribe(() => {
+      this.closeCurrentTimeoutSubscription = of(1).pipe(delay(300)).subscribe(() => {
         this.pageDispatcher.closeCurrent();
       });
     }
