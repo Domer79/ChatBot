@@ -47,9 +47,9 @@ namespace Chatbot.Core.Services
             return _userRepository.GetByIds(ids);
         }
 
-        public Task<User> GetByLoginOrEmail(string loginOrEmail)
+        public Task<User> GetByLogin(string login)
         {
-            return _userRepository.GetByLoginOrEmail(loginOrEmail);
+            return _userRepository.GetByLogin(login);
         }
 
         public Task<User> Upsert(User user)
@@ -80,11 +80,11 @@ namespace Chatbot.Core.Services
             return ValidatePassword(user, password);
         }
 
-        public async Task<bool> ValidatePassword(string loginOrEmail, string password)
+        public async Task<bool> ValidatePassword(string login, string password)
         {
-            var user = await GetByLoginOrEmail(loginOrEmail);
+            var user = await GetByLogin(login);
             if (user == null)
-                throw new ChatbotCoreException($"User by login {loginOrEmail} not found", ErrorType.UserNotFound);
+                throw new ChatbotCoreException($"User by login {login} not found", ErrorType.UserNotFound);
             return ValidatePassword(user, password);
         }
 
@@ -112,9 +112,9 @@ namespace Chatbot.Core.Services
             return await SetPassword(user, password);
         }
 
-        public async Task<bool> SetPassword(string loginOrEmail, string password)
+        public async Task<bool> SetPassword(string login, string password)
         {
-            var user = await GetByLoginOrEmail(loginOrEmail);
+            var user = await GetByLogin(login);
             return await SetPassword(user, password);
         }
 
@@ -142,9 +142,9 @@ namespace Chatbot.Core.Services
             return _userRepository.GetRoles(userId);
         }
 
-        public Task<Role[]> GetRoles(string loginOrEmail)
+        public Task<Role[]> GetRoles(string login)
         {
-            return _userRepository.GetRoles(loginOrEmail);
+            return _userRepository.GetRoles(login);
         }
     }
 }

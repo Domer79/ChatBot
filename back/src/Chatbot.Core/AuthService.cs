@@ -24,12 +24,12 @@ namespace Chatbot.Core
             _roleService = roleService;
         }
 
-        public async Task<Token> LogIn(string loginOrEmail, string password)
+        public async Task<Token> LogIn(string login, string password)
         {
-            if (!await _userService.ValidatePassword(loginOrEmail, password))
+            if (!await _userService.ValidatePassword(login, password))
                 return null;
 
-            var user = await _userService.GetByLoginOrEmail(loginOrEmail);
+            var user = await _userService.GetByLogin(login);
             return await _tokenService.IssueToken(user);
         }
 
@@ -51,9 +51,9 @@ namespace Chatbot.Core
             return await CheckAccess(policy, user);
         }
 
-        public async Task<bool> CheckAccess(SecurityPolicy policy, string loginOrEmail)
+        public async Task<bool> CheckAccess(SecurityPolicy policy, string login)
         {
-            var user = await _userService.GetByLoginOrEmail(loginOrEmail);
+            var user = await _userService.GetByLogin(login);
             return await CheckAccess(policy, user);
         }
 

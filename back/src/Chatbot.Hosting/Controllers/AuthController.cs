@@ -51,7 +51,7 @@ namespace Chatbot.Hosting.Controllers
         [HttpPost]
         public async Task<TokenResponse> Login(LoginRequest request)
         {
-            var token = await _authService.LogIn(request.LoginOrEmail, request.Password);
+            var token = await _authService.LogIn(request.Login, request.Password);
             return token == null ? null : _mapper.Map<TokenResponse>(token);
         }
 

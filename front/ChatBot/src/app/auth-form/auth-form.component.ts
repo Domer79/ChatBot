@@ -173,7 +173,9 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sendAuthDataSubscription.unsubscribe();
+    if (this.sendAuthDataSubscription){
+      this.sendAuthDataSubscription.unsubscribe();
+    }
 
     if (this.sendOfflineMessageSubscription){
       this.sendOfflineMessageSubscription.unsubscribe();

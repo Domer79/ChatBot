@@ -12,9 +12,9 @@ namespace Chatbot.Abstractions.Repositories
         Task<User> SetPassword(User user);
         Task<bool> Remove(Guid userId);
         Task<bool> Remove(User user);
-        Task<User> GetByLoginOrEmail(string loginOrEmail);
+        Task<User> GetByLogin(string login);
         Task<Role[]> GetRoles(Guid userId);
-        Task<Role[]> GetRoles(string loginOrEmail);
+        Task<Role[]> GetRoles(string login);
         Task<User[]> GetByIds(Guid[] ids);
         Task<User[]> GetPage(int pageNumber, int pageSize, bool? isActive);
         Task<long> GetTotalCount(bool? isActive);

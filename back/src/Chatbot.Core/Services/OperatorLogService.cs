@@ -37,7 +37,7 @@ namespace Chatbot.Core.Services
 
         public async Task Log(string login, string action)
         {
-            var user = await _userService.GetByLoginOrEmail(login);
+            var user = await _userService.GetByLogin(login);
             await Log(user.Id, action);
         }
     }

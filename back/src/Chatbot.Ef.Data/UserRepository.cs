@@ -70,9 +70,9 @@ namespace Chatbot.Ef.Data
             return entriesCount != 0;
         }
 
-        public Task<User> GetByLoginOrEmail(string loginOrEmail)
+        public Task<User> GetByLogin(string login)
         {
-            return _context.Users.SingleOrDefaultAsync(_ => _.Login == loginOrEmail || _.Email == loginOrEmail);
+            return _context.Users.SingleOrDefaultAsync(_ => _.Login == login);
         }
 
         public async Task<Role[]> GetRoles(Guid userId)
@@ -81,10 +81,10 @@ namespace Chatbot.Ef.Data
             return user.Roles.ToArray();
         }
 
-        public async Task<Role[]> GetRoles(string loginOrEmail)
+        public async Task<Role[]> GetRoles(string login)
         {
             var user = await _context.Users.Include(_ => _.Roles)
-                .SingleOrDefaultAsync(_ => _.Login == loginOrEmail || _.Email == loginOrEmail);
+                .SingleOrDefaultAsync(_ => _.Login == login);
             return user.Roles.ToArray();
         }
 

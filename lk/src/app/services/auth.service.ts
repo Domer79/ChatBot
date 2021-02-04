@@ -32,7 +32,7 @@ export class AuthService {
 
   logIn(login: string, password: string): Observable<boolean> {
     return this.httpClient.post<any>("api/Auth/Login", {
-      loginOrEmail: login,
+      login: login,
       password
     }).pipe(
         map(_ => {

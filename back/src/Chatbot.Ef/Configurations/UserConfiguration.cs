@@ -78,7 +78,7 @@ namespace Chatbot.Ef.Configurations
                 );
 
             b.HasIndex(_ => _.Login).IsUnique();
-            b.HasIndex(_ => _.Email).IsUnique();
+            b.HasIndex(_ => _.Email);
             b.HasIndex(_ => _.IsOperator);
             b.HasIndex(_ => _.Number).IsUnique();
         }

@@ -44,7 +44,7 @@ namespace Chatbot.Hosting.Hubs
         protected Task<User> GetUser()
         {
             var login = Context.User.GetLogin();
-            return _userService.GetByLoginOrEmail(login);
+            return _userService.GetByLogin(login);
         }
 
         public async Task Send(Message message)
