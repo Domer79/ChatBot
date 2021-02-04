@@ -5,8 +5,8 @@ import {Time} from '@angular/common';
   providedIn: 'root'
 })
 export class CommonService {
-  closingShift: Time = { hours: 18, minutes: 0 };
-  beginShift: Time = { hours: 9, minutes: 0 };
+  beginShift: Time = { hours: 0, minutes: 0 };
+  closingShift: Time = { hours: 24, minutes: 0 };
 
   constructor() { }
 }
