@@ -1,4 +1,4 @@
-<div class="main-container questions-container" style="padding-top: 0">
+<div class="main-container questions-container" style="padding-top: 0" *ngIf="!nothingToShow">
   <div *ngFor="let question of questions | async" class="question-container">
     <div>
       <img src="assets/document.svg" class="document-svg"/>
@@ -7,4 +7,8 @@
       <span class="question-question" (click)="showQuestions(question)">{{question.question}}</span>
     </div>
   </div>
+</div>
+
+<div *ngIf="nothingToShow">
+  <h2>Ничего не найдено</h2>
 </div>
