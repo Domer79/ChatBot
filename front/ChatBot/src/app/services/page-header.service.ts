@@ -33,7 +33,13 @@ export class PageHeaderService implements OnDestroy {
       throw new Error('The BackService not initialized');
     }
 
-    (this.currentPage.instance as unknown as HasBackService).getBackService().goBack();
+    const backService = (this.currentPage.instance as unknown as HasBackService).getBackService();
+
+    if (backService.isBackWithClose()){
+      this.closePage();
+    }
+
+    backService.goBack();
   }
 
   closePage(): void{

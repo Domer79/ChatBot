@@ -20,7 +20,11 @@ export class QuestionsProviderService {
 
   constructor(
     private httpClient: HttpClient
-  ) { }
+  ) {
+    const question = new Question();
+    question.id = guidEmpty;
+    this.selectedQuestions.push(question);
+  }
 
   loadQuestions(question: Question | undefined): void{
     if (!question)
@@ -61,7 +65,12 @@ export class QuestionsProviderService {
     return this.selectedQuestions.length > 1;
   }
 
+  isBackWithClose(): boolean{
+    return this.selectedQuestions.length === 2;
+  }
+
   goBack(): void{
+    // debugger;
     const question = this.getBackQuestions();
     this.loadQuestions(question);
   }

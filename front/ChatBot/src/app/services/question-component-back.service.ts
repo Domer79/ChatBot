@@ -23,4 +23,8 @@ export class QuestionComponentBackService implements BackService{
   getComponent(): Type<any> {
     return QuestionsComponent;
   }
+
+  isBackWithClose(): boolean {
+    return this.questionProvider.isBackWithClose();
+  }
 }
