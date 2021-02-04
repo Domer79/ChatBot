@@ -6,6 +6,7 @@ import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
 import {map} from 'rxjs/operators';
 import {MessageType} from '../../misc/message-type';
+import {MainQuestionsComponent} from '../questions/main-questions/main-questions.component';
 
 @Component({
   selector: 'chat-dialog',
@@ -51,6 +52,6 @@ export class ChatDialogComponent implements OnInit, OnDestroy {
   }
 
   onOpenQuestions(): void {
-    this.pageDispatcherService.showPage(QuestionsComponent);
+    this.pageDispatcherService.showPage(MainQuestionsComponent);
   }
 }

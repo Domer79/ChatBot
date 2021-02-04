@@ -32,6 +32,8 @@ export class PageHeaderService implements OnDestroy {
     if (!this.hasBack()){
       throw new Error('The BackService not initialized');
     }
+
+    (this.currentPage.instance as unknown as HasBackService).getBackService().goBack();
   }
 
   closePage(): void{

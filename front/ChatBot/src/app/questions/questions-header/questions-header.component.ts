@@ -9,21 +9,9 @@ import {PageHeaderService} from '../../services/page-header.service';
 })
 export class QuestionsHeaderComponent implements OnInit {
   @Input() responsePreset: boolean;
-  @Output() close: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(
-    private questionsProvider: QuestionsProviderService,
-  ) { }
+  constructor() { }
 
   ngOnInit(): void {
-  }
-
-  async getBackQuestions(): Promise<void> {
-    const question = this.questionsProvider.getSelectedQuestion();
-    await this.questionsProvider.loadQuestions(question);
-  }
-
-  closePage(): void {
-    this.close.emit();
   }
 }

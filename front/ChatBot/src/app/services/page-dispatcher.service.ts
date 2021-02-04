@@ -39,12 +39,8 @@ export class PageDispatcherService {
   }
 
   closeCurrent(): void{
-    if (this.stackPage.length === 1) {
-      throw new Error('The dialogue cannot be closed');
-    }
-
     if (this.stackPage.length === 1){
-
+      this.closeChat$.next();
       return;
     }
 

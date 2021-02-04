@@ -16,7 +16,8 @@ export class BaseChatHeaderComponent implements OnInit {
   }
 
   get hasBack(): boolean{
-    return this.headerService.hasBack();
+    const result = this.headerService.hasBack();
+    return result;
   }
 
   goBack(): void{

@@ -61,14 +61,9 @@ export class QuestionsProviderService {
     return this.selectedQuestions.length > 1;
   }
 
-  getBackQuestions(): Question | undefined{
-    if (this.selectedQuestions.length === 0)
-    {
-      throw new Error('Can\'t stop showing because there\'s nothing to show');
-    }
-
-    this.selectedQuestions.pop();
-    return this.selectedQuestions[this.selectedQuestions.length - 1];
+  goBack(): void{
+    const question = this.getBackQuestions();
+    this.loadQuestions(question);
   }
 
   getSelectedQuestion(): Question{
@@ -90,5 +85,15 @@ export class QuestionsProviderService {
 
   setSearchQuery(searchQuery: string): void {
     this.searchQuery$.next(searchQuery);
+  }
+
+  private getBackQuestions(): Question | undefined{
+    if (this.selectedQuestions.length === 0)
+    {
+      throw new Error('Can\'t stop showing because there\'s nothing to show');
+    }
+
+    this.selectedQuestions.pop();
+    return this.selectedQuestions[this.selectedQuestions.length - 1];
   }
 }

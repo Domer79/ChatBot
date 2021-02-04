@@ -13,7 +13,7 @@ export class QuestionComponentBackService implements BackService{
   ) { }
 
   goBack(): void {
-    this.questionProvider.getBackQuestions();
+    this.questionProvider.goBack();
   }
 
   isShowBack(): boolean {
