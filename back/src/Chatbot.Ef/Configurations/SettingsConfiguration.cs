@@ -19,6 +19,10 @@ namespace Chatbot.Ef.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
 
+            b.Property(_ => _.Description)
+                .HasColumnName("description")
+                .HasMaxLength(500);
+
             b.Property(_ => _.Value)
                 .HasColumnName("value");
 
@@ -29,6 +33,7 @@ namespace Chatbot.Ef.Configurations
 
             b.HasKey(_ => _.Id);
             b.HasIndex(_ => _.Name).IsUnique();
+            b.HasIndex(_ => _.Description);
         }
     }
 }

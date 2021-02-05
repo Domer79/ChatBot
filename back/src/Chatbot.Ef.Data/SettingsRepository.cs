@@ -26,11 +26,15 @@ namespace Chatbot.Ef.Data
             return _context.Settings.ToArrayAsync();
         }
 
-        public async Task<Settings> Upsert(Settings item)
+        public async Task<Settings> Upsert(Settings item, bool justAdd = false)
         {
             if (item.Id == Guid.Empty)
             {
                 item.Id = Guid.NewGuid();
+                _context.Add(item);
+            }
+            else if (justAdd)
+            {
                 _context.Add(item);
             }
             else

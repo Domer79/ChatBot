@@ -26,8 +26,10 @@ namespace Chatbot.Ef.Configurations
                 .IsRequired();
 
             b.Property(_ => _.Email)
-                .HasColumnName("email")
-                .IsRequired();
+                .HasColumnName("email");
+
+            b.Property(_ => _.Phone)
+                .HasColumnName("phone");
 
             b.Property(_ => _.FirstName)
                 .HasColumnName("first_name")
@@ -79,6 +81,7 @@ namespace Chatbot.Ef.Configurations
 
             b.HasIndex(_ => _.Login).IsUnique();
             b.HasIndex(_ => _.Email);
+            b.HasIndex(_ => _.Phone);
             b.HasIndex(_ => _.IsOperator);
             b.HasIndex(_ => _.Number).IsUnique();
         }

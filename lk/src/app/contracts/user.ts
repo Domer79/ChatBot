@@ -10,6 +10,7 @@ export default class User implements Fio{
             this.lastName = options.lastName;
             this.middleName = options.middleName;
             this.email = options.email;
+            this.phone = options.phone;
             this.isActive = options.isActive;
             this.isOperator = options.isOperator;
             this.dateCreated = options.dateCreated;
@@ -20,6 +21,7 @@ export default class User implements Fio{
     number: number;
     login: string;
     email: string;
+    phone: string;
     firstName: string;
     lastName: string;
     middleName: string;

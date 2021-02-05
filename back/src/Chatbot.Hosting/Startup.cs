@@ -110,9 +110,11 @@ namespace Chatbot.Hosting
                 AutofacContainer = app.ApplicationServices.GetAutofacRoot();
                 var context = AutofacContainer.Resolve<ChatbotContext>();
                 var permissionService = AutofacContainer.Resolve<IPermissionService>();
+                var settingsService = AutofacContainer.Resolve<ISettingsService>();
             
                 context.Database.Migrate();
-                permissionService.RefreshPolicy();
+                permissionService.RefreshPolicy().GetAwaiter().GetResult();
+                settingsService.SetDefaultSettings().GetAwaiter().GetResult();
             }
             
             var logger = loggerFactory.CreateLogger<Startup>();
