@@ -10,6 +10,7 @@ import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import Helper from '../../misc/Helper';
 import {browser} from 'protractor';
 import {concatAll, map, tap} from 'rxjs/operators';
+import {MainQuestionsComponent} from '../questions/main-questions/main-questions.component';
 
 @Component({
   selector: 'app-auth-form',
@@ -37,7 +38,7 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   }
 
   onOpenQuestions(): void {
-    this.pageDispatcher.showPage(QuestionsComponent);
+    this.pageDispatcher.showPage(MainQuestionsComponent);
   }
 
   sendAuthData(): void {
