@@ -70,7 +70,6 @@ export class QuestionsProviderService {
   }
 
   goBack(): void{
-    // debugger;
     const question = this.getBackQuestions();
     this.loadQuestions(question);
   }

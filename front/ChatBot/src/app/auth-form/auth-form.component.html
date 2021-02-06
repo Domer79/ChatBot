@@ -1,4 +1,4 @@
-<chat-header (closed)="onCloseChat()" (openQuestions)="onOpenQuestions()"></chat-header>
+<chat-header (openQuestions)="onOpenQuestions()"></chat-header>
 <div class="form-container">
   <div class="form-input-container">
     <div
@@ -36,7 +36,7 @@
       (keydown.enter)="phoneOnKeydownEnter($event)"
     ></div>
   </div>
-  <div class="form-input-container" *ngIf="!isShift">
+  <div class="form-input-container" *ngIf="!(isShift | async)">
     <div
       #messageEditor
       contenteditable="true"
@@ -50,7 +50,7 @@
   </div>
   <div class="form-input-container" (click)="sendData()">
     <div class="form-submit">
-      {{!isShift ? 'Отправить сообщение' : 'Начать чат с оператором'}}
+      {{!(isShift | async) ? 'Отправить сообщение' : 'Начать чат с оператором'}}
     </div>
   </div>
 </div>

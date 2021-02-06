@@ -3,6 +3,7 @@ using Chatbot.Abstractions.Core.Services;
 using Chatbot.Hosting.Authentication;
 using Chatbot.Model.DataModel;
 using Chatbot.Model.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chatbot.Hosting.Controllers
@@ -19,6 +20,7 @@ namespace Chatbot.Hosting.Controllers
             _settingsService = settingsService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<Settings[]> GetSettings()
         {

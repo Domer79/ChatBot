@@ -11,6 +11,7 @@ import {CustomNamed} from '../../decoratotrs/custom-named.decorator';
 import Helper from '../../../misc/Helper';
 import {ShowChatEditor} from '../../../abstracts/ShowChatEditor';
 import {AuthService} from '../../services/auth.service';
+import {CommonService} from '../../services/common.service';
 
 @CustomNamed('MainQuestionsComponent')
 @Component({
@@ -28,7 +29,8 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit,
   constructor(
     private pageDispatcher: PageDispatcherService,
     private questionsProvider: QuestionsProviderService,
-    private authService: AuthService
+    private authService: AuthService,
+    private common: CommonService,
   ) {
   }
 
@@ -104,5 +106,9 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit,
 
   canShowEditor(): Observable<boolean> {
     return this.authService.isActive();
+  }
+
+  get salam1(): Observable<string>{
+    return this.common.salam1;
   }
 }

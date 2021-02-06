@@ -3,12 +3,13 @@ import {QuestionsComponent} from '../questions/questions/questions.component';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {AuthService} from '../services/auth.service';
 import User from '../../abstracts/User';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {CommonService} from '../services/common.service';
 import {MessageService} from '../services/message.service';
 import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import Helper from '../../misc/Helper';
 import {browser} from 'protractor';
+import {concatAll, map, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-auth-form',
@@ -33,10 +34,6 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-  }
-
-  onCloseChat(): void {
-    this.pageDispatcher.closeCurrent();
   }
 
   onOpenQuestions(): void {
@@ -165,11 +162,13 @@ export class AuthFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  get isShift(): boolean{
-    const now = new Date();
-    const beginDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), this.commonService.beginShift.hours, 0, 0);
-    const closeDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), this.commonService.closingShift.hours, 0, 0);
-    return beginDate < now && now < closeDate;
+  get isShift(): Observable<boolean>{
+    return this.commonService.getShift().pipe(map(shift => {
+      const now = new Date();
+      const beginDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), shift.begin, 0, 0);
+      const closeDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), shift.close, 0, 0);
+      return beginDate < now && now < closeDate;
+    }));
   }
 
   ngOnDestroy(): void {

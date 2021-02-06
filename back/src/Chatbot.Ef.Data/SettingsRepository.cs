@@ -51,5 +51,10 @@ namespace Chatbot.Ef.Data
             _context.Remove(item);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public Task<Settings> GetByName(string name)
+        {
+            return _context.Settings.SingleOrDefaultAsync(_ => _.Name.Equals(name));
+        }
     }
 }

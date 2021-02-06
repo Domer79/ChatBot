@@ -10,5 +10,6 @@ namespace Chatbot.Abstractions.Repositories
         Task<Settings[]> GetAll();
         Task<Settings> Upsert(Settings item, bool justAdd = false);
         Task<bool> Delete(Settings item);
+        Task<Settings> GetByName(string name);
     }
 }

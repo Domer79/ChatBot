@@ -1,5 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {PageHeaderService} from '../../services/page-header.service';
+import {CommonService} from '../../services/common.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'main-questions-header',
@@ -9,9 +11,13 @@ import {PageHeaderService} from '../../services/page-header.service';
 export class MainQuestionsHeaderComponent implements OnInit {
   @Output() close: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor() { }
+  caption: Observable<string>;
+
+  constructor(
+    private common: CommonService
+  ) { }
 
   ngOnInit(): void {
+    this.caption = this.common.caption;
   }
-
 }

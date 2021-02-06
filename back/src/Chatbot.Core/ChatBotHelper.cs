@@ -16,15 +16,18 @@ namespace Chatbot.Core
     {
         private readonly IMessageService _messageService;
         private readonly IQuestionService _questionService;
+        private readonly ISettingsService _settingsService;
         private readonly Mapper _mapper;
 
         public ChatBotHelper(
             IMessageService messageService,
             IQuestionService questionService,
+            ISettingsService settingsService,
             Mapper mapper)
         {
             _messageService = messageService;
             _questionService = questionService;
+            _settingsService = settingsService;
             _mapper = mapper;
         }
 
@@ -33,8 +36,7 @@ namespace Chatbot.Core
             var msg = await _messageService.Add(new Message()
             {
                 Id = Guid.NewGuid(),
-                Content = "Здравствуйте! Я робот-помощник АО РЭС. " +
-                          "Выберите тему из списка ниже или заполните форму для связи с оператором",
+                Content = await _settingsService.GetSalam2(),
                 Owner = MessageOwner.ChatbotHelper,
                 Sender = default,
                 Status = MessageStatus.Saved,
