@@ -33,3 +33,10 @@
 .main-questions-block.elements
   display: flex
   flex-wrap: wrap
+
+.editableDiv2[contentEditable="true"]:empty:before
+  content: attr(placeholder)
+  cursor: text
+
+.placeholder-active
+  color: gray

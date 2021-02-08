@@ -52,12 +52,10 @@ namespace Chatbot.Hosting.Controllers
             var questionResponseObjects = _mapper.Map<QuestionResponseObject[]>(questions);
             foreach (var responseObject in questionResponseObjects)
             {
-                try
+                if (responseObject.Question.Length > 40)
                 {
                     responseObject.Question = responseObject.Question.Substring(0, 40) + "...";
                 }
-                catch
-                { }
             }
 
             return questionResponseObjects;

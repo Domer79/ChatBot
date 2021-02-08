@@ -38,6 +38,7 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit,
     this.questions = this.questionsProvider.getShortParentQuestions();
     if (!this.data){
       this.data = new MainQuestionsState();
+      this.data.searchQuery = '';
     }
   }
 

@@ -9,10 +9,12 @@
     <div
       #searchEditor
       [contentEditable]="true"
-      class="main-questions-block-search"
+      class="main-questions-block-search editableDiv2"
       (keypress)="enter($event)"
       (input)="inputSearchQuery($event.target)"
       (keydown.enter)="onKeydownEnter($event)"
+      placeholder="Свет в вашем доме - это мы!"
+      [ngClass]="{'placeholder-active': data.searchQuery === ''}"
     ></div>
     <div class="search-icon" (click)="searchQuestionClick()">
       <img src="assets/search.svg"/>
