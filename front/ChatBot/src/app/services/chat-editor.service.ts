@@ -1,11 +1,14 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {PageDispatcherService} from './page-dispatcher.service';
-import {Observable, of, Subscription} from 'rxjs';
+import {Observable, of, Subscription, zip} from 'rxjs';
 import Page from '../../abstracts/Page';
 import {HasBackService} from '../../abstracts/BackService';
 import {ShowChatEditor} from '../../abstracts/ShowChatEditor';
 import {ClientMsgDispatcher} from './client-msg-dispatcher.service';
 import Message from '../../abstracts/message';
+import {CommonService} from './common.service';
+import {map} from 'rxjs/operators';
+import Helper from '../../misc/Helper';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +21,8 @@ export class ChatEditorService implements OnDestroy{
 
   constructor(
     private pageDispatcher: PageDispatcherService,
-    private clientMsgDispatcher: ClientMsgDispatcher
+    private clientMsgDispatcher: ClientMsgDispatcher,
+    private common: CommonService
   ) {
     this.pageSubscription = pageDispatcher.getPageWithInstance().subscribe(page => {
       this.currentPage = page;
@@ -45,7 +49,15 @@ export class ChatEditorService implements OnDestroy{
     }
 
     const shower = this.currentPage.instance as unknown as ShowChatEditor;
-    return shower.canShowEditor();
+    const isShift = this.common.getShift().pipe(map(_ => Helper.IsShift(_)));
+    return zip(isShift, shower.canShowEditor()).pipe(map(vals => {
+      let result = true;
+      for (const val of vals){
+        result &&= val;
+      }
+
+      return result;
+    }));
   }
 
   ngOnDestroy(): void {
