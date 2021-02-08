@@ -31,7 +31,7 @@ namespace Chatbot.Core.Services
             var dialog = new MessageDialog
             {
                 DialogStatus = DialogStatus.Started,
-                ClientId = clientId
+                ClientId = clientId,
             };
 
             return _dialogRepository.Upsert(dialog);

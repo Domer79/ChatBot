@@ -33,7 +33,7 @@ namespace Chatbot.Ef.Configurations
             b.Property(_ => _.DateCreated)
                 .HasColumnName("date_created")
                 .IsRequired()
-                .HasDefaultValueSql("GETDATE()");
+                .HasDefaultValueSql("GETUTCDATE()");
 
             b.ToTable("question_response");
             b.HasKey(_ => _.Id);

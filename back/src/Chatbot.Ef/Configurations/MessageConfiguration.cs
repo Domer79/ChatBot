@@ -31,7 +31,7 @@ namespace Chatbot.Ef.Configurations
 
             builder.Property(_ => _.Time)
                 .HasColumnName("time")
-                .HasDefaultValueSql("GETDATE()")
+                .HasDefaultValueSql("GETUTCDATE()")
                 .IsRequired();
 
             builder.Property(_ => _.MessageDialogId)

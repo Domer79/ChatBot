@@ -24,7 +24,7 @@ namespace Chatbot.Ef.Configurations
             b.Property(_ => _.DateCreated)
                 .HasColumnName("date_created")
                 .IsRequired()
-                .HasDefaultValueSql("GETDATE()");
+                .HasDefaultValueSql("GETUTCDATE()");
 
             b.Property(_ => _.DateWork)
                 .HasColumnName("date_work");

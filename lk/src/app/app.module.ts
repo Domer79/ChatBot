@@ -44,6 +44,7 @@ import { ConfirmComponent } from './dialogs/confirm/confirm.component';
 import { OperatorsComponent } from './security/operators/operators.component';
 import { OperatorEditDialogComponent } from './security/operator-edit-dialog/operator-edit-dialog.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {ChatDatePipe} from "./pipes/chatdate.pipe";
 
 registerLocaleData(localeRu, 'ru');
 
@@ -58,11 +59,12 @@ registerLocaleData(localeRu, 'ru');
     ClientMessageComponent,
     DialogStatusPipe,
     FioPipe,
+    ChatDatePipe,
     QuestionsPageComponent,
     EditQuestionDialogComponent,
     ConfirmComponent,
     OperatorsComponent,
-    OperatorEditDialogComponent
+    OperatorEditDialogComponent,
   ],
   imports: [
     BrowserModule,
