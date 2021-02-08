@@ -54,6 +54,7 @@ namespace Chatbot.Hosting.Controllers
         {
             Page<MessageDialog> page = await _messageDialogService.GetPageByDialogStatus(request.Status, request.Number, request.Size);
             var ids = page.Items.Select(_ => _.ClientId).OfType<Guid>().ToArray();
+            ids = ids.Concat(page.Items.Select(_ => _.OperatorId).OfType<Guid>()).ToArray();
             var users = (await _userService.GetByIds(ids)).ToDictionary(_ => _.Id, _ => _);
 
             foreach (var dialog in page.Items)

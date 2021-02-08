@@ -38,7 +38,7 @@ namespace Chatbot.Hosting
                     .ConfigureWebHostDefaults(builder =>
                     {
                         builder.UseConfiguration(config)
-                            .UseUrls(config.GetValue<string>("BaseUrl"))
+                            .UseKestrel(options => options.ConfigureEndpoints())
                             .UseContentRoot(Directory.GetCurrentDirectory())
                             .UseWebRoot("wwwroot")
                             .UseStartup<Startup>();

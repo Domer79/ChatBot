@@ -14,5 +14,6 @@ namespace Chatbot.Abstractions.Contracts.Responses
         public Guid? OperatorId { get; set; }
         public string FirstMessage { get; set; }
         public UserResponse Client { get; set; }
+        public UserResponse Operator { get; set; }
     }
 }
