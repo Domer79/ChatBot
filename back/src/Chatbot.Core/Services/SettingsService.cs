@@ -12,6 +12,7 @@ namespace Chatbot.Core.Services
     {
         private readonly ISettingsRepository _settingsRepository;
         private string _salam2;
+        private int? _clientTimeoutInterval;
 
         public SettingsService(ISettingsRepository settingsRepository)
         {
@@ -58,6 +59,11 @@ namespace Chatbot.Core.Services
         public async Task<string> GetSalam2()
         {
             return _salam2 ??= (await GetByName("salam2")).Value;
+        }
+
+        public async Task<int?> GetClientTimeoutInterval()
+        {
+            return _clientTimeoutInterval ??= int.Parse((await GetByName("clientTimeoutInterval")).Value);
         }
     }
 }

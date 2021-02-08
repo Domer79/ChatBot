@@ -31,6 +31,7 @@ namespace Chatbot.Hosting
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
+        private ISettingsService _settingsService;
 
         private ILifetimeScope AutofacContainer { get; set; }
 
@@ -67,7 +68,7 @@ namespace Chatbot.Hosting
                 .AddHubOptions<ChatHub>(options =>
                 {
                     options.EnableDetailedErrors = true;
-                    options.ClientTimeoutInterval = TimeSpan.FromMinutes(5);
+                    options.ClientTimeoutInterval = TimeSpan.FromMinutes(_settingsService.GetClientTimeoutInterval().GetAwaiter().GetResult().Value);
                     options.KeepAliveInterval = TimeSpan.FromSeconds(60);
                     options.HandshakeTimeout = TimeSpan.FromSeconds(60);
                 })
@@ -105,17 +106,17 @@ namespace Chatbot.Hosting
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             if (!env.EnvironmentName.EndsWith("-hub"))
             {
-                AutofacContainer = app.ApplicationServices.GetAutofacRoot();
                 var context = AutofacContainer.Resolve<ChatbotContext>();
                 var permissionService = AutofacContainer.Resolve<IPermissionService>();
-                var settingsService = AutofacContainer.Resolve<ISettingsService>();
             
                 context.Database.Migrate();
                 permissionService.RefreshPolicy().GetAwaiter().GetResult();
-                settingsService.SetDefaultSettings().GetAwaiter().GetResult();
             }
+            _settingsService = AutofacContainer.Resolve<ISettingsService>();
+            _settingsService.SetDefaultSettings().GetAwaiter().GetResult();
             
             var logger = loggerFactory.CreateLogger<Startup>();
             app.Use(async (context, next) => await ErrorHandle(context, next, logger));

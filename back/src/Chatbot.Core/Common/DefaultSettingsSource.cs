@@ -52,6 +52,13 @@ namespace Chatbot.Core.Common
                     Name = "caption",
                     Description = "Заголовок чатбота",
                     Value = "ЧАТ БОТ АО РЭС"
+                },
+                new Settings()
+                {
+                    Id = new Guid("00000000-0000-0000-0001-000000000007"),
+                    Name = "clientTimeoutInterval",
+                    Description = "Время неактивности клиента, после которого диалог будет закрыт",
+                    Value = "20"
                 }
             };
 
