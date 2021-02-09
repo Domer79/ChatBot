@@ -63,6 +63,8 @@ namespace Chatbot.Hosting.Controllers
 
                 var clientId = dialog.ClientId.Value;
                 dialog.Client = users[clientId];
+                if (dialog.OperatorId != null)
+                    dialog.Operator = users[dialog.OperatorId.Value];
             }
             
             return new Page<MessageDialogResponse>()

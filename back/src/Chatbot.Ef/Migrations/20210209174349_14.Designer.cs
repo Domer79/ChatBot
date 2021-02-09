@@ -4,14 +4,16 @@ using Chatbot.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Chatbot.Ef.Migrations
 {
     [DbContext(typeof(ChatbotContext))]
-    partial class ChatbotContextModelSnapshot : ModelSnapshot
+    [Migration("20210209174349_14")]
+    partial class _14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -366,6 +368,12 @@ namespace Chatbot.Ef.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasColumnName("fio");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("first_name");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit")
                         .HasColumnName("is_active");
@@ -374,10 +382,21 @@ namespace Chatbot.Ef.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("is_operator");
 
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("last_name");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("login");
+
+                    b.Property<string>("MiddleName")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("middle_name");
 
                     b.Property<int>("Number")
                         .ValueGeneratedOnAdd()

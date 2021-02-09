@@ -33,9 +33,7 @@ namespace Chatbot.Hosting.Hubs
             {
                 Login = Guid.NewGuid().ToString("N"),
                 Email = Guid.NewGuid().ToString("N"),
-                LastName = "Не авторизованный",
-                FirstName = "Пользователь",
-                MiddleName = "",
+                Fio = "Не авторизован",
                 Password = "0x0".GetBytes(),
                 IsActive = false,
             };

@@ -35,7 +35,6 @@ import { registerLocaleData } from "@angular/common";
 import localeRu from '@angular/common/locales/ru';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import { DialogStatusPipe } from './pipes/dialog-status.pipe';
-import { FioPipe } from './pipes/fio.pipe';
 import { QuestionsPageComponent } from './questions/questions-page/questions-page.component';
 import { EditQuestionDialogComponent } from './questions/edit-question-dialog/edit-question-dialog.component';
 import {MatStepperModule} from "@angular/material/stepper";
@@ -58,7 +57,6 @@ registerLocaleData(localeRu, 'ru');
     OperatorMessageComponent,
     ClientMessageComponent,
     DialogStatusPipe,
-    FioPipe,
     ChatDatePipe,
     QuestionsPageComponent,
     EditQuestionDialogComponent,

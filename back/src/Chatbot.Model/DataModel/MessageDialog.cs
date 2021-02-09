@@ -16,7 +16,6 @@ namespace Chatbot.Model.DataModel
         public Guid? ClientId { get; set; }
         public bool Offline { get; set; }
         public HashSet<Message> Messages { get; set; }
-        
         public User Operator { get; set; }
         public User Client { get; set; }
     }

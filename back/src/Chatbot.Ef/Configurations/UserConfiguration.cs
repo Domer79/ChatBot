@@ -31,18 +31,8 @@ namespace Chatbot.Ef.Configurations
             b.Property(_ => _.Phone)
                 .HasColumnName("phone");
 
-            b.Property(_ => _.FirstName)
-                .HasColumnName("first_name")
-                .IsRequired()
-                .HasMaxLength(500);
-
-            b.Property(_ => _.LastName)
-                .HasColumnName("last_name")
-                .IsRequired()
-                .HasMaxLength(500);
-
-            b.Property(_ => _.MiddleName)
-                .HasColumnName("middle_name")
+            b.Property(_ => _.Fio)
+                .HasColumnName("fio")
                 .HasMaxLength(500);
 
             b.Property(_ => _.DateCreated)
@@ -82,6 +72,7 @@ namespace Chatbot.Ef.Configurations
             b.HasIndex(_ => _.Login).IsUnique();
             b.HasIndex(_ => _.Email);
             b.HasIndex(_ => _.Phone);
+            b.HasIndex(_ => _.Fio);
             b.HasIndex(_ => _.IsOperator);
             b.HasIndex(_ => _.Number).IsUnique();
         }

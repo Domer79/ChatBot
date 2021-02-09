@@ -39,9 +39,7 @@ export class OperatorEditDialogComponent implements OnInit {
     this.action = this.getAction();
     this.userEditStepGroup = this._formBuilder.group({
       id: [this.data.id ?? guidEmpty, userIdValidator()],
-      firstName: [this.data.firstName, Validators.required],
-      lastName: [this.data.lastName, Validators.required],
-      middleName: [this.data.middleName, Validators.nullValidator],
+      fio: [this.data.fio, Validators.required],
       login: [this.data.login, Validators.required],
       email: [this.data.email, Validators.required],
     });
@@ -105,9 +103,7 @@ export class OperatorEditDialogComponent implements OnInit {
       console.log(this.userEditStepGroup.controls);
       const user = new User({
         id: this.userEditStepGroup.controls.id.value,
-        firstName: this.userEditStepGroup.controls.firstName.value,
-        lastName: this.userEditStepGroup.controls.lastName.value,
-        middleName: this.userEditStepGroup.controls.middleName.value,
+        fio: this.userEditStepGroup.controls.fio.value,
         login: this.userEditStepGroup.controls.login.value,
         email: this.userEditStepGroup.controls.email.value,
         isActive: this.data.isActive ?? true,

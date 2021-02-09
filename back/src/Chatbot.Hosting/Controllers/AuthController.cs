@@ -72,10 +72,7 @@ namespace Chatbot.Hosting.Controllers
                 throw new InvalidOperationException("User not authorized");
 
             var user = await _userService.GetById(UserId.Value);
-            var strings = request.Fio.Split(' ');
-            user.LastName = strings.Length > 0 ? strings[0] : user.LastName;
-            user.FirstName = strings.Length > 1 ? strings[1] : user.FirstName;
-            user.MiddleName = strings.Length > 2 ? strings[2] : user.MiddleName;
+            user.Fio = request.Fio;
             user.Email = request.Email;
             user.Phone = request.Phone;
             user.IsActive = true;

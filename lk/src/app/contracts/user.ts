@@ -1,14 +1,10 @@
-import Fio from "../../abstracts/Fio";
-
-export default class User implements Fio{
+export default class User{
     constructor(options: any | undefined = undefined) {
         if (options){
             this.id = options.id;
             this.number = options.number;
             this.login = options.login;
-            this.firstName = options.firstName;
-            this.lastName = options.lastName;
-            this.middleName = options.middleName;
+            this.fio = options.fio;
             this.email = options.email;
             this.phone = options.phone;
             this.isActive = options.isActive;
@@ -20,11 +16,9 @@ export default class User implements Fio{
     id: string;
     number: number;
     login: string;
+    fio: string;
     email: string;
     phone: string;
-    firstName: string;
-    lastName: string;
-    middleName: string;
     isActive: boolean;
     isOperator: boolean;
     dateCreated: Date;

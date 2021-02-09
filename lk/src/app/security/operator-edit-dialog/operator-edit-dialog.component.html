@@ -7,16 +7,8 @@
             <form [formGroup]="userEditStepGroup" (ngSubmit)="userInfoSave()">
                 <ng-template matStepLabel>Общая информация</ng-template>
                 <mat-form-field>
-                    <mat-label>Фамилия</mat-label>
-                    <input matInput placeholder="Фамилия" formControlName="lastName" required />
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Имя</mat-label>
-                    <input matInput placeholder="Имя" formControlName="firstName" required />
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Отчество</mat-label>
-                    <input matInput placeholder="Отчество" formControlName="middleName" />
+                    <mat-label>Фамилия Имя Отчество</mat-label>
+                    <input matInput placeholder="Фамилия Имя Отчество" formControlName="fio" required />
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Логин</mat-label>

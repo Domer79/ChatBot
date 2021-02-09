@@ -4,9 +4,7 @@ export default class User{
       this.id = options.id;
       this.number = options.number;
       this.login = options.login;
-      this.firstName = options.firstName;
-      this.lastName = options.lastName;
-      this.middleName = options.middleName;
+      this.fio = options.fio;
       this.email = options.email;
       this.phone = options.phone;
       this.isActive = options.isActive;
@@ -20,9 +18,7 @@ export default class User{
   login: string;
   email: string;
   phone: string;
-  firstName: string;
-  lastName: string;
-  middleName: string;
+  fio: string;
   isActive: boolean;
   isOperator: boolean;
   dateCreated: Date;

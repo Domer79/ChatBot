@@ -21,7 +21,8 @@ export default class MessageDialog{
     operatorId?: string;
     firstMessage?: string;
     clientId?: string;
-    client: User
+    client: User;
+    operator: User;
 }
 
 export enum DialogStatus{

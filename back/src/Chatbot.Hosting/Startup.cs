@@ -132,6 +132,7 @@ namespace Chatbot.Hosting
                 builder
                     .AllowAnyMethod()
                     .AllowAnyHeader()
+                    .WithHeaders("x-requested-with", "Content-Type", "origin", "authorization", "accept", "token")
                     .AllowCredentials()
                     .WithOrigins(origins)
                     .SetIsOriginAllowed(h => true);
