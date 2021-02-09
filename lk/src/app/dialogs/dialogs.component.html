@@ -1,4 +1,4 @@
-<nav mat-tab-nav-bar [backgroundColor]="'primary'">
+<nav mat-tab-nav-bar [backgroundColor]="'primary'" xmlns="http://www.w3.org/1999/html">
     <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.all]]" routerLinkActive #rla="routerLinkActive"
        [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.all"
        (click)="activeLink = linkType.all">Все</a>
@@ -24,7 +24,7 @@
             <div class="dialog-status {{dialog.dialogStatus | dialogStatus:'color'}}">{{dialog.dialogStatus | dialogStatus}}</div>
             <div class="dialog-date-created">{{dialog.dateCreated | date }}</div>
             <div class="dialog-date-closed">{{dialog.dateCompleted | date}}</div>
-            <div class="dialog-client">{{dialog.client | userFio}}</div>
+            <div class="dialog-client">{{dialog.client | userFio}} <br> {{dialog.client.email}}, {{dialog.client.phone}}</div>
             <div class="dialog-actions">
                 <div class="dialog-open">
                     <button mat-button (click)="openChat(dialog)">

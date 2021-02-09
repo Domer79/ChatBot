@@ -1,4 +1,5 @@
 import {TimeStatus} from './message-type';
+import {Shift} from '../abstracts/settings';
 
 export default class Helper{
   public static getTimeStatus(time: Date): TimeStatus{
@@ -36,5 +37,12 @@ export default class Helper{
 
   public static existBr(str: string): any | null{
     return str.match(/(.*)(<br>)$/);
+  }
+
+  public static IsShift(shift: Shift): boolean{
+    const now = new Date();
+    const beginDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), shift.begin, 0, 0);
+    const closeDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), shift.close, 0, 0);
+    return beginDate < now && now < closeDate;
   }
 }

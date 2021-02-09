@@ -13,7 +13,7 @@
       (keypress)="enter($event)"
       (input)="inputSearchQuery($event.target)"
       (keydown.enter)="onKeydownEnter($event)"
-      placeholder="Свет в вашем доме - это мы!"
+      placeholder="Введите строку поиска"
       [ngClass]="{'placeholder-active': data.searchQuery === ''}"
     ></div>
     <div class="search-icon" (click)="searchQuestionClick()">

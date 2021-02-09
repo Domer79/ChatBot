@@ -123,14 +123,20 @@ namespace Chatbot.Hosting
             app.Use(async (context, next) => await AuthQueryStringToHeader(context, next));
             app.UseCors(builder =>
             {
+                var origins = _configuration.GetSection("HttpServer:Endpoints").GetChildren().Select(_ =>
+                {
+                    var endpoint = new EndpointConfiguration();
+                    _.Bind(endpoint);
+                    return endpoint.CorsOrigins;
+                }).ToArray();
                 builder
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                    .WithOrigins("http://*:4200", "http://*:4201")
+                    .WithOrigins(origins)
                     .SetIsOriginAllowed(h => true);
             });
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.EnvironmentName == "dev-hub")
             {
                 app.UseDeveloperExceptionPage();
             }

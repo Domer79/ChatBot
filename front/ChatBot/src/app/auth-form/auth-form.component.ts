@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 import {QuestionsComponent} from '../questions/questions/questions.component';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {AuthService} from '../services/auth.service';
@@ -17,7 +17,7 @@ import {MainQuestionsComponent} from '../questions/main-questions/main-questions
   templateUrl: './auth-form.component.html',
   styleUrls: ['./auth-form.component.sass']
 })
-export class AuthFormComponent implements OnInit, OnDestroy {
+export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
   fio = '';
   email = '';
   phone = '';
@@ -25,6 +25,8 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   private sendAuthDataSubscription: Subscription;
   private sendOfflineMessageSubscription: Subscription;
   private fioEditor: ElementRef;
+  private isShift$ = false;
+  private isShiftSubscription: Subscription;
 
   constructor(
     private pageDispatcher: PageDispatcherService,
@@ -43,7 +45,7 @@ export class AuthFormComponent implements OnInit, OnDestroy {
 
   sendAuthData(): void {
     this.sendAuthDataSubscription = this.authService.sendAuthData(this.fio, this.email, this.phone).subscribe(_ => {
-      if (this.isShift){
+      if (this.isShift$){
         this.pageDispatcher.closeCurrent();
       }
     });
@@ -57,7 +59,7 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   }
 
   sendData(): void{
-    if (this.isShift){
+    if (this.isShift$){
       this.sendAuthData();
     }
     else{
@@ -164,12 +166,7 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   }
 
   get isShift(): Observable<boolean>{
-    return this.commonService.getShift().pipe(map(shift => {
-      const now = new Date();
-      const beginDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), shift.begin, 0, 0);
-      const closeDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), shift.close, 0, 0);
-      return beginDate < now && now < closeDate;
-    }));
+    return this.commonService.getShift().pipe(map(shift => Helper.IsShift(shift)));
   }
 
   ngOnDestroy(): void {
@@ -180,10 +177,18 @@ export class AuthFormComponent implements OnInit, OnDestroy {
     if (this.sendOfflineMessageSubscription){
       this.sendOfflineMessageSubscription.unsubscribe();
     }
+
+    if (this.isShiftSubscription){
+      this.isShiftSubscription.unsubscribe();
+    }
   }
 
   private removeBr(element: ElementRef): void{
     debugger;
     element.nativeElement.querySelector('br');
+  }
+
+  ngAfterViewInit(): void {
+    this.isShiftSubscription = this.isShift.subscribe(_ => this.isShift$ = _);
   }
 }
