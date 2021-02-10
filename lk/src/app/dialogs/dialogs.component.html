@@ -35,7 +35,7 @@
             <div class="dialog-status {{dialog | dialogStatus:'color'}}">{{dialog | dialogStatus}}</div>
             <div class="dialog-date-created">{{dialog.dateCreated | date }}</div>
             <div class="dialog-date-closed">{{dialog.dateCompleted | date}}</div>
-            <div class="dialog-operator">{{dialog.operator ? dialog.operator.fio : 'Открыт'}}</div>
+            <div class="dialog-operator">{{dialog.operator ? dialog.operator.fio : 'Пусто'}}</div>
             <div class="dialog-client">{{dialog.client.fio}} <br> {{dialog.client.email}}, {{dialog.client.phone}}</div>
             <div class="dialog-actions">
                 <div class="dialog-open">

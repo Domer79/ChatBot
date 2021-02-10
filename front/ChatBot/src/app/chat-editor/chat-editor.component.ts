@@ -79,7 +79,7 @@ export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.chatEditorElement.nativeElement.style.height = `${this.originalClientHeight}px`;
 
     if (this.pageDispatcher.getCurrent().componentName === 'MainQuestionsComponent'){
-      this.closeCurrentTimeoutSubscription = of(1).pipe(delay(300)).subscribe(() => {
+      this.closeCurrentTimeoutSubscription = of(1).pipe(delay(350)).subscribe(() => {
         this.pageDispatcher.closeCurrent();
       });
     }

@@ -65,7 +65,7 @@ namespace Chatbot.Hosting.Hubs
             if (message.MessageDialogId.IsEmpty())
             {
                 message.MessageDialogId = dialogGroup.MessageDialogId;
-                message.Status = MessageStatus.Received;
+                message.Status = MessageStatus.Saved;
                 dialogGroup.ClientId = User.Id;
                 await _operatorHubContext.Clients.All.SendAsync("dialogCreated", dialogGroup.MessageDialogId);
                 await Clients.Caller.SendAsync("send", await _chatBotHelper.GetResponse(message));
