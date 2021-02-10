@@ -59,6 +59,13 @@ namespace Chatbot.Core.Common
                     Name = "clientTimeoutInterval",
                     Description = "Время неактивности клиента, после которого диалог будет закрыт",
                     Value = "20"
+                },
+                new Settings()
+                {
+                    Id = new Guid("00000000-0000-0000-0001-000000000008"),
+                    Name = "questionSearchPlaceHolder",
+                    Description = "Плейсхолдер в поле поиска",
+                    Value = "Поиск по вопросам"
                 }
             };
 

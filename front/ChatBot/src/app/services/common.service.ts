@@ -15,6 +15,7 @@ export class CommonService{
   private salam2$: ReplaySubject<string> = new ReplaySubject<string>(1);
   private sendedMessage$: ReplaySubject<string> = new ReplaySubject<string>(1);
   private captionMessage$: ReplaySubject<string> = new ReplaySubject<string>(1);
+  private questionSearchPlaceHolder$: ReplaySubject<string> = new ReplaySubject<string>(1);
 
   private beginShift: Observable<NumberSettings> = this.beginShift$.asObservable();
   private closeShift: Observable<NumberSettings> = this.closeShift$.asObservable();
@@ -23,6 +24,7 @@ export class CommonService{
   salam2: Observable<string> = this.salam2$.asObservable();
   sendedMessage: Observable<string> = this.sendedMessage$.asObservable();
   caption: Observable<string> = this.captionMessage$.asObservable();
+  questionSearchPlaceHolder: Observable<string> = this.questionSearchPlaceHolder$.asObservable();
 
   constructor(
     private httpClient: HttpClient,
@@ -60,6 +62,10 @@ export class CommonService{
           }
           case 'caption': {
             this.captionMessage$.next(settings.value);
+            break;
+          }
+          case 'questionSearchPlaceHolder': {
+            this.questionSearchPlaceHolder$.next(settings.value);
             break;
           }
         }

@@ -20,6 +20,8 @@ import {CommonService} from '../../services/common.service';
   styleUrls: ['./main-questions.component.sass']
 })
 export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit, ShowChatEditor {
+  private placeholderSubscription: Subscription;
+
   isSearchQueryInput: boolean;
   questions: Observable<Question[]>;
   public data: MainQuestionsState = undefined;
@@ -48,6 +50,10 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit,
       this.questionsProvider.setSearchQuery(this.data.searchQuery);
       this.searchQuestion();
     }
+
+    this.placeholderSubscription = this.common.questionSearchPlaceHolder.subscribe(_ => {
+      this.searchEditor.nativeElement.setAttribute('placeholder', _);
+    });
   }
 
   closePage(): void {
@@ -99,6 +105,7 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit,
   }
 
   ngOnDestroy(): void {
+    this.placeholderSubscription.unsubscribe();
   }
 
   private search(): void {
