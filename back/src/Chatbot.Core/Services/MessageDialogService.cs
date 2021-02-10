@@ -136,11 +136,22 @@ namespace Chatbot.Core.Services
             return dialogs.ToArray();
         }
 
-        public async Task<Page<MessageDialog>> GetPageByDialogStatus(DialogStatus status, int number, int size)
+        public async Task<Page<MessageDialog>> GetPageByDialogStatus(DialogStatus status, int number, int size,
+            bool? offline)
         {
-            var dialogs = await _dialogRepository.GetPage(status, number, size);
-            var totalCount = await _dialogRepository.GetTotalCount(status);
-            
+            MessageDialog[] dialogs;
+            long totalCount;
+            if (offline.HasValue && offline.Value)
+            {
+                dialogs = await _dialogRepository.GetOffline(number, size);
+                totalCount = await _dialogRepository.GetOfflineTotalCount();
+            }
+            else
+            {
+                dialogs = await _dialogRepository.GetPage(status, number, size);
+                totalCount = await _dialogRepository.GetTotalCount(status);
+            }
+
             return new Page<MessageDialog>()
             {
                 Items = dialogs,

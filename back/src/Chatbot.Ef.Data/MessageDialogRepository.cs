@@ -42,6 +42,19 @@ namespace Chatbot.Ef.Data
             
             return dialogs
                 .Include(_ => _.Operator)
+                .Include(_ => _.Client)
+                .OrderByDescending(_ => _.DateCreated)
+                .Skip(number * size - size)
+                .Take(size)
+                .ToArrayAsync();
+        }
+        
+        public Task<MessageDialog[]> GetOffline(int number, int size)
+        {
+            var query = _context.Dialogs.Where(_ => _.Offline);
+            return query
+                .Include(_ => _.Operator)
+                .Include(_ => _.Client)
                 .OrderByDescending(_ => _.DateCreated)
                 .Skip(number * size - size)
                 .Take(size)
@@ -62,6 +75,11 @@ namespace Chatbot.Ef.Data
             }
             
             return dialogs.LongCountAsync();
+        }
+        
+        public Task<long> GetOfflineTotalCount()
+        {
+            return _context.Dialogs.Where(_ => _.Offline).LongCountAsync();
         }
 
         public Task<MessageDialog[]> GetByStatus(DialogStatus status)

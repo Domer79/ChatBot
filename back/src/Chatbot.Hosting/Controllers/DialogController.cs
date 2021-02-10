@@ -52,7 +52,8 @@ namespace Chatbot.Hosting.Controllers
         [HttpGet]
         public async Task<Page<MessageDialogResponse>> GetDialogsByStatus([FromQuery] DialogPageRequest request)
         {
-            Page<MessageDialog> page = await _messageDialogService.GetPageByDialogStatus(request.Status, request.Number, request.Size);
+            Page<MessageDialog> page = await _messageDialogService.GetPageByDialogStatus(request.Status, request.Number, 
+                request.Size, request.Offline);
             var ids = page.Items.Select(_ => _.ClientId).OfType<Guid>().ToArray();
             ids = ids.Concat(page.Items.Select(_ => _.OperatorId).OfType<Guid>()).ToArray();
             var users = (await _userService.GetByIds(ids)).ToDictionary(_ => _.Id, _ => _);

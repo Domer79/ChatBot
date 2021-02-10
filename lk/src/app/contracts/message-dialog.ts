@@ -11,6 +11,7 @@ export default class MessageDialog{
         this.operatorId = options.operatorId;
         this.firstMessage = options.firstMessage;
         this.clientId = options.clientId;
+        this.offline = options.offline;
     }
     id: string;
     number: number;
@@ -21,6 +22,7 @@ export default class MessageDialog{
     operatorId?: string;
     firstMessage?: string;
     clientId?: string;
+    offline: boolean;
     client: User;
     operator: User;
 }
@@ -50,6 +52,11 @@ export enum DialogStatus{
     * Диалог отклонен оператором
     * */
     Rejected = 1 << 4,
+
+    /**
+     * Офлайн - диалог создан не в рабочее время
+     */
+    Offline= 1 << 5,
 }
 
 export enum LinkType {
@@ -58,4 +65,5 @@ export enum LinkType {
     rejected = DialogStatus.Rejected,
     worked = DialogStatus.Active,
     closed = DialogStatus.Closed,
+    offline = DialogStatus.Offline,
 }

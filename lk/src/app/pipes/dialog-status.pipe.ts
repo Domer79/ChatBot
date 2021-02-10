@@ -1,28 +1,47 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {DialogStatus} from "../contracts/message-dialog";
+import MessageDialog, {DialogStatus} from "../contracts/message-dialog";
 
 @Pipe({
   name: 'dialogStatus'
 })
 export class DialogStatusPipe implements PipeTransform {
 
-  transform(value: DialogStatus, exportType?: string): string {
-    switch (value){
+  transform(value: MessageDialog, exportType?: string): string {
+    let result = '';
+
+    switch (value.dialogStatus){
       case DialogStatus.Started:
-        return exportType == 'color' ? "active" : "Открыт";
+        result = exportType == 'color' ? "active" : "Открыт";
+        break;
       case DialogStatus.Active:
-        return exportType == 'color' ? "active" : "В работе";
+        result = exportType == 'color' ? "active" : "В работе";
+        break;
       case DialogStatus.Started | DialogStatus.Active:
-        return exportType == 'color' ? "active" : "Открыт";
+        result = exportType == 'color' ? "active" : "Открыт";
+        break;
       case DialogStatus.Closed:
-        return exportType == 'color' ? "inactive" : "Закрыт";
+        result = exportType == 'color' ? "inactive" : "Закрыт";
+        break;
       case DialogStatus.Rejected:
-        return exportType == 'color' ? "inactive" : "Отклонен";
+        result = exportType == 'color' ? "inactive" : "Отклонен";
+        break;
       case DialogStatus.Sleep:
-        return exportType == 'color' ? "offline" : "Оффлайн";
+        result = exportType == 'color' ? "inactive" : "Закрыт";
+        break;
       default:
         throw new Error("Неизвестный статус диалога");
     }
+
+    if (value.offline){
+      if (exportType == 'color'){
+        return 'offline';
+      }
+      else{
+        result = `${result} Оффлайн`;
+      }
+    }
+
+    return result;
   }
 
 }

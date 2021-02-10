@@ -29,6 +29,7 @@ export class ApiInterceptor implements HttpInterceptor, OnDestroy {
 
       if (request.url.match(regex)){
         const cloneRequest = request.clone({
+          withCredentials: true,
           url: request.url.replace(request.url, `${environment.apiUrl}/${request.url}`),
           setHeaders: { token: tokenId ?? '' },
         });

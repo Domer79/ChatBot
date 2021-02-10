@@ -12,9 +12,11 @@ namespace Chatbot.Abstractions.Repositories
         Task<MessageDialog[]> GetPage(DialogStatus status, int number, int size);
         Task<long> GetTotalCount();
         Task<long> GetTotalCount(DialogStatus status);
+        Task<long> GetOfflineTotalCount();
         Task<MessageDialog[]> GetByStatus(DialogStatus status);
         Task<MessageDialog> Upsert(MessageDialog dialog);
         Task<bool> Delete(MessageDialog dialog);
         Task<MessageDialog> GetById(Guid messageDialogId);
+        Task<MessageDialog[]> GetOffline(int number, int size);
     }
 }

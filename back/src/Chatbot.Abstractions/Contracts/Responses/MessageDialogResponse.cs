@@ -12,6 +12,8 @@ namespace Chatbot.Abstractions.Contracts.Responses
         public DateTime? DateCompleted { get; set; }
         public DialogStatus DialogStatus { get; set; } 
         public Guid? OperatorId { get; set; }
+        public Guid? ClientId { get; set; }
+        public bool Offline { get; set; }
         public string FirstMessage { get; set; }
         public UserResponse Client { get; set; }
         public UserResponse Operator { get; set; }

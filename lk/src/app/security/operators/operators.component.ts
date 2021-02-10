@@ -33,7 +33,6 @@ export class OperatorsComponent implements OnInit, OnDestroy {
       private router: Router,
       private snackBar: MatSnackBar,
   ) {
-    // debugger;
   }
 
   ngOnInit(): void {
@@ -69,7 +68,6 @@ export class OperatorsComponent implements OnInit, OnDestroy {
     config.data = user ?? new User();
     this.userDialog.open(OperatorEditDialogComponent, config).afterClosed().subscribe(result => {
       if (result === DialogResult.Ok){
-        debugger;
         this.updateList();
       }
     });

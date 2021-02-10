@@ -55,9 +55,16 @@ export class DialogService implements OnDestroy{
     return this.httpClient.get<Message[]>("api/Message/GetMessages", { params: {messageDialogId} });
   }
 
-  getDialogs(dialogStatus: number, page: number, size: number): Observable<Page<MessageDialog>>{
-    return this.httpClient.get<Page<MessageDialog>>(
-        `api/Dialog/GetDialogsByStatus?status=${dialogStatus}&number=${page}&size=${size}`);
+  getDialogs(dialogStatus: number, page: number, size: number, offline?: boolean | undefined): Observable<Page<MessageDialog>>{
+    let params = new HttpParams()
+        .append('status', `${dialogStatus}`)
+        .append('number', `${page}`)
+        .append('size', `${size}`);
+    if (offline){
+      params = params.append('offline', `${offline}`);
+    }
+
+    return this.httpClient.get<Page<MessageDialog>>('api/Dialog/GetDialogsByStatus', {params});
   }
 
   async activate(dlg: MessageDialog) {

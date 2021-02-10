@@ -9,7 +9,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import Page from "../contracts/Page";
 import {PageEvent} from "@angular/material/paginator";
 import {map, tap} from "rxjs/operators";
-import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-dialogs',
@@ -45,17 +44,24 @@ export class DialogsComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateDialogs(linkType?: LinkType){
-    this.dialogs = this.dialogService.getDialogs(linkType ?? this.activeLink, this.dialogCurrentPage, this.dialogPageSize).pipe(tap(p => {
-      this.dialogCount = p.totalCount;
-    }), map(p => {
-      return p.items
-    }));
+  updateDialogs(){
+    let linkType = this.activeLink;
+    const offline = linkType === LinkType.offline;
+    if (offline){
+      linkType = LinkType.all;
+    }
+
+    this.dialogs = this.dialogService.getDialogs(linkType, this.dialogCurrentPage, this.dialogPageSize, offline)
+        .pipe(tap(p => {
+          this.dialogCount = p.totalCount;
+        }), map(p => {
+          return p.items
+        }));
   }
 
   ngOnInit(): void {
     this.paramsSubscription = this.activeRoute.params.subscribe(p => {
-      let pid: "all" | "opened" | "rejected" | "worked" | "closed" = p.id;
+      let pid: "all" | "opened" | "rejected" | "worked" | "closed" | "offline" = p.id;
       this.activeLink = LinkType[pid];
       this.updateDialogs();
     })

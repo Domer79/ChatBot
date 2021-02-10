@@ -1,16 +1,18 @@
+@use '../../common/styles/common'
+
 .dialog-info-container
   display: flex
 
 .dialog-actions
   display: flex
-  width: 50%
+  width: 28%
   flex-direction: row-reverse
 
 .dialog-number
-  width: 6%
+  width: 7%
 
 .dialog-status
-  width: 5%
+  width: 7%
 
 .dialog-status.active
   color: #6EB443
@@ -22,13 +24,16 @@
   color: #3757A1
 
 .dialog-date-created
-  width: 6%
+  width: 10%
 
 .dialog-date-closed
-  width: 6%
+  width: 10%
+
+.dialog-operator
+  width: 19%
 
 .dialog-client
-  width: 27%
+  width: 19%
 
 .card
   margin:
@@ -51,3 +56,16 @@
   display: flex
   justify-content: space-between
   width: 100%
+
+.dialog-captions
+  width: 100%
+  height: 50px
+  align-items: center
+  padding-top: 1em
+  display: flex
+  @include common.font-roboto(14px, 16px, )
+  color: #9FA1B5
+
+.dialog-first-message
+  text-decoration: #9FA115 underline
+  font-style: italic
