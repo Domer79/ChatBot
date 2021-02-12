@@ -11,6 +11,7 @@ import {map, tap} from 'rxjs/operators';
 export class CommonService{
   private beginShift$: ReplaySubject<NumberSettings> = new ReplaySubject<NumberSettings>(1);
   private closeShift$: ReplaySubject<NumberSettings> = new ReplaySubject<NumberSettings>(1);
+  private clientTimeoutInterval$: ReplaySubject<NumberSettings> = new ReplaySubject<NumberSettings>(1);
   private salam1$: ReplaySubject<string> = new ReplaySubject<string>(1);
   private salam2$: ReplaySubject<string> = new ReplaySubject<string>(1);
   private sendedMessage$: ReplaySubject<string> = new ReplaySubject<string>(1);
@@ -68,6 +69,10 @@ export class CommonService{
             this.questionSearchPlaceHolder$.next(settings.value);
             break;
           }
+          case 'clientTimeoutInterval': {
+            this.clientTimeoutInterval$.next(numberSettings);
+            break;
+          }
         }
       }
     })).subscribe();
@@ -78,6 +83,12 @@ export class CommonService{
       const closingShift = val.filter(_ => _.name === 'closeShift')[0];
       const beginShift = val.filter(_ => _.name === 'beginShift')[0];
       return { begin: beginShift.numberValue, close: closingShift.numberValue };
+    }));
+  }
+
+  public serverTimeoutInMilliseconds(): Observable<number>{
+    return this.clientTimeoutInterval$.pipe(map(val => {
+      return val.numberValue * 1000 * 60 * 60;
     }));
   }
 }

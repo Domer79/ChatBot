@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
+import {Injectable, OnDestroy} from '@angular/core';
+import {Observable, Subject, Subscription} from 'rxjs';
 import Message, {MessageInfo} from '../../abstracts/message';
 import {SubscribeCallBack} from '../../misc/types';
 import {MessageOwner, MessageStatus, MessageType} from '../../misc/message-type';
@@ -9,25 +9,32 @@ import {NIL as guidEmpty, v4 as uuidv4} from 'uuid';
 import {TokenService} from './token.service';
 import {MessageService} from './message.service';
 import Question from '../../abstracts/Question';
+import {CommonService} from './common.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClientMsgDispatcher {
+export class ClientMsgDispatcher implements OnDestroy{
   private connection: HubConnection;
   private messages$: Subject<Message> = new Subject<Message>();
   private meta$: Subject<MessageInfo> = new Subject<MessageInfo>();
   public messages: Observable<Message> = this.messages$.asObservable();
   public meta: Observable<MessageInfo> = this.meta$.asObservable();
   messageDialogId: string | null | undefined;
+  private serverTimeoutInMillisecondsSubscription: Subscription;
 
   constructor(
     private tokenService: TokenService,
     private messageService: MessageService,
+    private common: CommonService,
   ) {
     this.initHub()
       .then()
       .catch(e => console.log(e));
+  }
+
+  ngOnDestroy(): void {
+    this.serverTimeoutInMillisecondsSubscription.unsubscribe();
   }
 
   private async initHub(): Promise<void> {
@@ -39,12 +46,20 @@ export class ClientMsgDispatcher {
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Information)
       .build();
-    this.connection.serverTimeoutInMilliseconds = 120000;
 
-    this.connectionInit();
-    this.connection.start()
-      .then(r => console.log('Connection started'))
-      .catch(err => console.log('Error while starting connection: ' + err));
+    this.serverTimeoutInMillisecondsSubscription = this.common.serverTimeoutInMilliseconds().subscribe(_ => {
+      this.connection.serverTimeoutInMilliseconds = _;
+      this.connection.keepAliveIntervalInMilliseconds = _ / 2;
+
+      this.connection.onclose(err => {
+        console.log('Connection close');
+      });
+
+      this.connectionInit();
+      this.connection.start()
+        .then(r => console.log('Connection started'))
+        .catch(err => console.log('Error while starting connection: ' + err));
+    });
   }
 
   public setMessage(type: MessageType, msg: string): void{

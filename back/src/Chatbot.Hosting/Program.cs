@@ -50,6 +50,7 @@ namespace Chatbot.Hosting
             catch (Exception e)
             {
                 logger.Error(e, "Stopped program because of exception");
+                Console.WriteLine(e);
             }
             finally
             {

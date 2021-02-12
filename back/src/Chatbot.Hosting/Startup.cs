@@ -67,9 +67,10 @@ namespace Chatbot.Hosting
             services.AddSignalR()
                 .AddHubOptions<ChatHub>(options =>
                 {
+                    var clientTimeoutInterval = _settingsService.GetClientTimeoutInterval().GetAwaiter().GetResult() ?? 20;
                     options.EnableDetailedErrors = true;
-                    options.ClientTimeoutInterval = TimeSpan.FromMinutes(_settingsService.GetClientTimeoutInterval().GetAwaiter().GetResult().Value);
-                    options.KeepAliveInterval = TimeSpan.FromSeconds(60);
+                    options.ClientTimeoutInterval = TimeSpan.FromMinutes(clientTimeoutInterval);
+                    options.KeepAliveInterval = TimeSpan.FromMinutes(clientTimeoutInterval / 2.0);
                     options.HandshakeTimeout = TimeSpan.FromSeconds(60);
                 })
                 .AddHubOptions<OperatorHub>(options =>
