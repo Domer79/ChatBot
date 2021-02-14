@@ -7,6 +7,7 @@ import {map, tap} from 'rxjs/operators';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
 import {MainQuestionsComponent} from '../questions/main-questions/main-questions.component';
+import {CommonService} from '../services/common.service';
 
 @Component({
   selector: 'msg-container',
@@ -37,12 +38,17 @@ export class MsgContainerComponent implements OnInit, OnDestroy {
 
   title = 'ChatBot';
   private closeChatSubscription: Subscription;
+  private closeSessionSubscription: Subscription;
 
   constructor(
-    private pageDispatcher: PageDispatcherService
+    private pageDispatcher: PageDispatcherService,
+    private common: CommonService
   ) {
     this.closeChatSubscription = this.pageDispatcher.getCloseChatEvent().subscribe(() => {
       this.closeChat();
+    });
+    this.closeSessionSubscription = this.common.closeSessionByTimeout.subscribe(_ => {
+      this.pageDispatcher.closeChatFull();
     });
   }
 
@@ -57,5 +63,6 @@ export class MsgContainerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.closeChatSubscription.unsubscribe();
+    this.closeSessionSubscription.unsubscribe();
   }
 }

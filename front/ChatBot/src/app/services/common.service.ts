@@ -1,9 +1,9 @@
 import {Injectable, OnInit} from '@angular/core';
 import {Time} from '@angular/common';
 import {NumberSettings, Settings, Shift} from '../../abstracts/settings';
-import {Observable, ReplaySubject, zip} from 'rxjs';
+import {forkJoin, Observable, ReplaySubject, Subject, Subscription, timer, zip} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {map, tap} from 'rxjs/operators';
+import {map, repeatWhen, switchAll, switchMap, take, takeUntil, tap, zipAll} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,15 +17,19 @@ export class CommonService{
   private sendedMessage$: ReplaySubject<string> = new ReplaySubject<string>(1);
   private captionMessage$: ReplaySubject<string> = new ReplaySubject<string>(1);
   private questionSearchPlaceHolder$: ReplaySubject<string> = new ReplaySubject<string>(1);
-
+  private closeSessionByTimeout$: Subject<void> = new Subject<void>();
   private beginShift: Observable<NumberSettings> = this.beginShift$.asObservable();
   private closeShift: Observable<NumberSettings> = this.closeShift$.asObservable();
+  private stopTimeout$: Subject<void> = new Subject<void>();
+  private startTimeout$: Subject<void> = new Subject<void>();
 
   salam1: Observable<string> = this.salam1$.asObservable();
   salam2: Observable<string> = this.salam2$.asObservable();
   sendedMessage: Observable<string> = this.sendedMessage$.asObservable();
   caption: Observable<string> = this.captionMessage$.asObservable();
   questionSearchPlaceHolder: Observable<string> = this.questionSearchPlaceHolder$.asObservable();
+  closeSessionByTimeout: Observable<any> = this.closeSessionByTimeout$.asObservable();
+  private closeSessionSubscription: Subscription;
 
   constructor(
     private httpClient: HttpClient,
@@ -88,7 +92,40 @@ export class CommonService{
 
   public serverTimeoutInMilliseconds(): Observable<number>{
     return this.clientTimeoutInterval$.pipe(map(val => {
-      return val.numberValue * 1000 * 60 * 60;
+      return val.numberValue * 1000 * 60;
     }));
+  }
+
+  public runMessageTimeout(): void{
+    if (!this.closeSessionSubscription) {
+      this.closeSessionSubscription = this.serverTimeoutInMilliseconds()
+        .pipe(
+          switchMap(serverTimeout => {
+            return timer(serverTimeout, serverTimeout).pipe(
+              takeUntil(this.stopTimeout$),
+              repeatWhen(() => this.startTimeout$)
+            );
+          })
+        )
+        .subscribe(() => {
+          this.closeSessionByTimeout$.next();
+        });
+    }
+  }
+
+  stopTimeout(): void{
+    if (this.closeSessionSubscription){
+      this.stopTimeout$.next();
+    }
+  }
+
+  startTimeout(): void{
+    this.runMessageTimeout();
+    this.startTimeout$.next();
+  }
+
+  restartTimeout(): void{
+    this.stopTimeout();
+    this.startTimeout();
   }
 }

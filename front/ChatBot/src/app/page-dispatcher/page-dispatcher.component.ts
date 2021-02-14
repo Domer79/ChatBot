@@ -3,6 +3,7 @@ import Page from '../../abstracts/Page';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {PageHostDirective} from '../../directives/page-host.directive';
 import {Subscription} from 'rxjs';
+import {CommonService} from '../services/common.service';
 
 @Component({
   selector: 'page-dispatcher',
@@ -15,7 +16,9 @@ export class PageDispatcherComponent implements OnInit, OnDestroy {
   @ViewChild(PageHostDirective, {static: true}) pageHost: PageHostDirective;
 
   constructor(private pageDispatcher: PageDispatcherService,
-              private componentFactoryResolver: ComponentFactoryResolver) { }
+              private componentFactoryResolver: ComponentFactoryResolver,
+  )
+  { }
 
   ngOnInit(): void {
     this.pageSubscription = this.pageDispatcher.getPage().subscribe(page => this.loadComponent(page));

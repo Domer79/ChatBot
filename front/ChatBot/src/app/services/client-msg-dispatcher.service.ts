@@ -10,6 +10,7 @@ import {TokenService} from './token.service';
 import {MessageService} from './message.service';
 import Question from '../../abstracts/Question';
 import {CommonService} from './common.service';
+import {PageDispatcherService} from './page-dispatcher.service';
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +81,7 @@ export class ClientMsgDispatcher implements OnDestroy{
       .catch(r => console.log(`Error: ${r}`));
 
     this.messages$.next(message);
+    this.common.restartTimeout();
   }
 
   public loadMessages(): void{

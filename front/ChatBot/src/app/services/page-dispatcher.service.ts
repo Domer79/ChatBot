@@ -65,6 +65,10 @@ export class PageDispatcherService {
     this.updateWithInstance();
   }
 
+  closeChatFull(): void{
+    this.closeChat$.next();
+  }
+
   private update(): void{
     this.page$.next(this.getCurrent());
   }
