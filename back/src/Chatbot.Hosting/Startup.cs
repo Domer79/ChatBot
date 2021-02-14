@@ -130,7 +130,6 @@ namespace Chatbot.Hosting
                     _.Bind(endpoint);
                     return endpoint.CorsOrigins;
                 }).ToArray();
-                Console.WriteLine(string.Join(',', origins));
                 builder
                     .AllowAnyMethod()
                     .AllowAnyHeader()

@@ -49,8 +49,8 @@ namespace Chatbot.Hosting
             }
             catch (Exception e)
             {
-                logger.Error(e, "Stopped program because of exception");
                 Console.WriteLine(e);
+                logger.Error(e, "Stopped program because of exception");
             }
             finally
             {
