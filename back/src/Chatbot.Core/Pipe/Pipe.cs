@@ -8,29 +8,31 @@ namespace Chatbot.Core.Pipe
 {
     public class Pipe: IPipe
     {
-        private readonly IPipeContext _context;
-        private readonly Func<Task> _beginFunc;
+        private readonly Func<IPipeContext, Task> _beginFunc;
 
-        public Pipe(IPipeContext context, PipeConfigurator configurator)
+        public Pipe(PipeConfigurator configurator)
         {
-            _context = context;
             var handlers = configurator.GetHandlers().ToArray();
             _beginFunc = GetPipeFunc(handlers, 0);
         }
 
-        private Func<Task> GetPipeFunc(PipeHandler[] handlers, int index)
+        private Func<IPipeContext, Task> GetPipeFunc(PipeHandler[] handlers, int index)
         {
             if (index == handlers.Length)
             {
-                return () => Task.CompletedTask;
+                return _ => Task.CompletedTask;
             }
-            
-            return () => handlers[index].InvokeAsync(_context, GetPipeFunc(handlers, ++index));
+
+            return (context) =>
+            {
+                var pipeFunc = GetPipeFunc(handlers, index + 1);
+                return handlers[index].InvokeAsync(context, pipeFunc);
+            };
         }
 
-        public Task Start()
+        public Task Start(IPipeContext context)
         {
-            return _beginFunc();
+            return _beginFunc(context);
         }
     }
 }

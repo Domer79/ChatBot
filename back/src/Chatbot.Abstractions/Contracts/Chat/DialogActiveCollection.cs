@@ -102,5 +102,10 @@ namespace Chatbot.Abstractions.Contracts.Chat
                 .GetAwaiter().GetResult();
             return dialogs.ToDictionary(_ => _.Id, _ => new DialogGroup(_, userSet, appConfig.Chat));
         }
+
+        public void CloseDialogGroup(DialogGroup dialogGroup)
+        {
+            _dialogGroups.Value.Remove(dialogGroup.MessageDialogId);
+        }
     }
 }

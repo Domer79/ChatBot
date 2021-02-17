@@ -14,6 +14,6 @@ namespace Chatbot.Abstractions.Core.Services
         Task<bool> Delete(Settings item);
         Task SetDefaultSettings();
         Task<string> GetSalam2();
-        Task<int?> GetClientTimeoutInterval();
+        Task<double?> GetClientTimeoutInterval();
     }
 }

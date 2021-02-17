@@ -10,7 +10,10 @@ using Chatbot.Abstractions;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Ef;
 using Chatbot.Hosting.Authentication;
+using Chatbot.Hosting.Extensions;
 using Chatbot.Hosting.Hubs;
+using Chatbot.Hosting.Hubs.MessageHandlers;
+using Chatbot.Hosting.Hubs.Pipes;
 using Chatbot.Ioc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -96,6 +99,15 @@ namespace Chatbot.Hosting
                 });
             
             services.AddCors();
+            services.AddPipe<IMessagePipe, MessagePipe>(options =>
+            {
+                options.AddHandlerService<CreateDialogHandler>();
+                options.AddHandlerService<ValidateDialogHandler>();
+                options.AddHandlerService<SaveMessageHandler>();
+                options.AddHandlerService<ClosedMessageHandler>();
+                options.AddHandlerService<BroadcastMessageHandler>();
+                return options;
+            });
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

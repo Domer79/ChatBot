@@ -46,12 +46,14 @@ namespace Chatbot.Core.Services
         public Task<MessageDialog> Reject(MessageDialog dialog)
         {
             dialog.DialogStatus = DialogStatus.Rejected;
+            dialog.DateCompleted = DateTime.UtcNow;
             return _dialogRepository.Upsert(dialog);
         }
 
         public Task<MessageDialog> Close(MessageDialog dialog)
         {
             dialog.DialogStatus = DialogStatus.Closed;
+            dialog.DateCompleted = DateTime.UtcNow;
             return _dialogRepository.Upsert(dialog);
         }
 

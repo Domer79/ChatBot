@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Chatbot.Abstractions;
@@ -65,14 +66,14 @@ namespace Chatbot.Hosting.Hubs
 
         public async Task CloseClientDialog(Guid userId)
         {
-            foreach (var dialogGroup in _dialogActiveCollection)
+            var dialogGroups = _dialogActiveCollection.Where(_ => _.ClientId == userId);
+            foreach (var dialogGroup in dialogGroups)
             {
-                if (dialogGroup.ClientId == userId)
-                {
-                    await _messageDialogService.Close(dialogGroup.MessageDialogId);
-                    await NotifyOperators(dialogGroup.MessageDialogId);
-                }
+                await _messageDialogService.Close(dialogGroup.MessageDialogId);
+                await BroadcastOperators("dialogClosed", dialogGroup.MessageDialogId);
+                _dialogActiveCollection.CloseDialogGroup(dialogGroup);
             }
+
         }
 
         private async Task CheckDeprecated()
@@ -81,15 +82,15 @@ namespace Chatbot.Hosting.Hubs
             foreach (var dialogGroup in dialogGroups)
             {
                 await _messageDialogService.Close(dialogGroup.MessageDialogId);
-                await NotifyOperators(dialogGroup.MessageDialogId);
+                await BroadcastOperators("dialogClosed", dialogGroup.MessageDialogId);
             }
 
             _userSet.RemoveInactiveUsers();
         }
 
-        private Task NotifyOperators(Guid messageDialogId)
+        private Task BroadcastOperators(string methodName, object arg1)
         {
-            return _operatorHub.Clients.All.SendAsync("dialogClosed", messageDialogId);
+            return _operatorHub.Clients.All.SendAsync(methodName, arg1);
         }
 
         public void Dispose()

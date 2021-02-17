@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Core.Services;
@@ -12,7 +13,7 @@ namespace Chatbot.Core.Services
     {
         private readonly ISettingsRepository _settingsRepository;
         private string _salam2;
-        private int? _clientTimeoutInterval;
+        private double? _clientTimeoutInterval;
 
         public SettingsService(ISettingsRepository settingsRepository)
         {
@@ -61,9 +62,10 @@ namespace Chatbot.Core.Services
             return _salam2 ??= (await GetByName("salam2")).Value;
         }
 
-        public async Task<int?> GetClientTimeoutInterval()
+        public async Task<double?> GetClientTimeoutInterval()
         {
-            return _clientTimeoutInterval ??= int.Parse((await GetByName("clientTimeoutInterval")).Value);
+            var value = (await GetByName("clientTimeoutInterval")).Value;
+            return _clientTimeoutInterval ??= double.Parse(value, CultureInfo.InvariantCulture);
         }
     }
 }

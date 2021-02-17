@@ -5,6 +5,6 @@ namespace Chatbot.Abstractions.Pipe
 {
     public interface IPipe
     {
-        Task Start();
+        Task Start(IPipeContext context);
     }
 }

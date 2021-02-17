@@ -11,10 +11,13 @@ using Chatbot.Abstractions.Contracts.Chat;
 using Chatbot.Abstractions.Contracts.Responses;
 using Chatbot.Abstractions.Core;
 using Chatbot.Abstractions.Core.Services;
+using Chatbot.Abstractions.Pipe;
 using Chatbot.Abstractions.Repositories;
 using Chatbot.Common;
 using Chatbot.Core.Common;
 using Chatbot.Hosting.Authentication;
+using Chatbot.Hosting.Hubs.MessageHandlers;
+using Chatbot.Hosting.Hubs.Pipes;
 using Chatbot.Hosting.Misc;
 using Chatbot.Model.DataModel;
 using Chatbot.Model.Enums;
@@ -31,6 +34,7 @@ namespace Chatbot.Hosting.Hubs
         private readonly IHubContext<OperatorHub> _operatorHubContext;
         private readonly IOperatorLogService _logService;
         private readonly IChatBotHelper _chatBotHelper;
+        private readonly IMessagePipe _messagePipe;
         private readonly Mapper _mapper;
 
         public ChatHub(IMessageService messageService,
@@ -43,6 +47,7 @@ namespace Chatbot.Hosting.Hubs
             ILogger<ChatHub> logger,
             UserSet userSet,
             IChatBotHelper chatBotHelper,
+            IMessagePipe messagePipe,
             Mapper mapper)
         : base(userService, hubDispatcher, messageDialogService, messageService, userSet, logger)
         {
@@ -50,6 +55,7 @@ namespace Chatbot.Hosting.Hubs
             _operatorHubContext = operatorHubContext;
             _logService = logService;
             _chatBotHelper = chatBotHelper;
+            _messagePipe = messagePipe;
             _mapper = mapper;
         }
 
@@ -61,42 +67,8 @@ namespace Chatbot.Hosting.Hubs
 
         protected override async Task SendOf(Message message)
         {
-            var dialogGroup = await HubDispatcher.GetOrCreateDialogGroup(User, message.MessageDialogId);
-            if (message.MessageDialogId.IsEmpty())
-            {
-                message.MessageDialogId = dialogGroup.MessageDialogId;
-                message.Status = MessageStatus.Saved;
-                dialogGroup.ClientId = User.Id;
-                await _operatorHubContext.Clients.All.SendAsync("dialogCreated", dialogGroup.MessageDialogId);
-                await Clients.Caller.SendAsync("send", await _chatBotHelper.GetResponse(message));
-                Thread.Sleep(10);
-                await Clients.Caller.SendAsync("sendQuestions", await _chatBotHelper.GetQuestionMessages(message));
-                Thread.Sleep(10);
-                await Clients.Caller.SendAsync("sendButton", await _chatBotHelper.GetButtonForForm(message));
-            }
-            else
-            {
-                message.Status = MessageStatus.Saved;
-            }
-        
-            if (dialogGroup == null)
-                throw new InvalidOperationException(
-                    $"Group by message dialog id '{message.MessageDialogId}' not found");
-            if (!dialogGroup.UserExist(User))
-            {
-                throw new InvalidOperationException($"User {User.Login} not connected in chat room");
-            }
-        
-            message = await MessageService.Add(message);
-            dialogGroup.LastMessageTime = message.Time;
-            
-            await Clients.Caller.SendAsync("setMeta", message);
-        
-            if (dialogGroup.MemberCount > 1)
-            {
-                await Clients.Clients(dialogGroup.Others(User.Id))
-                    .SendAsync("send", _mapper.Map<MessageResponse>(message));
-            }
+            var context = new MessageContext(message, User, this);
+            await _messagePipe.Start(context);
         }
 
         [CustomSecurity(SecurityPolicy.OperatorConnection)]

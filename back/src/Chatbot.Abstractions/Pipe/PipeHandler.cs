@@ -5,7 +5,7 @@ namespace Chatbot.Abstractions.Pipe
 {
     public class PipeHandler
     {
-        public virtual Task InvokeAsync(object context, Func<Task> next)
+        public virtual Task InvokeAsync(object context, Func<IPipeContext, Task> next)
         {
             return Task.CompletedTask;
         }
@@ -13,9 +13,9 @@ namespace Chatbot.Abstractions.Pipe
 
     public abstract class PipeHandler<TPipeContext>: PipeHandler where TPipeContext: IPipeContext
     {
-        protected abstract Task InvokeAsync(TPipeContext context, Func<Task> next);
+        protected abstract Task InvokeAsync(TPipeContext context, Func<IPipeContext, Task> next);
 
-        public sealed override Task InvokeAsync(object context, Func<Task> next)
+        public sealed override Task InvokeAsync(object context, Func<IPipeContext, Task> next)
         {
             return InvokeAsync((TPipeContext) context, next);
         }

@@ -42,7 +42,7 @@ export class CommonService{
           description: settings.description,
           value: settings.value,
           dateCreated: settings.dateCreated,
-          numberValue: Number.parseInt(settings.value, 10)
+          numberValue: Number.parseFloat(settings.value)
         };
         switch (settings.name) {
           case 'beginShift': {
@@ -92,8 +92,8 @@ export class CommonService{
 
   public serverTimeoutInMilliseconds(): Observable<number>{
     return this.clientTimeoutInterval$.pipe(map(val => {
-      // return val.numberValue * 1000 * 60;
-      return 0.3 * 1000 * 60;
+      return val.numberValue * 1000 * 60;
+      // return 0.3 * 1000 * 60;
     }));
   }
 

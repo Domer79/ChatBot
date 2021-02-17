@@ -12,29 +12,36 @@ namespace Chatbot.Core.Tests
         [Test]
         public async Task RunPipeTest()
         {
-            var pipe = new Pipe.Pipe(new TextPipeContext() {Text = "Hello World!"}, new PipeConfigurator()
-                .RegisterHandler(new OutText1PipeHandler())
-                .RegisterHandler(new OutText2PipeHandler()));
+            var pipe = new Pipe.Pipe(new PipeConfigurator()
+                .AddHandler(new OutText1PipeHandler(new EmptyPipe()))
+                .AddHandler(new OutText2PipeHandler()));
 
-            await pipe.Start();
+            await pipe.Start(new TextPipeContext() {Text = "Hello World!"});
         }
     }
     
     public class OutText1PipeHandler: PipeHandler<ITextPipeContext>
     {
-        protected override async Task InvokeAsync(ITextPipeContext context, Func<Task> next)
+        private readonly EmptyPipe _emptyPipe;
+
+        public OutText1PipeHandler(EmptyPipe emptyPipe)
+        {
+            _emptyPipe = emptyPipe;
+        }
+
+        protected override async Task InvokeAsync(ITextPipeContext context, Func<IPipeContext, Task> next)
         {
             await Console.Out.WriteLineAsync(context.Text);
-            await next();
+            await _emptyPipe.Start(context);
         }
     }
     
     public class OutText2PipeHandler: PipeHandler<ITextPipeContext>
     {
-        protected override async Task InvokeAsync(ITextPipeContext context, Func<Task> next)
+        protected override async Task InvokeAsync(ITextPipeContext context, Func<IPipeContext, Task> next)
         {
             await Console.Out.WriteLineAsync("А это второй обработчик");
-            await next();
+            await next(context);
         }
     }
 
@@ -46,5 +53,13 @@ namespace Chatbot.Core.Tests
     public class TextPipeContext : ITextPipeContext
     {
         public string Text { get; set; }
+    }
+    
+    public class EmptyPipe: IPipe
+    {
+        public Task Start(IPipeContext context)
+        {
+            return Task.CompletedTask;
+        }
     }
 }
