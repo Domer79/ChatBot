@@ -10,6 +10,7 @@ namespace Chatbot.Abstractions.Core.Services
     {
         Task<MessageDialog> Start();
         Task<MessageDialog> Start(Guid clientId);
+        Task<MessageDialog> Start(Guid clientId, Guid basedId);
         Task<MessageDialog> Activate(MessageDialog dialog);
         Task<MessageDialog> Reject(MessageDialog dialog);
         Task<MessageDialog> Close(MessageDialog dialog);

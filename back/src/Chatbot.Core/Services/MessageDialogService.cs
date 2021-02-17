@@ -37,6 +37,20 @@ namespace Chatbot.Core.Services
             return _dialogRepository.Upsert(dialog);
         }
 
+        public Task<MessageDialog> Start(Guid clientId, Guid basedId)
+        {
+            if (basedId == default) throw new ArgumentException(null, nameof(basedId));
+            
+            var dialog = new MessageDialog
+            {
+                DialogStatus = DialogStatus.Started,
+                ClientId = clientId,
+                BasedId = basedId
+            };
+
+            return _dialogRepository.Upsert(dialog);
+        }
+
         public Task<MessageDialog> Activate(MessageDialog dialog)
         {
             dialog.DialogStatus = DialogStatus.Active;

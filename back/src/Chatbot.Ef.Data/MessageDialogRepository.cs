@@ -114,7 +114,7 @@ namespace Chatbot.Ef.Data
 
         public Task<MessageDialog> GetById(Guid messageDialogId)
         {
-            return _context.Dialogs.FindAsync(messageDialogId).AsTask();
+            return _context.Dialogs.AsNoTracking().SingleOrDefaultAsync(_ => _.Id == messageDialogId);
         }
     }
 }

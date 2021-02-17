@@ -19,6 +19,8 @@ namespace Chatbot.Hosting.Hubs.MessageHandlers
         protected override async Task InvokeAsync(IMessagePipeContext context, Func<IPipeContext, Task> next)
         {
             context.Message.Status = MessageStatus.Saved;
+            context.Message.MessageDialogId = context.DialogGroup.MessageDialogId;
+            
             context.Message = await _messageService.Add(context.Message);
             context.DialogGroup.LastMessageTime = context.Message.Time;
             await context.ChatHub.Clients.Caller.SendAsync("setMeta", context.Message);

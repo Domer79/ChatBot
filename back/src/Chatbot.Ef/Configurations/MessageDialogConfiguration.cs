@@ -46,10 +46,14 @@ namespace Chatbot.Ef.Configurations
                 .HasColumnName("offline")
                 .HasDefaultValue(false);
 
+            b.Property(_ => _.BasedId)
+                .HasColumnName("based_id");
+
             b.HasKey(_ => _.Id);
 
-            b.HasIndex(_ => _.Number)
-                .IsUnique();
+            b.HasIndex(_ => _.Number).IsUnique();
+
+            b.HasIndex(_ => _.BasedId);
 
             b.HasOne(_ => _.Operator)
                 .WithMany(_ => _.Dialogs)

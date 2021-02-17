@@ -37,17 +37,26 @@ namespace Chatbot.Abstractions.Contracts.Chat
             {
                 if (!_dialogGroups.Value.TryGetValue(messageDialogId, out var dialogGroup))
                 {
+                    MessageDialog messageDialog;
                     if (messageDialogId != Guid.Empty)
-                        throw new InvalidCastException("Dialog either not found or rejected");
-                
-                    if (messageDialogId == Guid.Empty)
                     {
-                        var messageDialog = await _dialogService.Start(user.Id);
-                        dialogGroup = new DialogGroup(messageDialog, _userSet, _appConfig.Chat);
-                        dialogGroup.AddUser(user);
-                        _dialogGroups.Value.Add(messageDialog.Id, dialogGroup);
-                        return dialogGroup;
+                        var dialog = await _dialogService.GetDialog(messageDialogId);
+                        if (dialog == null) throw new InvalidOperationException("Dialog not found");
+                        if (!(DialogStatus.Closed | DialogStatus.Rejected).HasFlag(dialog.DialogStatus))
+                            throw new InvalidOperationException(
+                                "When dialog creating based prev dialog, this dialog must by closed or rejected");
+
+                        messageDialog = await _dialogService.Start(user.Id, messageDialogId);
                     }
+                    else
+                    {
+                        messageDialog = await _dialogService.Start(user.Id);
+                    }
+                    
+                    dialogGroup = new DialogGroup(messageDialog, _userSet, _appConfig.Chat);
+                    dialogGroup.AddUser(user);
+                    _dialogGroups.Value.Add(messageDialog.Id, dialogGroup);
+                    return dialogGroup;
                 }
 
                 dialogGroup.AddUser(user);

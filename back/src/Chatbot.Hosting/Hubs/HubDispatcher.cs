@@ -73,7 +73,6 @@ namespace Chatbot.Hosting.Hubs
                 await BroadcastOperators("dialogClosed", dialogGroup.MessageDialogId);
                 _dialogActiveCollection.CloseDialogGroup(dialogGroup);
             }
-
         }
 
         private async Task CheckDeprecated()
