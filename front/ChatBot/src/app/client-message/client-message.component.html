@@ -1,7 +1,7 @@
-<div class="client-message">
+<div class="client-message" *ngIf="message.type == messageType.String">
   <div class="left-block"></div>
   <div class="msg-right">
-    <div #msg>
+    <div [innerHTML]="message.content">
 
     </div>
     <div class="msg-status" [ngSwitch]="message.status">
@@ -16,5 +16,11 @@
       </div>
       <span>{{message.time | chatDate }}</span>
     </div>
+  </div>
+</div>
+
+<div class="client-message" *ngIf="message.type == messageType.CloseSession" style="justify-content: center; align-items: center">
+  <div class="msg-right close-session">
+    <div>{{message.content}}</div>
   </div>
 </div>

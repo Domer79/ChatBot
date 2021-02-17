@@ -1,13 +1,11 @@
-import {Component, Input, Output, EventEmitter, OnInit, ElementRef, OnDestroy} from '@angular/core';
-import {animate, state, style, transition, trigger} from "@angular/animations";
-import {Observable, Subscription} from 'rxjs';
-import Message from '../../abstracts/message';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {Subscription} from 'rxjs';
 import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
-import {map, tap} from 'rxjs/operators';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
-import {QuestionsComponent} from '../questions/questions/questions.component';
 import {MainQuestionsComponent} from '../questions/main-questions/main-questions.component';
 import {CommonService} from '../services/common.service';
+import {MessageType} from '../../misc/message-type';
 
 @Component({
   selector: 'msg-container',
@@ -42,13 +40,14 @@ export class MsgContainerComponent implements OnInit, OnDestroy {
 
   constructor(
     private pageDispatcher: PageDispatcherService,
-    private common: CommonService
+    private common: CommonService,
+    private clientMsgDispatcher: ClientMsgDispatcher
   ) {
     this.closeChatSubscription = this.pageDispatcher.getCloseChatEvent().subscribe(() => {
       this.closeChat();
     });
     this.closeSessionSubscription = this.common.closeSessionByTimeout.subscribe(_ => {
-      this.pageDispatcher.closeChatFull();
+      clientMsgDispatcher.setMessage(MessageType.CloseSession, 'Диалог закрыт');
     });
   }
 

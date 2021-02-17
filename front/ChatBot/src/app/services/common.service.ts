@@ -92,7 +92,8 @@ export class CommonService{
 
   public serverTimeoutInMilliseconds(): Observable<number>{
     return this.clientTimeoutInterval$.pipe(map(val => {
-      return val.numberValue * 1000 * 60;
+      // return val.numberValue * 1000 * 60;
+      return 0.3 * 1000 * 60;
     }));
   }
 
@@ -109,6 +110,8 @@ export class CommonService{
         )
         .subscribe(() => {
           this.closeSessionByTimeout$.next();
+          this.stopTimeout();
+          this.closeSessionSubscription.unsubscribe();
         });
     }
   }

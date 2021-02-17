@@ -3,6 +3,7 @@ export enum MessageType{
   File,
   Question,
   ButtonForForm,
+  CloseSession,
 }
 
 export enum MessageStatus{
