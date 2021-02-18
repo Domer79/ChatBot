@@ -32,6 +32,9 @@ namespace Chatbot.Core.Services
 
         public Task<QuestionResponse> Upsert(QuestionResponse question)
         {
+            if (question.ParentId == Guid.Empty)
+                question.ParentId = null;
+            
             return _questionRepository.Upsert(question);
         }
 

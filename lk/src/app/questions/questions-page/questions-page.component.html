@@ -3,10 +3,6 @@
     <div class="action-bar">
         <div></div>
         <div>
-            <button mat-button class="add-question-btn" (click)="openEditQuestionDialog(undefined)">
-                <mat-icon>add</mat-icon>
-                Добавить вопрос/ответ
-            </button>
         </div>
     </div>
 </nav>
@@ -16,35 +12,18 @@
         <div style="width:6em">№ п/п</div>
         <div>Вопрос/Ответ</div>
     </div>
-    <mat-card *ngFor="let question of questions | async" class="card-question">
-        <mat-dialog-content>
-            <div class="question-info-container">
-                <div class="question-number">
-                    {{question.number}}
-                </div>
-                <div class="question-info">
-                    <div class="question-question">
-                        <div style="width:5em">Вопрос:</div>
-                        <div style="padding-left: 1em">
-                            {{question.question}}
-                        </div>
-                    </div>
-                    <div class="question-response">
-                        <div style="width:50px">Ответ:</div>
-                        <div style="padding-left: 1em">
-                            {{question.response}}
-                        </div>
-                    </div>
-                </div>
-                <div class="question-actions">
-                    <div class="question-edit">
-                        <button class="question-edit-btn" (click)="questionEdit(question)">Редактировать</button>
-                    </div>
-                    <div class="question-delete">
-                        <button class="question-delete-btn" (click)="questionDelete(question)">Удалить</button>
-                    </div>
-                </div>
-            </div>
-        </mat-dialog-content>
-    </mat-card>
+    <question-element *ngFor="let question of questions | async"
+                      [question]="question"
+                      (responseEditEvent)="questionEdit($event)"
+                      (questionDeleteEvent)="questionDelete($event)"
+                      (goToChildEvent)="goToChild($event)"
+                      (saveQuestionEvent)="saveQuestion($event)"
+    ></question-element>
 </div>
+<button mat-button class="add-question-btn" (click)="addNewQuestion()">
+    <div style="display: flex">
+        <mat-icon style="color: #519E36">add</mat-icon>
+        <span style="padding-top: 5px">Добавить вопрос</span>
+    </div>
+</button>
+

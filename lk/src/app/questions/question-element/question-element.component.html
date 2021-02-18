@@ -1,0 +1,34 @@
+<div>
+    <mat-card class="card-question">
+        <mat-dialog-content>
+            <div class="question-info-container">
+                <div class="question-number">
+                    {{question.number}}
+                </div>
+                <div class="question-info">
+                    <div class="question-question">
+                        <textarea
+                                class="question-editor"
+                                (focusout)="saveQuestion()"
+                                [(ngModel)]="question.question"
+                        >{{question.question}}</textarea>
+                    </div>
+                    <div class="question-actions">
+                        <div class="question-edit">
+                            <button mat-button class="question-edit-btn" (click)="goToChild()">Перейти на дочерний уровень</button>
+                        </div>
+                        <div class="question-edit">
+                            <button mat-button class="question-edit-btn" (click)="edit()">
+                                <mat-icon style="color: #519E36">add</mat-icon>
+                                Добавить ответ
+                            </button>
+                        </div>
+                        <div class="question-delete">
+                            <button mat-button class="question-delete-btn" (click)="delete()">Удалить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-dialog-content>
+    </mat-card>
+</div>

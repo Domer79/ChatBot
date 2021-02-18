@@ -20,8 +20,7 @@ namespace Chatbot.Ef.Configurations
 
             b.Property(_ => _.Question)
                 .HasColumnName("question")
-                .HasMaxLength(800)
-                .IsRequired();
+                .HasMaxLength(800);
 
             b.Property(_ => _.Response)
                 .HasColumnName("response");
@@ -32,14 +31,17 @@ namespace Chatbot.Ef.Configurations
 
             b.Property(_ => _.DateCreated)
                 .HasColumnName("date_created")
-                .IsRequired()
                 .HasDefaultValueSql("GETUTCDATE()");
+
+            b.Property(_ => _.SortOrder)
+                .HasColumnName("sort_order");
 
             b.ToTable("question_response");
             b.HasKey(_ => _.Id);
             b.HasIndex(_ => _.Question);
-            b.HasIndex(_ => _.Number)
-                .IsUnique();
+            b.HasIndex(_ => _.Number).IsUnique();
+            b.HasIndex(_ => _.SortOrder);
+                
             b.HasOne(_ => _.Parent)
                 .WithMany(_ => _.Children)
                 .HasForeignKey(_ => _.ParentId)

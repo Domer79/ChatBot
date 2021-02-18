@@ -26,11 +26,15 @@ const routes: Routes = [
   },
   {path: 'dialogs/:id', component: DialogsComponent, canActivate: [AuthGuard], pathMatch: 'full'},
   {path: 'questions', component: QuestionsPageComponent, canActivate: [AuthGuard]},
+  {path: 'questions/:parentId', component: QuestionsPageComponent, canActivate: [AuthGuard], pathMatch: 'full'},
   {path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    onSameUrlNavigation: "reload",
+    enableTracing: true
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

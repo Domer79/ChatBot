@@ -14,15 +14,8 @@ export class QuestionService {
       private _matSnackBar: MatSnackBar,
   ) { }
 
-  getAllQuestionsUnlessChild(questionId: string | undefined): Observable<Question[]>{
-    if (!questionId)
-      return this.httpClient.get<Question[]>('api/Question/getAllQuestionsUnlessChild');
-
-    return this.httpClient.get<Question[]>('api/Question/getAllQuestionsUnlessChild', {params: {questionId}});
-  }
-
-  getAll(): Observable<Question[]>{
-    return this.httpClient.get<Question[]>('api/Question/GetAll');
+  getQuestions(parentId: string): Observable<Question[]>{
+    return this.httpClient.get<Question[]>('api/Question/GetQuestions', { params: {parentId} });
   }
 
   async saveQuestion(question: Question): Promise<void>{
@@ -32,10 +25,10 @@ export class QuestionService {
       }
 
       await this.httpClient.post('api/Question/save', question).toPromise();
-      this._matSnackBar.open(`Вопрос сохранен`);
+      this._matSnackBar.open(`Вопрос сохранен`, 'Закрыть', { duration: 5000 });
     }
     catch (err){
-      this._matSnackBar.open(`Не удалось сохранить вопрос`);
+      this._matSnackBar.open(`Не удалось сохранить вопрос`, 'Закрыть', { duration: 5000 });
     }
   }
 
@@ -46,10 +39,10 @@ export class QuestionService {
       }
 
       await this.httpClient.delete('api/Question/delete', {params: {questionId: question.id}}).toPromise();
-      this._matSnackBar.open(`Вопрос удален`);
+      this._matSnackBar.open(`Вопрос удален`, 'Закрыть', { duration: 5000 });
     }
     catch (err){
-      this._matSnackBar.open(`Не удалось удалить вопрос. ${err.message}`);
+      this._matSnackBar.open(`Не удалось удалить вопрос. ${err.message}`, 'Закрыть', { duration: 5000 });
       throw err;
     }
   }

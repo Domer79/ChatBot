@@ -1,3 +1,5 @@
+@use "../../../common/styles/common"
+
 .curtain
   background-color: #E5E5E5
   position: fixed
@@ -11,83 +13,25 @@
   height: 5em
 
 .add-question-btn
-  width: 247px
+  width: 188px
   height: 50px
-  background: linear-gradient(180deg, #4A76DB 0%, #4670C7 100%)
-  border-radius: 3px
-  bottom: 1em
-  right: 1em
-  top: 0.5em
-  position: relative
-  color: #FFFFFF
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAFBFF 100%)
+  /* обводка */
+  border: 1px solid #D5DDED
+  box-sizing: border-box
+  border-radius: 4px
+  margin-left: 4em
+  @include common.font-roboto(12px, 14px)
+  text-transform: uppercase
+  justify-content: center
+  align-items: center
 
 .questions-list
-  padding: 2em
-  width: 100%
-
-.card-question
-  background: #FFFFFF
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15)
   margin:
-    top: 0.5em
-    bottom: 0.5em
-
-.question-info-container
-  display: flex
-
-.question-number
-  width: 70px
-
-.question-info
-  width: 60%
+    top: 4em
+    left: 4em
+    right: 4em
+  width: 96%
 
 .questions-title
   display: flex
-
-.question-question
-  display: flex
-
-.question-response
-  display: flex
-
-.question-actions
-  display: flex
-  width: 30%
-
-.question-edit
-  margin:
-    left: 1em
-    right: 1em
-
-.question-delete
-  margin:
-    left: 1em
-    right: 1em
-
-.question-edit-btn
-  width: 11em
-  height: 50px
-  background: linear-gradient(180deg, #FFFFFF 0%, #FAFBFF 100%)
-  border: 1px solid #D5DDED
-  box-sizing: border-box
-  border-radius: 3px
-  font-family: Roboto
-  font-style: normal
-  font-weight: normal
-  font-size: 12px
-  line-height: 14px
-  color: #3757A1
-
-.question-delete-btn
-  width: 10em
-  height: 50px
-  background: linear-gradient(180deg, #FFFFFF 0%, #FAFBFF 100%)
-  border: 1px solid #D5DDED
-  box-sizing: border-box
-  border-radius: 3px
-  font-family: Roboto
-  font-style: normal
-  font-weight: normal
-  font-size: 12px
-  line-height: 14px
-  color: #E52D2E
