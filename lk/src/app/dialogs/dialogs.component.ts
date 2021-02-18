@@ -28,6 +28,7 @@ export class DialogsComponent implements OnInit, OnDestroy {
 
   private dialogCreatedSubscription: Subscription;
   private paramsSubscription: Subscription;
+  private dialogClosedSubscription: Subscription;
 
   constructor(
       private dialogService: DialogService,
@@ -39,8 +40,15 @@ export class DialogsComponent implements OnInit, OnDestroy {
     this.activeLink = LinkType[route.snapshot.paramMap.get('id')];
 
     this.dialogCreatedSubscription = this.dialogService.dialogCreated.subscribe(dialogId => {
+      if (this.activeLink === LinkType.opened){
+        this.updateDialogs();
+        return;
+      }
       const openParam = LinkType[LinkType.opened];
       this.router.navigate([`/dialogs/`, openParam]);
+    });
+    this.dialogClosedSubscription = this.dialogService.dialogClosed.subscribe(dialogId => {
+      this.updateDialogs();
     });
   }
 
@@ -70,6 +78,7 @@ export class DialogsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.dialogCreatedSubscription.unsubscribe();
     this.paramsSubscription.unsubscribe();
+    this.dialogClosedSubscription.unsubscribe();
   }
 
   openChat(messageDialog: MessageDialog) {
