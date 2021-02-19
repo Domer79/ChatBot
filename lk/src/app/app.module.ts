@@ -45,6 +45,7 @@ import { OperatorEditDialogComponent } from './security/operator-edit-dialog/ope
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {ChatDatePipe} from "./pipes/chatdate.pipe";
 import { QuestionElementComponent } from './questions/question-element/question-element.component';
+import { DialogFilterComponent } from './dialogs/dialog-filter/dialog-filter.component';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -65,6 +66,7 @@ registerLocaleData(localeRu, 'ru');
     OperatorsComponent,
     OperatorEditDialogComponent,
     QuestionElementComponent,
+    DialogFilterComponent,
   ],
   imports: [
     BrowserModule,

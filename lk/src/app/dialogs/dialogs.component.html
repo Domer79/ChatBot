@@ -1,22 +1,32 @@
 <nav mat-tab-nav-bar [backgroundColor]="'primary'" xmlns="http://www.w3.org/1999/html">
-    <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.all]]" routerLinkActive #rla="routerLinkActive"
-       [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.all"
-       (click)="activeLink = linkType.all">Все</a>
-    <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.opened]]" routerLinkActive #rla="routerLinkActive"
-       [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.opened"
-       (click)="activeLink = linkType.opened">Открытые</a>
-    <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.rejected]]" routerLinkActive #rla="routerLinkActive"
-       [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.rejected"
-       (click)="activeLink = linkType.rejected">Отклоненные</a>
-    <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.worked]]" routerLinkActive #rla="routerLinkActive"
-       [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.worked"
-       (click)="activeLink = linkType.worked">В работе</a>
-    <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.closed]]" routerLinkActive #rla="routerLinkActive"
-       [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.closed"
-       (click)="activeLink = linkType.closed">Закрытые</a>
-    <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.offline]]" routerLinkActive #rla="routerLinkActive"
-       [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.offline"
-       (click)="activeLink = linkType.offline">Офлайн</a>
+    <div class="menu1">
+        <div style="padding-top: 1em">
+            <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.all]]" routerLinkActive #rla="routerLinkActive"
+               [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.all"
+               (click)="activeLink = linkType.all">Все</a>
+            <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.opened]]" routerLinkActive #rla="routerLinkActive"
+               [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.opened"
+               (click)="activeLink = linkType.opened">Открытые</a>
+            <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.rejected]]" routerLinkActive #rla="routerLinkActive"
+               [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.rejected"
+               (click)="activeLink = linkType.rejected">Отклоненные</a>
+            <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.worked]]" routerLinkActive #rla="routerLinkActive"
+               [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.worked"
+               (click)="activeLink = linkType.worked">В работе</a>
+            <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.closed]]" routerLinkActive #rla="routerLinkActive"
+               [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.closed"
+               (click)="activeLink = linkType.closed">Закрытые</a>
+            <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.offline]]" routerLinkActive #rla="routerLinkActive"
+               [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.offline"
+               (click)="activeLink = linkType.offline">Офлайн</a>
+        </div>
+        <div>
+            <button mat-flat-button class="dialog-filter-btn">
+                <mat-icon svgIcon="filter"></mat-icon>
+                Фильтр
+            </button>
+        </div>
+    </div>
 </nav>
 <div class="dialog-captions">
     <div class="dialog-number">№ Диалога</div>
