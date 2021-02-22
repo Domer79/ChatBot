@@ -9,6 +9,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import Page from "../contracts/Page";
 import {PageEvent} from "@angular/material/paginator";
 import {map, tap} from "rxjs/operators";
+import {CommonService} from "../services/common.service";
 
 @Component({
   selector: 'app-dialogs',
@@ -29,6 +30,7 @@ export class DialogsComponent implements OnInit, OnDestroy {
   private dialogCreatedSubscription: Subscription;
   private paramsSubscription: Subscription;
   private dialogClosedSubscription: Subscription;
+  private isOpenDialogFilter: false;
 
   constructor(
       private dialogService: DialogService,
@@ -36,6 +38,7 @@ export class DialogsComponent implements OnInit, OnDestroy {
       public dialog: MatDialog,
       private router: Router,
       private activeRoute: ActivatedRoute,
+      private common: CommonService,
   ) {
     this.activeLink = LinkType[route.snapshot.paramMap.get('id')];
 
@@ -104,5 +107,9 @@ export class DialogsComponent implements OnInit, OnDestroy {
     this.dialogCurrentPage = $event.pageIndex + 1;
     this.dialogPageSize = $event.pageSize;
     this.updateDialogs();
+  }
+
+  toggleDialogFilter() {
+    this.common.toggleDialogFilter(!this.isOpenDialogFilter);
   }
 }

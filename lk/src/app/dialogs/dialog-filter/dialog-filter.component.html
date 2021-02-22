@@ -1,1 +1,6 @@
-<p>dialog-filter works!</p>
+<div [@openCloseFilter]="opened ? 'open' : 'closed'">
+    <div class="dialog-filter-curtain" (click)="hide()"></div>
+    <div class="dialog-filter">
+        
+    </div>
+</div>

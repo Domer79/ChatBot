@@ -41,5 +41,8 @@ namespace Chatbot.Model.Enums
         SettingsManager = 10,
         
         #endregion
+        
+        [Description("Разработчик")]
+        Developer = 11,
     }
 }

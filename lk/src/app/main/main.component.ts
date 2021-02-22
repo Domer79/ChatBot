@@ -33,6 +33,8 @@ export class MainComponent implements OnInit {
         this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/exit.svg"));
     this.matIconRegistry.addSvgIcon("filter",
         this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/filter.svg"));
+    this.matIconRegistry.addSvgIcon("arrow-down",
+        this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/arrow_down.svg"));
   }
 
   async ngOnInit(): Promise<void> {

@@ -46,6 +46,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {ChatDatePipe} from "./pipes/chatdate.pipe";
 import { QuestionElementComponent } from './questions/question-element/question-element.component';
 import { DialogFilterComponent } from './dialogs/dialog-filter/dialog-filter.component';
+import { SelectComponent } from './components/select/select.component';
+import { TestComponent } from './test/test.component';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -67,6 +69,8 @@ registerLocaleData(localeRu, 'ru');
     OperatorEditDialogComponent,
     QuestionElementComponent,
     DialogFilterComponent,
+    SelectComponent,
+    TestComponent,
   ],
   imports: [
     BrowserModule,

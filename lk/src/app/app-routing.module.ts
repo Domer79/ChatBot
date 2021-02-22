@@ -8,6 +8,7 @@ import {DialogsComponent} from "./dialogs/dialogs.component";
 import {QuestionsPageComponent} from "./questions/questions-page/questions-page.component";
 import {OperatorsComponent} from "./security/operators/operators.component";
 import {LinkType} from "./contracts/message-dialog";
+import {TestComponent} from "./test/test.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -28,13 +29,11 @@ const routes: Routes = [
   {path: 'questions', component: QuestionsPageComponent, canActivate: [AuthGuard]},
   {path: 'questions/:parentId', component: QuestionsPageComponent, canActivate: [AuthGuard], pathMatch: 'full'},
   {path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard]},
+  {path: 'test', component: TestComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {
-    onSameUrlNavigation: "reload",
-    enableTracing: true
-  })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
