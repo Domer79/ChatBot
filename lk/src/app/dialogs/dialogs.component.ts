@@ -9,7 +9,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import Page from "../contracts/Page";
 import {PageEvent} from "@angular/material/paginator";
 import {map, tap} from "rxjs/operators";
-import {CommonService} from "../services/common.service";
+import {DialogFilterService} from "../services/dialog-filter.service";
 
 @Component({
   selector: 'app-dialogs',
@@ -38,7 +38,7 @@ export class DialogsComponent implements OnInit, OnDestroy {
       public dialog: MatDialog,
       private router: Router,
       private activeRoute: ActivatedRoute,
-      private common: CommonService,
+      private common: DialogFilterService,
   ) {
     this.activeLink = LinkType[route.snapshot.paramMap.get('id')];
 

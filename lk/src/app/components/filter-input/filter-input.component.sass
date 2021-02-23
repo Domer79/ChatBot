@@ -1,0 +1,9 @@
+@use "../../../common/styles/common"
+
+.editableDiv2[contentEditable="true"]:empty:before
+  content: attr(placeholder)
+  cursor: text
+
+.placeholder-active
+  color: gray
+

@@ -1,7 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {CommonService} from "../../services/common.service";
+import {DialogFilterService} from "../../services/dialog-filter.service";
 import {Subscription} from "rxjs";
+import {DialogStatus} from "../../contracts/message-dialog";
+import {DialogFilterData} from "../../../abstracts/dialog-filter-data";
 
 @Component({
   selector: 'dialog-filter',
@@ -27,13 +29,24 @@ import {Subscription} from "rxjs";
 export class DialogFilterComponent implements OnInit, OnDestroy {
   opened = false;
   private openClosDialogFilterSubscription: Subscription;
+  dialogStatuses: { value: DialogStatus, name: string }[];
+  dialogStatusType: DialogStatus | any;
+  dialogFilterData: DialogFilterData | { [key: string]: any; };
 
   constructor(
-      private common: CommonService
+      private dialogFilter: DialogFilterService
   ) {
-    this.openClosDialogFilterSubscription = this.common.openCloseDialogFilter.subscribe(state => {
+    // TODO: add subscription
+    dialogFilter.dialogFilterData.subscribe(data => {
+      this.dialogFilterData = data;
+    });
+    this.openClosDialogFilterSubscription = this.dialogFilter.openCloseDialogFilter.subscribe(state => {
       this.opened = state;
     })
+
+    for(let name in this.dialogStatusType){
+      this.dialogStatuses.push({ value: this.dialogStatusType[name], name })
+    }
   }
 
   ngOnInit(): void {
@@ -44,6 +57,9 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
   }
 
   hide() {
-    this.common.toggleDialogFilter(false);
+    this.dialogFilter.toggleDialogFilter(false);
+    // this.common.dialogFilterData = {
+    //   client
+    // };
   }
 }

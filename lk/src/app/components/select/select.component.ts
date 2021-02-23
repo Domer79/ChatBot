@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'rao-select',
   templateUrl: './select.component.html',
-  styleUrls: ['./select.component.sass']
+  styleUrls: ['./select.component.sass', '../filter-elements.sass']
 })
 export class SelectComponent implements OnInit {
-  items: string[] = ['One', 'Two', 'Three', 'Four'];
-  selectedItem: string = undefined;
+  @Input() selectPattern: { 'key': string, 'name': string }
+  @Input() items: any[];
+  @Input() selectedItem: any;
+  @Output()selectedItemChange: EventEmitter<any> = new EventEmitter<any>();
+
   isOpen = false;
 
   constructor() { }
@@ -15,7 +18,7 @@ export class SelectComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  selectItem(item: string) {
+  selectItem(item: any) {
     this.selectedItem = item;
     this.isOpen = false;
   }

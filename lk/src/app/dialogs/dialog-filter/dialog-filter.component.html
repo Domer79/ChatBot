@@ -1,6 +1,13 @@
 <div [@openCloseFilter]="opened ? 'open' : 'closed'">
     <div class="dialog-filter-curtain" (click)="hide()"></div>
     <div class="dialog-filter">
-        
+        <div class="dialog-filter-elements">
+            <rao-select [selectPattern]="{ key: 'id', name: 'value' }" [(selectedItem)]="dialogFilterData.dialogStatus"></rao-select>
+            <rao-datepicker></rao-datepicker>
+            <rao-filter-input></rao-filter-input>
+            <rao-filter-input></rao-filter-input>
+            <rao-datepicker></rao-datepicker>
+            <rao-filter-input></rao-filter-input>
+        </div>
     </div>
 </div>

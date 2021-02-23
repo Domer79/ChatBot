@@ -1,42 +1,17 @@
 @use "../../../common/styles/common"
 
-.select-container
-  position: relative
-  width: 320px
-  height: 54px
-  background: #FCFDFF
-  border: 1px solid #D5DDED
-  box-sizing: border-box
-  border-radius: 3px
-
-.select-value-container
-  display: flex
-  width: 100%
-  height: 100%
-
-.select-value
-  width: 100%
-  height: 100%
-
-.select-open
-  width: 54px
-  height: 100%
-  border-left: 1px solid #D8DCE2
-  justify-content: center
-  align-items: center
-  display: flex
-  cursor: pointer
-
 .select-open:hover img
   width: 19px
   height: 10px
 
 .select-items-container
+  position: absolute
   width: 100%
   background: #FCFDFF
   border: 1px solid #D5DDED
   box-sizing: border-box
   border-radius: 3px
+  z-index: 10
 
 .select-value-item
   width: 100%
@@ -50,5 +25,10 @@
     top: 1px solid #D5DDED
     bottom: 1px solid #D5DDED
 
+.editableDiv2[contentEditable="true"]:empty:before
+  content: attr(placeholder)
+  cursor: text
 
+.placeholder-active
+  color: gray
 

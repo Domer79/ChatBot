@@ -48,6 +48,10 @@ import { QuestionElementComponent } from './questions/question-element/question-
 import { DialogFilterComponent } from './dialogs/dialog-filter/dialog-filter.component';
 import { SelectComponent } from './components/select/select.component';
 import { TestComponent } from './test/test.component';
+import { DatePickerComponent } from './components/date-picker/date-picker.component';
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { FilterInputComponent } from './components/filter-input/filter-input.component';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -71,6 +75,8 @@ registerLocaleData(localeRu, 'ru');
     DialogFilterComponent,
     SelectComponent,
     TestComponent,
+    DatePickerComponent,
+    FilterInputComponent,
   ],
   imports: [
     BrowserModule,
@@ -95,6 +101,8 @@ registerLocaleData(localeRu, 'ru');
     MatStepperModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },

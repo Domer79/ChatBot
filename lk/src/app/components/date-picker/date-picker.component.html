@@ -1,0 +1,14 @@
+<div class="filter-container">
+    <div class="filter-value-container">
+        <div class="filter-value">
+            <mat-form-field class="example-full-width" style="width: 100%; height: 100%">
+                <mat-label>Укажите дату открытия</mat-label>
+                <input matInput [matDatepicker]="picker">
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="filter-open pointer" (click)="picker.open()">
+            <img src="assets/calendar.svg" />
+        </div>
+    </div>
+</div>
