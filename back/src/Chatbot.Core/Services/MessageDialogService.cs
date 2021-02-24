@@ -174,5 +174,20 @@ namespace Chatbot.Core.Services
                 TotalCount = totalCount
             };
         }
+
+        public async Task<Page<MessageDialog>> GetPageByFilter(DialogStatus? linkType, string @operator, string client,
+            DateTime? startDate, DateTime? closeDate, int? dialogNumber, int pageNumber, int pageSize)
+        {
+            MessageDialog[] dialogs = await _dialogRepository.GetByFilter(linkType, @operator, client, startDate, closeDate,
+                dialogNumber, pageNumber, pageSize);
+            long totalCount = await _dialogRepository.GetTotalCountByFilter(linkType, @operator, client, startDate, closeDate,
+                dialogNumber, pageNumber, pageSize);
+
+            return new Page<MessageDialog>()
+            {
+                Items = dialogs,
+                TotalCount = totalCount
+            };
+        }
     }
 }

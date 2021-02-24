@@ -52,13 +52,9 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
         this.selectedLinkType = Helper.getLinkTypeDescription(data.linkType);
       }
 
+      // @ts-ignore
       this.dialogFilterData = {
-        linkType: this.selectedLinkType?.value,
-        startDate: moment(new Date(data.startDate)),
-        closeDate: moment(new Date(data.closeDate)),
-        client: data.client,
-        operator: data.operator,
-        dialogNumber: data.dialogNumber,
+        ...data
       };
     });
 

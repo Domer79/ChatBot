@@ -28,5 +28,8 @@ namespace Chatbot.Abstractions.Core.Services
         Task<MessageDialog> GetDialog(Guid messageDialogId);
         Task<MessageDialog[]> GetByStatusFlags(DialogStatus status);
         Task<Page<MessageDialog>> GetPageByDialogStatus(DialogStatus status, int number, int size, bool? offline);
+
+        Task<Page<MessageDialog>> GetPageByFilter(DialogStatus? linkType, string @operator, string client,
+            DateTime? startDate, DateTime? closeDate, int? dialogNumber, int pageNumber, int pageSize);
     }
 }

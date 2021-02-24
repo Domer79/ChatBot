@@ -29,5 +29,11 @@ namespace Chatbot.Model.Enums
         /// Диалог отклонен оператором
         /// </summary>
         Rejected = 1 << 4,
+        
+        /// <summary>
+        /// Офлайн - диалог создан не в рабочее время
+        /// </summary>
+        /// <remarks>Использовать с осторожностью</remarks>
+        Offline = 1 << 5,
     }
 }

@@ -76,6 +76,20 @@ namespace Chatbot.Hosting.Controllers
         }
 
         [HttpGet]
+        public async Task<Page<MessageDialogResponse>> GetDialogsByFilter([FromQuery] FilterDialogPageRequest request)
+        {
+            Page<MessageDialog> page = await _messageDialogService.GetPageByFilter(request.LinkType, request.Operator,
+                request.Client, request.StartDate, request.CloseDate, request.DialogNumber, request.PageNumber,
+                request.PageSize);
+            
+            return new Page<MessageDialogResponse>()
+            {
+                Items = _mapper.Map<MessageDialogResponse[]>(page.Items),
+                TotalCount = page.TotalCount
+            };
+        }
+
+        [HttpGet]
         public async Task<MessageDialogResponse[]> GetStartedOrActiveDialogs()
         {
             var dialogs = await _messageDialogService.GetByStatusFlags(DialogStatus.Started | DialogStatus.Active);

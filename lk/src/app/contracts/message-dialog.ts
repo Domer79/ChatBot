@@ -57,7 +57,7 @@ export enum DialogStatus{
     /**
      * Офлайн - диалог создан не в рабочее время
      */
-    Offline= 1 << 5,
+    Offline = 1 << 5,
 }
 
 export enum LinkType {

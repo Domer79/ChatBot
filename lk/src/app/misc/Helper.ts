@@ -64,6 +64,8 @@ export default class Helper{
   }
 
   public static objectIsEmpty(obj: any): boolean{
+    if (!obj) return true;
+
     for(let property in obj){
       return false;
     }

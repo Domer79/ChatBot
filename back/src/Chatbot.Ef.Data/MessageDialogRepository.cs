@@ -61,6 +61,27 @@ namespace Chatbot.Ef.Data
                 .ToArrayAsync();
         }
 
+        public Task<MessageDialog[]> GetByFilter(DialogStatus? linkType, string @operator, string client,
+            DateTime? startDate, DateTime? closeDate, int? dialogNumber, int pageNumber, int pageSize)
+        {
+            var query = GetFilterQuery(linkType, @operator, client, startDate, closeDate, dialogNumber);
+
+            return query
+                .Include(_ => _.Operator)
+                .Include(_ => _.Client)
+                .OrderByDescending(_ => _.DateCreated)
+                .Skip(pageNumber * pageSize - pageSize)
+                .Take(pageSize)
+                .ToArrayAsync();
+        }
+
+        public Task<long> GetTotalCountByFilter(DialogStatus? linkType, string @operator, string client, DateTime? startDate,
+            DateTime? closeDate, int? dialogNumber, int pageNumber, int pageSize)
+        {
+            var query = GetFilterQuery(linkType, @operator, client, startDate, closeDate, dialogNumber);
+            return query.LongCountAsync();
+        }
+
         public Task<long> GetTotalCount()
         {
             return _context.Dialogs.LongCountAsync();
@@ -76,7 +97,7 @@ namespace Chatbot.Ef.Data
             
             return dialogs.LongCountAsync();
         }
-        
+
         public Task<long> GetOfflineTotalCount()
         {
             return _context.Dialogs.Where(_ => _.Offline).LongCountAsync();
@@ -115,6 +136,59 @@ namespace Chatbot.Ef.Data
         public Task<MessageDialog> GetById(Guid messageDialogId)
         {
             return _context.Dialogs.AsNoTracking().SingleOrDefaultAsync(_ => _.Id == messageDialogId);
+        }
+
+        private IQueryable<MessageDialog> GetFilterQuery(DialogStatus? linkType, string @operator, string client, DateTime? startDate,
+            DateTime? closeDate, int? dialogNumber)
+        {
+            IQueryable<MessageDialog> query = null;
+            if (linkType.HasValue)
+            {
+                foreach (var flag in Helper.GetFlags(linkType.Value))
+                {
+                    if (query == null)
+                    {
+                        query = _context.Dialogs.Where(_ => _.DialogStatus == flag);
+                        continue;
+                    }
+                    
+                    query = query.Concat(_context.Dialogs.Where(_ => _.DialogStatus == flag));
+                }
+            }
+
+            if (query == null)
+            {
+                query = _context.Dialogs;
+            }
+                
+            if (@operator != null)
+            {
+                query = query.Where(_ => _.Operator.Fio.Contains(@operator));
+            }
+
+            if (client != null)
+            {
+                query = query.Where(_ => _.Client.Fio.Contains(client));
+            }
+
+            if (startDate.HasValue)
+            {
+                var nextDay = startDate.Value.AddDays(1);
+                query = query.Where(_ => _.DateCreated >= startDate && _.DateCreated < nextDay);
+            }
+
+            if (closeDate.HasValue)
+            {
+                var nextDay = closeDate.Value.AddDays(1);
+                query = query.Where(_ => _.DateCompleted >= closeDate && _.DateCompleted < nextDay);
+            }
+
+            if (dialogNumber.HasValue)
+            {
+                query = query.Where(_ => _.Number == dialogNumber);
+            }
+
+            return query;
         }
     }
 }

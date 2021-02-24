@@ -9,6 +9,7 @@ import Message from "../../abstracts/message";
 import Page from "../contracts/Page";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+import {DialogFilterData} from "../../abstracts/dialog-filter-data";
 
 @Injectable({
   providedIn: 'root'
@@ -76,5 +77,10 @@ export class DialogService implements OnDestroy{
   }
 
   ngOnDestroy(): void {
+  }
+
+  getDialogsByFilter(data: DialogFilterData, page: number, size: number): Observable<Page<MessageDialog>> {
+    // @ts-ignore
+    return this.httpClient.get('api/Dialog/GetDialogsByFilter', { params: {...data, pageNumber: page, pageSize: size} });
   }
 }

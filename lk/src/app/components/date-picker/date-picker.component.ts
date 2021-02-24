@@ -1,5 +1,11 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {MatDatepickerInputEvent} from "@angular/material/datepicker";
+import * as _moment from 'moment';
+// tslint:disable-next-line:no-duplicate-imports
+// @ts-ignore
+import {default as _rollupMoment} from 'moment';
+
+const moment = _rollupMoment || _moment;
 
 @Component({
   selector: 'rao-datepicker',
@@ -8,8 +14,8 @@ import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 })
 export class DatePickerComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() placeholder: string = null;
-  @Input() date: Date = null;
-  @Output() dateChange: EventEmitter<Date> = new EventEmitter<Date>();
+  @Input() date: string = null;
+  @Output() dateChange: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() {
   }
@@ -24,7 +30,7 @@ export class DatePickerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setDate($event: MatDatepickerInputEvent<Date, Date | null>) {
-    this.date = $event.value;
-    this.dateChange.emit($event.value);
+    this.date = moment($event.value).utc().format();
+    this.dateChange.emit(this.date);
   }
 }

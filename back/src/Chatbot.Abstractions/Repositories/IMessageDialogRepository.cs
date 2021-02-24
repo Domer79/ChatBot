@@ -18,5 +18,11 @@ namespace Chatbot.Abstractions.Repositories
         Task<bool> Delete(MessageDialog dialog);
         Task<MessageDialog> GetById(Guid messageDialogId);
         Task<MessageDialog[]> GetOffline(int number, int size);
+
+        Task<MessageDialog[]> GetByFilter(DialogStatus? linkType, string @operator, string client, DateTime? startDate,
+            DateTime? closeDate, int? dialogNumber, int pageNumber, int pageSize);
+
+        Task<long> GetTotalCountByFilter(DialogStatus? linkType, string @operator, string client, DateTime? startDate,
+            DateTime? closeDate, int? dialogNumber, int pageNumber, int pageSize);
     }
 }
