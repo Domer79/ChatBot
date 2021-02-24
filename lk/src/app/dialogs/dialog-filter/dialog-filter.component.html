@@ -6,12 +6,17 @@
                     [selectPattern]="{ key: 'value', name: 'description' }"
                     [(selectedItem)]="selectedLinkType"
                     [items]="linkTypes"
+                    placeholder="Статус диалога"
             ></rao-select>
-            <rao-datepicker></rao-datepicker>
-            <rao-filter-input></rao-filter-input>
-            <rao-filter-input></rao-filter-input>
-            <rao-datepicker></rao-datepicker>
-            <rao-filter-input></rao-filter-input>
+            <rao-datepicker [(date)]="dialogFilterData.startDate" placeholder="Укажите дату открытия"></rao-datepicker>
+            <rao-filter-input [(filter)]="dialogFilterData.operator" placeholder="Оператор"></rao-filter-input>
+            <rao-filter-input [(filter)]="dialogFilterData.dialogNumber" placeholder="Номер диалога"></rao-filter-input>
+            <rao-datepicker [(date)]="dialogFilterData.closeDate" placeholder="Укажите дату закрытия"></rao-datepicker>
+            <rao-filter-input [(filter)]="dialogFilterData.client" placeholder="Клиент"></rao-filter-input>
+        </div>
+        <div class="dialog-filter-actions">
+            <button mat-button class="dialog-filter-btn dialog-filter-apply-btn" (click)="apply()">Применить</button>
+            <button mat-button class="dialog-filter-btn dialog-filter-discard-btn" (click)="hide()">Отмена</button>
         </div>
     </div>
 </div>

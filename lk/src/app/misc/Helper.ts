@@ -51,15 +51,23 @@ export default class Helper{
   }
 
   public static getLinkTypeDescription(value: LinkType): { value: LinkType, description: string } {
-    const linkType: LinkType = value * 1;
+    const linkType = value * 1 as LinkType;
     switch(linkType){
-      case LinkType.all: return { value, description: 'Все' };
-      case LinkType.opened: return { value, description: 'Открыт' };
-      case LinkType.offline: return { value, description: 'Офлайн' };
-      case LinkType.closed: return { value, description: 'Закрыт' };
-      case LinkType.worked: return { value, description: 'В работе' };
-      case LinkType.rejected: return { value, description: 'Отклонен' };
+      case LinkType.all: return { value: linkType, description: 'Все' };
+      case LinkType.opened: return { value: linkType, description: 'Открыт' };
+      case LinkType.offline: return { value: linkType, description: 'Офлайн' };
+      case LinkType.closed: return { value: linkType, description: 'Закрыт' };
+      case LinkType.worked: return { value: linkType, description: 'В работе' };
+      case LinkType.rejected: return { value: linkType, description: 'Отклонен' };
       default: throw new Error(`Unknown link type ${value}`);
     }
+  }
+
+  public static objectIsEmpty(obj: any): boolean{
+    for(let property in obj){
+      return false;
+    }
+
+    return true;
   }
 }

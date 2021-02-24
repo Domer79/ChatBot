@@ -5,6 +5,12 @@ import {Subscription} from "rxjs";
 import {DialogStatus, LinkType} from "../../contracts/message-dialog";
 import {DialogFilterData} from "../../../abstracts/dialog-filter-data";
 import Helper from "../../misc/Helper";
+import * as _moment from 'moment';
+// tslint:disable-next-line:no-duplicate-imports
+// @ts-ignore
+import {default as _rollupMoment} from 'moment';
+
+const moment = _rollupMoment || _moment;
 
 @Component({
   selector: 'dialog-filter',
@@ -28,27 +34,31 @@ import Helper from "../../misc/Helper";
   ]
 })
 export class DialogFilterComponent implements OnInit, OnDestroy {
-  opened = false;
   private openClosDialogFilterSubscription: Subscription;
+  private dataSubscription: Subscription;
+  selectedLinkType: { value: LinkType, description: string };
   // @ts-ignore
-  selectedLinkType: { value: LinkType, description: string } = {};
+  dialogFilterData: DialogFilterData = {};
+  opened = false;
+
   linkTypes: { value: LinkType, description: string }[];
-  dialogFilterData: DialogFilterData | any = {};
 
   constructor(
       private dialogFilter: DialogFilterService
   ) {
     this.linkTypes = Helper.getLinkTypeDescriptions();
-    // TODO: add subscription
-    dialogFilter.dialogFilterData.subscribe(data => {
-      debugger;
+    this.dataSubscription = dialogFilter.dialogFilterDataFromQueryParams.subscribe(data => {
       if (data.linkType){
         this.selectedLinkType = Helper.getLinkTypeDescription(data.linkType);
       }
 
-      // @ts-ignore
       this.dialogFilterData = {
-        ...data
+        linkType: this.selectedLinkType?.value,
+        startDate: moment(new Date(data.startDate)),
+        closeDate: moment(new Date(data.closeDate)),
+        client: data.client,
+        operator: data.operator,
+        dialogNumber: data.dialogNumber,
       };
     });
 
@@ -62,12 +72,16 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.openClosDialogFilterSubscription.unsubscribe();
+    this.dataSubscription.unsubscribe();
   }
 
   hide() {
-    this.dialogFilter.toggleDialogFilter(false);
-    // this.common.dialogFilterData = {
-    //   client
-    // };
+    this.dialogFilter.close();
+  }
+
+  apply() {
+    this.hide();
+    this.dialogFilterData.linkType = this.selectedLinkType?.value;
+    this.dialogFilter.apply(this.dialogFilterData);
   }
 }

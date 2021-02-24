@@ -7,26 +7,39 @@ import {ActivatedRoute} from "@angular/router";
   providedIn: 'root'
 })
 export class DialogFilterService implements OnDestroy{
-  private $opeCloseDialogFilter: Subject<boolean> = new Subject<boolean>();
+  private openCloseDialogFilter$: Subject<boolean> = new Subject<boolean>();
   private queryParamsSubscription: Subscription;
   private dialogFilterData$: Subject<DialogFilterData | { [key: string]: any; }> = new Subject<DialogFilterData | {[p: string]: any}>();
+  private applyAction$: Subject<DialogFilterData> = new Subject<DialogFilterData>();
 
-  openCloseDialogFilter = this.$opeCloseDialogFilter.asObservable();
-  dialogFilterData: Observable<DialogFilterData | { [key: string]: any; }> = this.dialogFilterData$.asObservable();
+  openCloseDialogFilter = this.openCloseDialogFilter$.asObservable();
+  applyAction = this.applyAction$.asObservable();
+  dialogFilterDataFromQueryParams: Observable<DialogFilterData | { [key: string]: any; }> = this.dialogFilterData$.asObservable();
 
   constructor(
       private activeRoute: ActivatedRoute,
   ) {
     this.queryParamsSubscription = this.activeRoute.queryParams.subscribe(params => {
-      debugger;
       this.dialogFilterData$.next({
         ...params
       });
     })
   }
 
-  toggleDialogFilter(newState: boolean): void{
-    this.$opeCloseDialogFilter.next(newState);
+  private toggleDialogFilter(newState: boolean): void{
+    this.openCloseDialogFilter$.next(newState);
+  }
+
+  open(): void{
+    this.toggleDialogFilter(true);
+  }
+
+  close(): void{
+    this.toggleDialogFilter(false);
+  }
+
+  apply(data: DialogFilterData): void{
+    this.applyAction$.next(data);
   }
 
   ngOnDestroy(): void {

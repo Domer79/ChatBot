@@ -6,13 +6,14 @@ import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Outpu
   styleUrls: ['./select.component.sass', '../filter-elements.sass']
 })
 export class SelectComponent implements OnInit, AfterViewInit {
+  private _isOpen = false;
+  @Input() placeholder: string = null;
   @Input() selectPattern: { 'key': string, 'name': string } = {key: 'key', name: 'name'};
   @Input() items: any[];
   @Input() selectedItem: any;
   @Output() selectedItemChange: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('filterValueContainer') filterValueContainer: ElementRef;
 
-  isOpen = false;
   componentTop: string;
   componentLeft: string;
   componentWidth: string;
@@ -23,16 +24,27 @@ export class SelectComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.updateItemsContainerSize();
+  }
+
+  selectItem(item: any) {
+    this.selectedItemChange.emit(item);
+    this.isOpen = false;
+  }
+
+  get isOpen(){
+    return this._isOpen;
+  }
+
+  set isOpen(value){
+    this._isOpen = value;
+    this.updateItemsContainerSize();
+  }
+
+  private updateItemsContainerSize(){
     const domRect = this.filterValueContainer.nativeElement.getBoundingClientRect();
     this.componentLeft = `${domRect.left}px`;
     this.componentTop = `${domRect.top + 54}px`;
     this.componentWidth = `${domRect.width}px`;
-    console.log(domRect);
-    console.log(this.componentLeft, this.componentTop);
-  }
-
-  selectItem(item: any) {
-    this.selectedItem = item;
-    this.isOpen = false;
   }
 }

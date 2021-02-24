@@ -10,6 +10,7 @@ import Page from "../contracts/Page";
 import {PageEvent} from "@angular/material/paginator";
 import {map, tap} from "rxjs/operators";
 import {DialogFilterService} from "../services/dialog-filter.service";
+import Helper from "../misc/Helper";
 
 @Component({
   selector: 'app-dialogs',
@@ -30,7 +31,8 @@ export class DialogsComponent implements OnInit, OnDestroy {
   private dialogCreatedSubscription: Subscription;
   private paramsSubscription: Subscription;
   private dialogClosedSubscription: Subscription;
-  private isOpenDialogFilter: false;
+  private dialogFilterSubscription: Subscription;
+  private queryParamsSubscription: Subscription;
 
   constructor(
       private dialogService: DialogService,
@@ -38,7 +40,7 @@ export class DialogsComponent implements OnInit, OnDestroy {
       public dialog: MatDialog,
       private router: Router,
       private activeRoute: ActivatedRoute,
-      private common: DialogFilterService,
+      private dialogFilterService: DialogFilterService,
   ) {
     this.activeLink = LinkType[route.snapshot.paramMap.get('id')];
 
@@ -52,6 +54,10 @@ export class DialogsComponent implements OnInit, OnDestroy {
     });
     this.dialogClosedSubscription = this.dialogService.dialogClosed.subscribe(dialogId => {
       this.updateDialogs();
+    });
+
+    this.dialogFilterSubscription = this.dialogFilterService.applyAction.subscribe(data => {
+      this.router.navigate(['/dialogs/'], { queryParams: {...data} });
     });
   }
 
@@ -72,16 +78,27 @@ export class DialogsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.paramsSubscription = this.activeRoute.params.subscribe(p => {
+      // @ts-ignore
+      if (!Helper.objectIsEmpty(this.activeRoute.queryParams.value)){
+        return;
+      }
+
       let pid: "all" | "opened" | "rejected" | "worked" | "closed" | "offline" = p.id;
       this.activeLink = LinkType[pid];
       this.updateDialogs();
     })
+    this.queryParamsSubscription = this.activeRoute.queryParams.subscribe(q => {
+      debugger
+    })
+    // ?linkType=2&startDate=Wed%20Feb%2017%202021%2000:00:00%20GMT%2B0500&closeDate=Wed%20Feb%2024%202021%2000:00:00%20GMT%2B0500&client=Client&operator=Operator&dialogNumber=12
   }
 
   ngOnDestroy(): void {
     this.dialogCreatedSubscription.unsubscribe();
     this.paramsSubscription.unsubscribe();
     this.dialogClosedSubscription.unsubscribe();
+    this.dialogFilterSubscription.unsubscribe();
+    this.queryParamsSubscription.unsubscribe();
   }
 
   openChat(messageDialog: MessageDialog) {
@@ -109,7 +126,7 @@ export class DialogsComponent implements OnInit, OnDestroy {
     this.updateDialogs();
   }
 
-  toggleDialogFilter() {
-    this.common.toggleDialogFilter(!this.isOpenDialogFilter);
+  dialogFilterOpen() {
+    this.dialogFilterService.open();
   }
 }

@@ -1,7 +1,12 @@
 <div class="filter-container">
     <div class="filter-value-container" #filterValueContainer>
-        <div class="filter-value editor editableDiv2" contenteditable="true" placeholder="Статус диалога"
-             [ngClass]="{'placeholder-active': selectedItem === undefined}" [innerHTML]="selectedItem === undefined ? '' : selectedItem[selectPattern.name]">
+        <div
+            class="filter-value editor editableDiv2"
+            style="padding-top: 1em"
+            contenteditable="true"
+            [attr.placeholder]="placeholder"
+            [ngClass]="{'placeholder-active': selectedItem === undefined}"
+            [innerHTML]="selectedItem === undefined ? undefined : selectedItem[selectPattern.name]">
         </div>
         <div class="filter-open pointer" (click)="isOpen = !isOpen">
             <img src="assets/arrow_down.svg" *ngIf="!isOpen"/>
