@@ -1,4 +1,5 @@
 import User from "./user";
+import {Security} from "../security.decorator";
 
 export default class MessageDialog{
     constructor(options: any) {

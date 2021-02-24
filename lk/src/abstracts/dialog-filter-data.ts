@@ -1,7 +1,7 @@
-import {DialogStatus} from "../app/contracts/message-dialog";
+import {LinkType} from "../app/contracts/message-dialog";
 
 export interface DialogFilterData{
-    dialogStatus: DialogStatus;
+    linkType: LinkType;
     startDate: Date;
     closeDate: Date;
     operator: string;

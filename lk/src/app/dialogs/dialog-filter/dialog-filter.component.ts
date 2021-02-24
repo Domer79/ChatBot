@@ -2,8 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {DialogFilterService} from "../../services/dialog-filter.service";
 import {Subscription} from "rxjs";
-import {DialogStatus} from "../../contracts/message-dialog";
+import {DialogStatus, LinkType} from "../../contracts/message-dialog";
 import {DialogFilterData} from "../../../abstracts/dialog-filter-data";
+import Helper from "../../misc/Helper";
 
 @Component({
   selector: 'dialog-filter',
@@ -29,24 +30,31 @@ import {DialogFilterData} from "../../../abstracts/dialog-filter-data";
 export class DialogFilterComponent implements OnInit, OnDestroy {
   opened = false;
   private openClosDialogFilterSubscription: Subscription;
-  dialogStatuses: { value: DialogStatus, name: string }[];
-  dialogStatusType: DialogStatus | any;
-  dialogFilterData: DialogFilterData | { [key: string]: any; };
+  // @ts-ignore
+  selectedLinkType: { value: LinkType, description: string } = {};
+  linkTypes: { value: LinkType, description: string }[];
+  dialogFilterData: DialogFilterData | any = {};
 
   constructor(
       private dialogFilter: DialogFilterService
   ) {
+    this.linkTypes = Helper.getLinkTypeDescriptions();
     // TODO: add subscription
     dialogFilter.dialogFilterData.subscribe(data => {
-      this.dialogFilterData = data;
+      debugger;
+      if (data.linkType){
+        this.selectedLinkType = Helper.getLinkTypeDescription(data.linkType);
+      }
+
+      // @ts-ignore
+      this.dialogFilterData = {
+        ...data
+      };
     });
+
     this.openClosDialogFilterSubscription = this.dialogFilter.openCloseDialogFilter.subscribe(state => {
       this.opened = state;
     })
-
-    for(let name in this.dialogStatusType){
-      this.dialogStatuses.push({ value: this.dialogStatusType[name], name })
-    }
   }
 
   ngOnInit(): void {

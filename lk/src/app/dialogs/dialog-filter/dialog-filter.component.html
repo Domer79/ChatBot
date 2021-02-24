@@ -2,7 +2,11 @@
     <div class="dialog-filter-curtain" (click)="hide()"></div>
     <div class="dialog-filter">
         <div class="dialog-filter-elements">
-            <rao-select [selectPattern]="{ key: 'id', name: 'value' }" [(selectedItem)]="dialogFilterData.dialogStatus"></rao-select>
+            <rao-select
+                    [selectPattern]="{ key: 'value', name: 'description' }"
+                    [(selectedItem)]="selectedLinkType"
+                    [items]="linkTypes"
+            ></rao-select>
             <rao-datepicker></rao-datepicker>
             <rao-filter-input></rao-filter-input>
             <rao-filter-input></rao-filter-input>

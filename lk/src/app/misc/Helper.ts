@@ -1,4 +1,5 @@
 import {TimeStatus} from "../../abstracts/message-type";
+import {LinkType} from "../contracts/message-dialog";
 
 export default class Helper{
   public static getTimeStatus(time: Date): TimeStatus{
@@ -36,5 +37,29 @@ export default class Helper{
 
   public static existBr(str: string): any | null{
     return str.match(/(.*)(<br>)$/);
+  }
+
+  public static getLinkTypeDescriptions(): { value: LinkType, description: string }[] {
+    const linkTypeDescriptions: { value: LinkType, description: string }[] = [];
+    for(let value in LinkType){
+      const status = Number.parseInt(value) as LinkType;
+      if (isNaN(status)) continue;
+      linkTypeDescriptions.push(this.getLinkTypeDescription(status));
+    }
+
+    return linkTypeDescriptions;
+  }
+
+  public static getLinkTypeDescription(value: LinkType): { value: LinkType, description: string } {
+    const linkType: LinkType = value * 1;
+    switch(linkType){
+      case LinkType.all: return { value, description: 'Все' };
+      case LinkType.opened: return { value, description: 'Открыт' };
+      case LinkType.offline: return { value, description: 'Офлайн' };
+      case LinkType.closed: return { value, description: 'Закрыт' };
+      case LinkType.worked: return { value, description: 'В работе' };
+      case LinkType.rejected: return { value, description: 'Отклонен' };
+      default: throw new Error(`Unknown link type ${value}`);
+    }
   }
 }
