@@ -59,6 +59,7 @@ export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   sendData(): void{
+    debugger
     if (this.isShift$){
       this.sendAuthData();
     }
@@ -190,5 +191,13 @@ export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.isShiftSubscription = this.isShift.subscribe(_ => this.isShift$ = _);
+  }
+
+  onPhoneAccept($event: any): void {
+    console.log($event);
+  }
+
+  onPhoneComplete($event: any): void {
+    console.log($event);
   }
 }

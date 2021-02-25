@@ -25,16 +25,26 @@
     ></div>
   </div>
   <div class="form-input-container">
-    <div
-      #phoneEditor
-      contenteditable="true"
-      class="form-input editable-placeholder"
+    <input
+      [imask]="{mask: '{+7(}000{)} 000{-}00{-}00', placeholder: '_'}"
+      [unmask]="true"
+      (accept)="onPhoneAccept($event)"
+      (complete)="onPhoneComplete($event)"
       placeholder="Укажите свой телефон"
-      [ngClass]="{'placeholder-active': phone === ''}"
-      (keypress)="phoneEnter($event)"
-      (input)="phoneInput($event.target)"
-      (keydown.enter)="phoneOnKeydownEnter($event)"
-    ></div>
+      class="form-input"
+      [(ngModel)]="phone"
+      style="padding-top: 0"
+    />
+<!--    <div-->
+<!--      #phoneEditor-->
+<!--      contenteditable="true"-->
+<!--      class="form-input editable-placeholder"-->
+<!--      placeholder="Укажите свой телефон"-->
+<!--      [ngClass]="{'placeholder-active': phone === ''}"-->
+<!--      (keypress)="phoneEnter($event)"-->
+<!--      (input)="phoneInput($event.target)"-->
+<!--      (keydown.enter)="phoneOnKeydownEnter($event)"-->
+<!--    ></div>-->
   </div>
   <div class="form-input-container" *ngIf="!(isShift | async)">
     <div
