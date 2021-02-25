@@ -76,7 +76,7 @@ namespace Chatbot.Core
             var msg = await _messageService.Add(new Message()
             {
                 Id = Guid.NewGuid(),
-                Content = "Заполнить форму",
+                Content = "Для начала диалога с оператором заполните форму",
                 Owner = MessageOwner.ChatbotHelper,
                 Sender = default,
                 Status = MessageStatus.Received,
