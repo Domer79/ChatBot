@@ -12,17 +12,22 @@
       (keydown.enter)="fioOnKeydownEnter($event)"
     ></div>
   </div>
-  <div class="form-input-container">
-    <div
-      #emailEditor
-      contenteditable="true"
-      class="form-input editable-placeholder"
-      placeholder="Укажите свой email"
-      [ngClass]="{'placeholder-active': email === ''}"
-      (keypress)="emailEnter($event)"
-      (input)="emailInput($event.target)"
-      (keydown.enter)="emailOnKeydownEnter($event)"
-    ></div>
+  <div>
+    <div style="justify-content: center; align-items: center; display: flex; width: 100%">
+      <span style="color: #E52D2E" *ngIf="emailIsNotValid">Не верный формат email</span>
+    </div>
+    <div class="form-input-container">
+      <div
+        #emailEditor
+        contenteditable="true"
+        class="form-input editable-placeholder"
+        placeholder="Укажите свой email"
+        [ngClass]="{'placeholder-active': email === ''}"
+        (keypress)="emailEnter($event)"
+        (input)="emailInput($event.target)"
+        (keydown.enter)="emailOnKeydownEnter($event)"
+      ></div>
+    </div>
   </div>
   <div class="form-input-container">
     <input

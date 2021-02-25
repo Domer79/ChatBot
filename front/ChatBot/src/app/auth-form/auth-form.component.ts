@@ -27,6 +27,7 @@ export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
   private fioEditor: ElementRef;
   private isShift$ = false;
   private isShiftSubscription: Subscription;
+  emailIsNotValid = false;
 
   constructor(
     private pageDispatcher: PageDispatcherService,
@@ -60,6 +61,10 @@ export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   sendData(): void{
     debugger
+    if (!this.validateEmail()){
+      return;
+    }
+
     if (this.isShift$){
       this.sendAuthData();
     }
@@ -104,6 +109,7 @@ export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   emailInput(target: EventTarget | any): void {
+    this.emailIsNotValid = false;
     this.email = target.innerHTML;
   }
 
@@ -199,5 +205,12 @@ export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onPhoneComplete($event: any): void {
     console.log($event);
+  }
+
+  private validateEmail(): boolean {
+    this.emailIsNotValid = this.email.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g)
+      === null;
+
+    return !this.emailIsNotValid;
   }
 }
