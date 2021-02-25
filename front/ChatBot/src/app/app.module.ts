@@ -34,6 +34,7 @@ import { BackService } from '../abstracts/BackService';
 import { SearchQuestionsComponent } from './questions/search-questions/search-questions.component';
 import { AuthFormComponent } from './auth-form/auth-form.component';
 import { AuthFormHederComponent } from './auth-form-heder/auth-form-heder.component';
+import {IMaskModule} from 'angular-imask';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { AuthFormHederComponent } from './auth-form-heder/auth-form-heder.compon
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
+    IMaskModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
