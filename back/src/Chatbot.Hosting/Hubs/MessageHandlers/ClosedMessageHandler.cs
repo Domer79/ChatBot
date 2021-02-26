@@ -19,7 +19,7 @@ namespace Chatbot.Hosting.Hubs.MessageHandlers
         {
             if (context.Message.Type == MessageType.CloseSession)
             {
-                await _hubDispatcher.CloseClientDialog(context.User.Id);
+                await _hubDispatcher.CloseClientDialog(context.User.Id, context.Message.MessageDialogId);
             }
             
             await next(context);

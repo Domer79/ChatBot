@@ -64,9 +64,13 @@ namespace Chatbot.Hosting.Hubs
             return _dialogActiveCollection.GetDeprecated();
         }
 
-        public async Task CloseClientDialog(Guid userId)
+        public async Task CloseClientDialog(Guid userId, Guid? messageDialogId = null)
         {
-            var dialogGroups = _dialogActiveCollection.Where(_ => _.ClientId == userId);
+            var dialogGroups = _dialogActiveCollection.Where(_ => _.ClientId == userId).ToArray();
+            if (dialogGroups.Length == 0 && messageDialogId.HasValue)
+            {
+                dialogGroups = _dialogActiveCollection.Where(_ => _.MessageDialogId == messageDialogId).ToArray();
+            }
             foreach (var dialogGroup in dialogGroups)
             {
                 await _messageDialogService.Close(dialogGroup.MessageDialogId);

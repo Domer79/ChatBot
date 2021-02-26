@@ -1,9 +1,9 @@
-<div>
+<div style="height: 97%">
     <div>
-    <h1 mat-dialog-title>{{senderName | async}}</h1>
+        <h1 mat-dialog-title>{{senderName | async}}</h1>
     </div>
     <div class="chat">
-        <div class="chat-message">
+        <div class="chat-message chat-background">
             <div *ngFor="let msg of messages" [ngSwitch]="msg.owner">
                 <client-message [message]="msg" *ngSwitchCase="0"></client-message>
                 <operator-message [message]="msg" *ngSwitchCase="1"></operator-message>
@@ -24,6 +24,9 @@
             <div class="btn-send" (click)="sendMessageClick()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"></path></svg>
             </div>
+        </div>
+        <div style="margin-top: 0.5em">
+            <button mat-raised-button color="primary" (click)="closeDialog()">Закрыть диалог</button>
         </div>
     </div>
 </div>

@@ -1,6 +1,9 @@
 export enum MessageType{
   String,
-  File
+  File,
+  Question,
+  ButtonForForm,
+  CloseSession,
 }
 
 export enum MessageStatus{

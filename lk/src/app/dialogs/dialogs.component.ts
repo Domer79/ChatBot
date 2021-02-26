@@ -123,8 +123,9 @@ export class DialogsComponent implements OnInit, OnDestroy {
 
   openChat(messageDialog: MessageDialog) {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '500px';
-    dialogConfig.height = '510px';
+    dialogConfig.width = '600px';
+    dialogConfig.height = '700px';
+    dialogConfig.panelClass = 'dialog-panel-class'
     dialogConfig.data = messageDialog;
     this.dialog.open(ClientChatDialogComponent, dialogConfig);
   }

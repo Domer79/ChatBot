@@ -15,6 +15,6 @@ namespace Chatbot.Abstractions
 
         DialogGroup[] GetDeprecated();
 
-        Task CloseClientDialog(Guid userId);
+        Task CloseClientDialog(Guid userId, Guid? messageDialogId = null);
     }
 }

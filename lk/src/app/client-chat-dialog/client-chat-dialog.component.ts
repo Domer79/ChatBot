@@ -121,4 +121,9 @@ export class ClientChatDialogComponent implements OnInit {
       messages[0].status = msg.status;
     }
   }
+
+  closeDialog() {
+    this.clientMessageService.setMessage(MessageType.CloseSession, "Диалог закрыт");
+    this.dialogRef.close();
+  }
 }
