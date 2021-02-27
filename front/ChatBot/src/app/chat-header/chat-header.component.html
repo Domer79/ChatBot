@@ -1,6 +1,6 @@
 <base-chat-header>
   <div>
-    <div class="company">АО РЭС</div>
+    <div class="company">{{caption | async}}</div>
     <div class="operators">
     <span class="header-element question" (click)="onOpenQuestions($event)">
       <img

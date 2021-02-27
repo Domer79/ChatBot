@@ -60,7 +60,6 @@ export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   sendData(): void{
-    debugger
     if (!this.validateEmail()){
       return;
     }

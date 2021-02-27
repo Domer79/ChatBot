@@ -1,5 +1,8 @@
 <chat-header (openQuestions)="onOpenQuestions()"></chat-header>
 <div class="form-container">
+  <div style="justify-content: center; align-items: center; display: flex; width: 100%" *ngIf="!(isShift | async)">
+    <span *ngIf="emailIsNotValid">Оператор ответит Вам в рабочее время</span>
+  </div>
   <div class="form-input-container">
     <div
       #fioEditor
