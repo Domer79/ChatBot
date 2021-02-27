@@ -28,6 +28,7 @@ export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
   private isShift$ = false;
   private isShiftSubscription: Subscription;
   emailIsNotValid = false;
+  phoneIsNotValid = false;
 
   constructor(
     private pageDispatcher: PageDispatcherService,
@@ -61,6 +62,10 @@ export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   sendData(): void{
     if (!this.validateEmail()){
+      return;
+    }
+
+    if (!this.validatePhone()){
       return;
     }
 
@@ -199,10 +204,11 @@ export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onPhoneAccept($event: any): void {
-    console.log($event);
+
   }
 
   onPhoneComplete($event: any): void {
+    this.phoneIsNotValid = false;
     console.log($event);
   }
 
@@ -211,5 +217,10 @@ export class AuthFormComponent implements OnInit, AfterViewInit, OnDestroy {
       === null;
 
     return !this.emailIsNotValid;
+  }
+
+  private validatePhone(): boolean{
+    this.phoneIsNotValid = this.phone.match(/^\+\d\([\d]{3}\)[\d]{3}-[\d]{2}-[\d]{2}$/) === null;
+    return !this.phoneIsNotValid;
   }
 }
