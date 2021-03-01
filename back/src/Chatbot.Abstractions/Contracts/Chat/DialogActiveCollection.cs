@@ -73,11 +73,17 @@ namespace Chatbot.Abstractions.Contracts.Chat
             await _semaphore.WaitAsync();
             try
             {
-                var dialogGroup = _dialogGroups.Value[messageDialogId];
-                if (dialogGroup != null) 
+                if (_dialogGroups.Value.TryGetValue(messageDialogId, out var dialogGroup))
+                {
                     return dialogGroup;
+                }
             
                 var dialog = await _dialogService.GetDialog(messageDialogId);
+                if (DialogStatus.NotActive.HasFlag(dialog.DialogStatus))
+                {
+                    throw new DialogNotActiveException(dialog.DialogStatus);
+                }
+                
                 dialogGroup = new DialogGroup(dialog, _userSet, _appConfig.Chat);
                 _dialogGroups.Value.Add(messageDialogId, dialogGroup);
 

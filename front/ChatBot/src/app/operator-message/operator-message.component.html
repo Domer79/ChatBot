@@ -21,3 +21,9 @@
   </div>
   <div class="right-block button-right"></div>
 </div>
+
+<div class="operator-message" *ngIf="message.type == messageType.CloseSession" style="justify-content: center; align-items: center">
+  <div class="msg-left close-session">
+    <div>{{message.content}}</div>
+  </div>
+</div>

@@ -124,6 +124,7 @@ namespace Chatbot.Ef.Data
             }
             
             await _context.SaveChangesAsync();
+            _context.Entry(dialog).State = EntityState.Detached;
             return dialog;
         }
 

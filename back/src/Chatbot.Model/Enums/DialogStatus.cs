@@ -35,5 +35,10 @@ namespace Chatbot.Model.Enums
         /// </summary>
         /// <remarks>Использовать с осторожностью</remarks>
         Offline = 1 << 5,
+        
+        /// <summary>
+        /// Закрыт, отклонен, или офлайн
+        /// </summary>
+        NotActive = Closed | Rejected | Offline,
     }
 }

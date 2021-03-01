@@ -4,7 +4,7 @@ import Message from '../../abstracts/message';
 import {Observable, Subscription} from 'rxjs';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
-import {map} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {MessageType} from '../../misc/message-type';
 import {MainQuestionsComponent} from '../questions/main-questions/main-questions.component';
 import {ShowChatEditor} from '../../abstracts/ShowChatEditor';
@@ -29,16 +29,21 @@ export class ChatDialogComponent implements OnInit, OnDestroy, ShowChatEditor {
 
   ngOnInit(): void {
     this.clientMsgDispatcher.loadMessages();
-    this.messageSubscription = this.clientMsgDispatcher.messages.pipe(map(_ => {
-      if (_.type === MessageType.Question){
-        const question = JSON.parse(_.content);
-        _.questionId = question.Id;
-        _.question = question.Question;
-        _.content = question.Question;
-      }
+    this.messageSubscription = this.clientMsgDispatcher.messages.pipe(
+      map(_ => {
+        if (_.type === MessageType.Question){
+          const question = JSON.parse(_.content);
+          _.questionId = question.Id;
+          _.question = question.Question;
+          _.content = question.Question;
+        }
+        else{
+          _.content = _.content + ' ' + _.messageDialogId.substring(1, 8);
+        }
 
-      return _;
+        return _;
     })).subscribe(msg => {
+      debugger;
       this.messages.push(msg);
     });
     this.metaSubscription = this.clientMsgDispatcher.meta.subscribe((msg) => {

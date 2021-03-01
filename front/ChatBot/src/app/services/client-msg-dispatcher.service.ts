@@ -1,16 +1,13 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {Observable, Subject, Subscription} from 'rxjs';
 import Message, {MessageInfo} from '../../abstracts/message';
-import {SubscribeCallBack} from '../../misc/types';
 import {MessageOwner, MessageStatus, MessageType} from '../../misc/message-type';
 import {HubConnection, HubConnectionBuilder, LogLevel} from '@microsoft/signalr';
 import {environment} from '../../environments/environment';
 import {NIL as guidEmpty, v4 as uuidv4} from 'uuid';
 import {TokenService} from './token.service';
 import {MessageService} from './message.service';
-import Question from '../../abstracts/Question';
 import {CommonService} from './common.service';
-import {PageDispatcherService} from './page-dispatcher.service';
 
 @Injectable({
   providedIn: 'root'
@@ -100,6 +97,11 @@ export class ClientMsgDispatcher implements OnDestroy{
     this.connection.on('send', async (message: Message) => {
       message.status = MessageStatus.received;
       this.messages$.next(message);
+
+      if (message.type === MessageType.CloseSession){
+        return;
+      }
+
       await this.connection.invoke('MessageRead', message);
     });
 

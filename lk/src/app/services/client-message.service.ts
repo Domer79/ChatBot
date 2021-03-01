@@ -80,6 +80,7 @@ export class ClientMessageService {
   }
 
   public setMessage(type: MessageType, msg: string): void{
+    debugger;
     const message: Message = {
       id: uuidv4(),
       type,
@@ -98,6 +99,7 @@ export class ClientMessageService {
   }
 
   public async Disconnect(): Promise<void>{
+    debugger;
     await this.connection.invoke('OperatorDisconnect', this.messageDialogId);
   }
 }
