@@ -39,4 +39,8 @@ export class BaseChatHeaderComponent implements OnInit {
   closeChat(): void{
     this.headerService.closeChat();
   }
+
+  activatePage(page: Page): void {
+    this.pageDispatcher.showPage(page.component);
+  }
 }

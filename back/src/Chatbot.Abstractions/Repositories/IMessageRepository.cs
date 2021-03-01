@@ -12,5 +12,6 @@ namespace Chatbot.Abstractions.Repositories
         Task<Message[]> GetDialogMessages(Guid dialogId);
         Task<Message[]> GetFirstMessages(Guid[] dialogIds);
         Task<Message[]> GetLastMessages(Guid[] dialogIds);
+        Task<Message[]> GetAllMessagesInLinkedDialogsByNumber(int dialogNumber);
     }
 }

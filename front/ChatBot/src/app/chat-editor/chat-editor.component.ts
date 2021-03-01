@@ -8,6 +8,7 @@ import {delay, timeout} from 'rxjs/operators';
 import {ShowChatEditor} from '../../abstracts/ShowChatEditor';
 import {AuthService} from '../services/auth.service';
 import {ChatEditorService} from '../services/chat-editor.service';
+import {ChatDialogComponent} from '../dialog/chat-dialog.component';
 
 @Component({
   selector: 'chat-editor',
@@ -80,7 +81,7 @@ export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (this.pageDispatcher.getCurrent().componentName === 'MainQuestionsComponent'){
       this.closeCurrentTimeoutSubscription = of(1).pipe(delay(350)).subscribe(() => {
-        this.pageDispatcher.closeCurrent();
+        this.pageDispatcher.showPage(ChatDialogComponent);
       });
     }
   }

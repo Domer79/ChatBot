@@ -53,6 +53,23 @@ namespace Chatbot.Ef.Data
             return GetSingleWndByTimeMessages(dialogIds, false);
         }
 
+        public Task<Message[]> GetAllMessagesInLinkedDialogsByNumber(int dialogNumber)
+        {
+            const string sql = @"
+with q1 (main_number, message_dialog_id, number, based_on, level)
+as ( 
+    select number as main_number, message_dialog_id, number, based_id, 1 as level from message_dialog where based_id is null
+    union all
+    select q1.main_number, md.message_dialog_id, md.number, md.based_id, q1.level + 1 as level from message_dialog md
+        inner join q1 on md.based_id = q1.message_dialog_id
+    )
+select * from message where message_dialog_id in (
+    select message_dialog_id from q1 where main_number = (select main_number from q1 where number = @dialogNumber)
+) order by time";
+
+            return _context.Messages.FromSqlRaw(sql, new SqlParameter("dialogNumber", dialogNumber)).ToArrayAsync();
+        }
+
         private Task<Message[]> GetSingleWndByTimeMessages(Guid[] dialogIds, bool orderAsc = true)
         {
             const string sql = @"with q1

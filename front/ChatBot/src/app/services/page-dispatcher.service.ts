@@ -40,8 +40,13 @@ export class PageDispatcherService {
     const page = this.pages.filter(_ => _.component === component)[0];
     page.data = data;
 
+    const index = this.stackPage.findIndex(_ => _.componentName === page.componentName);
+    if (index > -1){
+      this.stackPage.splice(index, 1);
+    }
+
     this.stackPage.push(page);
-    this.stackPageChange$.next(this.stackPage);
+    this.stackPageChange$.next(this.stackPage.filter(_ => _.componentName !== this.getCurrent().componentName));
 
     this.update();
   }
@@ -53,7 +58,7 @@ export class PageDispatcherService {
     }
 
     this.stackPage.pop();
-    this.stackPageChange$.next(this.stackPage);
+    this.stackPageChange$.next(this.stackPage.filter(_ => _.componentName !== this.getCurrent().componentName));
 
     this.update();
   }

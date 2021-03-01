@@ -4,7 +4,7 @@
   </div>
   <ng-content></ng-content>
   <div class="header-actions">
-    <span class="header-element actions-btn" *ngFor="let page of activePages | async">
+    <span class="header-element actions-btn" *ngFor="let page of activePages | async" (click)="activatePage(page)">
       <img [src]="'assets/' + page.iconFile" class="actions-icon" />
     </span>
     <div class="close-container">
