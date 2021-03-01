@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chatbot.Abstractions.Contracts.Chat;
 using Chatbot.Model.DataModel;
 
-namespace Chatbot.Abstractions.Contracts.Chat
+namespace Chatbot.Core.Chat
 {
-    public class DialogGroup
+    public class DialogGroup : IDialogGroup
     {
         private readonly List<User> _dialogUsers = new();
         private readonly MessageDialog _dialog;

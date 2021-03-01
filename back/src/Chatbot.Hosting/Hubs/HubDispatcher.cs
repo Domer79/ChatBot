@@ -5,6 +5,7 @@ using System.Timers;
 using Chatbot.Abstractions;
 using Chatbot.Abstractions.Contracts.Chat;
 using Chatbot.Abstractions.Core.Services;
+using Chatbot.Core.Chat;
 using Chatbot.Model.DataModel;
 using Microsoft.AspNetCore.SignalR;
 
@@ -49,17 +50,17 @@ namespace Chatbot.Hosting.Hubs
             CheckDeprecated().GetAwaiter().GetResult();
         }
 
-        public Task<DialogGroup> GetDialogGroup(Guid messageDialogId)
+        public Task<IDialogGroup> GetActiveDialogGroup(Guid messageDialogId)
         {
             return _dialogActiveCollection.GetDialogGroup(messageDialogId);
         }
 
-        public Task<DialogGroup> GetOrCreateDialogGroup(User user, Guid messageDialogId)
+        public Task<IDialogGroup> GetOrCreateDialogGroup(User user, Guid messageDialogId)
         {
             return _dialogActiveCollection.GetOrCreateDialog(user, messageDialogId);
         }
 
-        public DialogGroup[] GetDeprecated()
+        public IDialogGroup[] GetDeprecated()
         {
             return _dialogActiveCollection.GetDeprecated();
         }

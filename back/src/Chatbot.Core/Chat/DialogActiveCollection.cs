@@ -4,18 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Chatbot.Abstractions;
+using Chatbot.Abstractions.Contracts.Chat;
 using Chatbot.Abstractions.Core.Services;
+using Chatbot.Core.Exceptions;
 using Chatbot.Model.DataModel;
 using Chatbot.Model.Enums;
 
-namespace Chatbot.Abstractions.Contracts.Chat
+namespace Chatbot.Core.Chat
 {
-    public class DialogActiveCollection: IEnumerable<DialogGroup>
+    public class DialogActiveCollection: IEnumerable<IDialogGroup>
     {
         private readonly IMessageDialogService _dialogService;
         private readonly IAppConfig _appConfig;
         private readonly UserSet _userSet;
-        private readonly Lazy<Dictionary<Guid, DialogGroup>> _dialogGroups;
+        private readonly Lazy<Dictionary<Guid, IDialogGroup>> _dialogGroups;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public DialogActiveCollection(
@@ -27,10 +30,10 @@ namespace Chatbot.Abstractions.Contracts.Chat
             _appConfig = appConfig;
             _userSet = userSet;
 
-            _dialogGroups = new Lazy<Dictionary<Guid, DialogGroup>>(() => InitDialogGroups(dialogService, userSet, appConfig));
+            _dialogGroups = new Lazy<Dictionary<Guid, IDialogGroup>>(() => InitDialogGroups(dialogService, userSet, appConfig));
         }
 
-        public async Task<DialogGroup> GetOrCreateDialog(User user, Guid messageDialogId)
+        public async Task<IDialogGroup> GetOrCreateDialog(User user, Guid messageDialogId)
         {
             await _semaphore.WaitAsync();
             try
@@ -68,7 +71,7 @@ namespace Chatbot.Abstractions.Contracts.Chat
             }
         }
 
-        public async Task<DialogGroup> GetDialogGroup(Guid messageDialogId)
+        public async Task<IDialogGroup> GetDialogGroup(Guid messageDialogId)
         {
             await _semaphore.WaitAsync();
             try
@@ -81,7 +84,7 @@ namespace Chatbot.Abstractions.Contracts.Chat
                 var dialog = await _dialogService.GetDialog(messageDialogId);
                 if (DialogStatus.NotActive.HasFlag(dialog.DialogStatus))
                 {
-                    throw new DialogNotActiveException(dialog.DialogStatus);
+                    throw new DialogNotActiveException(dialog.Id, dialog.Number, dialog.DialogStatus);
                 }
                 
                 dialogGroup = new DialogGroup(dialog, _userSet, _appConfig.Chat);
@@ -95,12 +98,12 @@ namespace Chatbot.Abstractions.Contracts.Chat
             }
         }
 
-        public DialogGroup[] GetDeprecated()
+        public IDialogGroup[] GetDeprecated()
         {
             return _dialogGroups.Value.Values.Where(_ => _.IsDeprecated).ToArray();
         }
 
-        public IEnumerator<DialogGroup> GetEnumerator()
+        public IEnumerator<IDialogGroup> GetEnumerator()
         {
             return _dialogGroups.Value.Values.GetEnumerator();
         }
@@ -110,15 +113,15 @@ namespace Chatbot.Abstractions.Contracts.Chat
             return GetEnumerator();
         }
         
-        private static Dictionary<Guid, DialogGroup> InitDialogGroups(IMessageDialogService messageDialogService, 
+        private static Dictionary<Guid, IDialogGroup> InitDialogGroups(IMessageDialogService messageDialogService, 
             UserSet userSet, IAppConfig appConfig)
         {
             var dialogs = messageDialogService.GetByStatusFlags(DialogStatus.Started | DialogStatus.Active)
                 .GetAwaiter().GetResult();
-            return dialogs.ToDictionary(_ => _.Id, _ => new DialogGroup(_, userSet, appConfig.Chat));
+            return dialogs.ToDictionary(_ => _.Id, _ => (IDialogGroup) new DialogGroup(_, userSet, appConfig.Chat));
         }
 
-        public void CloseDialogGroup(DialogGroup dialogGroup)
+        public void CloseDialogGroup(IDialogGroup dialogGroup)
         {
             _dialogGroups.Value.Remove(dialogGroup.MessageDialogId);
         }

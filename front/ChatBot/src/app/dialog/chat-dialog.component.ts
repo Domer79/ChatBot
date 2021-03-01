@@ -37,13 +37,9 @@ export class ChatDialogComponent implements OnInit, OnDestroy, ShowChatEditor {
           _.question = question.Question;
           _.content = question.Question;
         }
-        else{
-          _.content = _.content + ' ' + _.messageDialogId.substring(1, 8);
-        }
 
         return _;
     })).subscribe(msg => {
-      debugger;
       this.messages.push(msg);
     });
     this.metaSubscription = this.clientMsgDispatcher.meta.subscribe((msg) => {

@@ -9,11 +9,11 @@ namespace Chatbot.Abstractions
 {
     public interface IHubDispatcher
     {
-        Task<DialogGroup> GetDialogGroup(Guid messageDialogId);
+        Task<IDialogGroup> GetActiveDialogGroup(Guid messageDialogId);
         
-        Task<DialogGroup> GetOrCreateDialogGroup(User user, Guid messageDialogId);
+        Task<IDialogGroup> GetOrCreateDialogGroup(User user, Guid messageDialogId);
 
-        DialogGroup[] GetDeprecated();
+        IDialogGroup[] GetDeprecated();
 
         Task CloseClientDialog(Guid userId, Guid? messageDialogId = null);
     }

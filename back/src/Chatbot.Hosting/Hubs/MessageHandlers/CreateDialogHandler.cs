@@ -34,12 +34,16 @@ namespace Chatbot.Hosting.Hubs.MessageHandlers
             {
                 message.MessageDialogId = dialogGroup.MessageDialogId;
                 dialogGroup.ClientId = context.User.Id;
-                await _operatorHub.Clients.All.SendAsync("dialogCreated", dialogGroup.MessageDialogId);
                 await chatHub.Clients.Caller.SendAsync("send", await _chatBotHelper.GetResponse(message));
                 Thread.Sleep(10);
                 await chatHub.Clients.Caller.SendAsync("sendQuestions", await _chatBotHelper.GetQuestionMessages(message));
                 Thread.Sleep(10);
                 await chatHub.Clients.Caller.SendAsync("sendButton", await _chatBotHelper.GetButtonForForm(message));
+            }
+
+            if (context.IsNewDialog)
+            {
+                await _operatorHub.Clients.All.SendAsync("dialogCreated", dialogGroup.MessageDialogId);
             }
 
             context.DialogGroup = dialogGroup;

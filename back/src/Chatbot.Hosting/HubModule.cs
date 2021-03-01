@@ -2,6 +2,7 @@
 using Chatbot.Abstractions;
 using Chatbot.Abstractions.Contracts.Chat;
 using Chatbot.Abstractions.Pipe;
+using Chatbot.Core.Chat;
 using Chatbot.Core.Common;
 using Chatbot.Hosting.Hubs;
 using Chatbot.Hosting.Hubs.MessageHandlers;

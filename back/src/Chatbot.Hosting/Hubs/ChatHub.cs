@@ -14,7 +14,9 @@ using Chatbot.Abstractions.Core.Services;
 using Chatbot.Abstractions.Pipe;
 using Chatbot.Abstractions.Repositories;
 using Chatbot.Common;
+using Chatbot.Core.Chat;
 using Chatbot.Core.Common;
+using Chatbot.Core.Exceptions;
 using Chatbot.Hosting.Authentication;
 using Chatbot.Hosting.Hubs.MessageHandlers;
 using Chatbot.Hosting.Hubs.Pipes;
@@ -61,13 +63,16 @@ namespace Chatbot.Hosting.Hubs
 
         protected override async Task SendMeta(MessageInfo messageInfo)
         {
-            var dialogGroup = await HubDispatcher.GetDialogGroup(messageInfo.MessageDialogId);
+            var dialogGroup = await HubDispatcher.GetActiveDialogGroup(messageInfo.MessageDialogId);
             await Clients.Clients(dialogGroup.Others(User.Id)).SendAsync("setMeta", messageInfo);
         }
 
         protected override async Task SendOf(Message message)
         {
-            var context = new MessageContext(message, User, this);
+            var messageDialog = await MessageDialogService.GetDialog(message.MessageDialogId);
+            var isNewDialog = message.MessageDialogId == Guid.Empty
+                              || DialogStatus.NotActive.HasFlag(messageDialog.DialogStatus); 
+            var context = new MessageContext(message, User, this, isNewDialog);
             await _messagePipe.Start(context);
         }
 
@@ -75,7 +80,7 @@ namespace Chatbot.Hosting.Hubs
         public async Task OperatorConnect(Guid messageDialogId)
         {
             UserSet[User.Id].IsOperator = true;
-            var dialogGroup = await HubDispatcher.GetDialogGroup(messageDialogId);
+            var dialogGroup = await HubDispatcher.GetActiveDialogGroup(messageDialogId);
             dialogGroup.AddUser(User);
             await _logService.Log(User.Id, $"Operator {User.Login} connect to dialog {messageDialogId}");
             await Clients.Caller.SendAsync("operatorConnect", "success");
@@ -84,9 +89,16 @@ namespace Chatbot.Hosting.Hubs
         [CustomSecurity(SecurityPolicy.OperatorConnection)]
         public async Task OperatorDisconnect(Guid messageDialogId)
         {
-            var dialogGroup = await HubDispatcher.GetDialogGroup(messageDialogId);
-            dialogGroup.RemoveUser(User);
-            await _logService.Log(User.Id, $"Operator {User.Login} disconnected from dialog {messageDialogId}");
+            try
+            {
+                var dialogGroup = await HubDispatcher.GetActiveDialogGroup(messageDialogId);
+                dialogGroup.RemoveUser(User);
+                await _logService.Log(User.Id, $"Operator {User.Login} disconnected from dialog {messageDialogId}");
+            }
+            catch (DialogNotActiveException e)
+            {
+                await _logService.Log(User.Id, $"Диалог не активен: {e.Message}");
+            }
         }
 
         protected override async Task OnDisconnected()

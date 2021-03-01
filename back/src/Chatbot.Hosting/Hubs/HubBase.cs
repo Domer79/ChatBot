@@ -6,6 +6,7 @@ using Chatbot.Abstractions.Contracts;
 using Chatbot.Abstractions.Contracts.Chat;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Common;
+using Chatbot.Core.Chat;
 using Chatbot.Model.DataModel;
 using Chatbot.Model.Enums;
 using Microsoft.AspNetCore.SignalR;
