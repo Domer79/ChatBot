@@ -15,6 +15,9 @@ export class PageDispatcherService {
   private readonly closeChat: Observable<void>;
   private readonly pages: Page[] = PageSource.getPages();
   private readonly stackPage: Page[] = [];
+  private readonly stackPageChange$: BehaviorSubject<Page[]>;
+
+  public readonly stackPageChange: Observable<Page[]>;
 
   constructor() {
     this.page$ = new BehaviorSubject<Page>(this.pages[0]);
@@ -24,6 +27,8 @@ export class PageDispatcherService {
     this.closeChat$ = new Subject<void>();
     this.closeChat = this.closeChat$.asObservable();
     this.stackPage.push(this.pages[0]);
+    this.stackPageChange$ = new BehaviorSubject<Page[]>(this.stackPage);
+    this.stackPageChange = this.stackPageChange$.asObservable();
     this.update();
   }
 
@@ -34,7 +39,10 @@ export class PageDispatcherService {
   showPage(component: Type<any>, data: any = null): void{
     const page = this.pages.filter(_ => _.component === component)[0];
     page.data = data;
+
     this.stackPage.push(page);
+    this.stackPageChange$.next(this.stackPage);
+
     this.update();
   }
 
@@ -45,6 +53,8 @@ export class PageDispatcherService {
     }
 
     this.stackPage.pop();
+    this.stackPageChange$.next(this.stackPage);
+
     this.update();
   }
 

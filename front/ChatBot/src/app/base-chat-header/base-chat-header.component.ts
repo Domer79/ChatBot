@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {PageHeaderService} from '../services/page-header.service';
+import {PageDispatcherService} from '../services/page-dispatcher.service';
+import {Observable} from 'rxjs';
+import Page from '../../abstracts/Page';
+import {map, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'base-chat-header',
@@ -7,10 +11,18 @@ import {PageHeaderService} from '../services/page-header.service';
   styleUrls: ['./base-chat-header.component.sass']
 })
 export class BaseChatHeaderComponent implements OnInit {
+  activePages: Observable<Page[]>;
 
   constructor(
-    private headerService: PageHeaderService
-  ) { }
+    private headerService: PageHeaderService,
+    private pageDispatcher: PageDispatcherService
+  ) {
+    this.activePages = this.pageDispatcher.stackPageChange.pipe(map(pages => {
+      return pages.filter(_ => _.iconFile !== null);
+    }), tap(pages => {
+      console.log(pages);
+    }));
+  }
 
   ngOnInit(): void {
   }
@@ -24,7 +36,7 @@ export class BaseChatHeaderComponent implements OnInit {
     this.headerService.goBack();
   }
 
-  closePage(): void{
-    this.headerService.closePage();
+  closeChat(): void{
+    this.headerService.closeChat();
   }
 }

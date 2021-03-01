@@ -7,13 +7,16 @@ import {QuestionsComponent} from '../questions/questions.component';
 import {MainQuestionsState} from './MainQuestionsState';
 import {MainQuestionsComponentBackService} from '../../services/main-questions-component-back.service';
 import {PageHeaderService} from '../../services/page-header.service';
-import {CustomNamed} from '../../decoratotrs/custom-named.decorator';
+import {PageComponent} from '../../decoratotrs/custom-named.decorator';
 import Helper from '../../../misc/Helper';
 import {ShowChatEditor} from '../../../abstracts/ShowChatEditor';
 import {AuthService} from '../../services/auth.service';
 import {CommonService} from '../../services/common.service';
 
-@CustomNamed('MainQuestionsComponent')
+@PageComponent({
+  customName: 'MainQuestionsComponent',
+  iconFile: 'home.svg'
+})
 @Component({
   selector: 'app-main-questions',
   templateUrl: './main-questions.component.html',

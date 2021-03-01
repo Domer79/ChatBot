@@ -3,7 +3,14 @@
     <div (click)="goBack()" class="header-element header-message back-btn"><img src="assets/left_arrow.svg"/> &nbsp; Назад</div>
   </div>
   <ng-content></ng-content>
-  <div class="close-container">
-    <span class="close-btn" (click)="closePage()"><img src="assets/cross.svg" class="header-element close-icon"/></span>
+  <div class="header-actions">
+    <span class="header-element actions-btn" *ngFor="let page of activePages | async">
+      <img [src]="'assets/' + page.iconFile" class="actions-icon" />
+    </span>
+    <div class="close-container">
+      <span class="header-element actions-btn" (click)="closeChat()" style="margin-right: 1em">
+        <img src="assets/cross.svg" class="actions-icon"/>
+      </span>
+    </div>
   </div>
 </div>

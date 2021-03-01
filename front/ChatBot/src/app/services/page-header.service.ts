@@ -46,4 +46,8 @@ export class PageHeaderService implements OnDestroy {
   closePage(): void{
     this.pageDispatcher.closeCurrent();
   }
+
+  closeChat(): void{
+    this.pageDispatcher.closeChatFull();
+  }
 }

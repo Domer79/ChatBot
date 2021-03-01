@@ -15,4 +15,12 @@ export default class Page{
 
     return this.component.name;
   }
+
+  get iconFile(): string{
+    if (this.component['__iconFile']){
+      return this.component['__iconFile'];
+    }
+
+    return null;
+  }
 }

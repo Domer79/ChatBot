@@ -9,7 +9,12 @@ import {MessageType} from '../../misc/message-type';
 import {MainQuestionsComponent} from '../questions/main-questions/main-questions.component';
 import {ShowChatEditor} from '../../abstracts/ShowChatEditor';
 import {AuthService} from '../services/auth.service';
+import {PageComponent} from '../decoratotrs/custom-named.decorator';
 
+@PageComponent({
+  customName: 'ChatDialogComponent',
+  iconFile: 'chat.svg'
+})
 @Component({
   selector: 'chat-dialog',
   templateUrl: './chat-dialog.component.html',

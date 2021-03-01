@@ -5,13 +5,16 @@ import Question from '../../../abstracts/Question';
 import {PageDispatcherService} from '../../services/page-dispatcher.service';
 import {tap} from 'rxjs/operators';
 import {PageHeaderService} from '../../services/page-header.service';
-import {CustomNamed} from '../../decoratotrs/custom-named.decorator';
+import {PageComponent} from '../../decoratotrs/custom-named.decorator';
 import {QuestionComponentBackService} from '../../services/question-component-back.service';
 import {BackService, HasBackService} from '../../../abstracts/BackService';
 import {ShowChatEditor} from '../../../abstracts/ShowChatEditor';
 import {AuthService} from '../../services/auth.service';
 
-@CustomNamed('QuestionsComponent')
+@PageComponent({
+  customName: 'QuestionsComponent',
+  iconFile: 'questions.svg'
+})
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'questions',
