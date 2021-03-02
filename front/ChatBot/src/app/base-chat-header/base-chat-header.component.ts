@@ -19,8 +19,6 @@ export class BaseChatHeaderComponent implements OnInit {
   ) {
     this.activePages = this.pageDispatcher.stackPageChange.pipe(map(pages => {
       return pages.filter(_ => _.iconFile !== null);
-    }), tap(pages => {
-      console.log(pages);
     }));
   }
 

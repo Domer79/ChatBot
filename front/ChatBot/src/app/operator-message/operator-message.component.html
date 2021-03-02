@@ -1,6 +1,6 @@
 <div class="operator-message" *ngIf="message.type == messageType.String">
   <div class="msg-left">
-    <div>{{message.content}}</div>
+    <div [innerHTML]="message.content"></div>
     <div class="msg-status">
       <span>{{message.time | chatDate}}</span>
     </div>

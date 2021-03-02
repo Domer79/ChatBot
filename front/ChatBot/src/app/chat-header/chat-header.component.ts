@@ -19,8 +19,4 @@ export class ChatHeaderComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-  onOpenQuestions($event: MouseEvent): void {
-    this.openQuestions.emit();
-  }
 }
