@@ -2,7 +2,7 @@ import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core
 import {Security} from "../security.decorator";
 import {DialogService} from "../services/dialog.service";
 import {Observable, of, Subscription} from "rxjs";
-import MessageDialog, {LinkType} from "../contracts/message-dialog";
+import MessageDialog, {DialogStatus, LinkType} from "../contracts/message-dialog";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ClientChatDialogComponent} from "../client-chat-dialog/client-chat-dialog.component";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -29,6 +29,7 @@ export class DialogsComponent implements OnInit, OnDestroy {
   @ViewChild('rla') rlaElement: ElementRef;
   activeLink = LinkType.all;
   linkType = LinkType;
+  dialogStatus = DialogStatus;
   dialogPageSize: number = 10;
   dialogCurrentPage: number = 1;
   dialogPage: Page<MessageDialog>;
@@ -140,6 +141,11 @@ export class DialogsComponent implements OnInit, OnDestroy {
     await this.updateDialogs();
   }
 
+  async close(dialog: MessageDialog) {
+    await this.dialogService.close(dialog);
+    await this.updateDialogs();
+  }
+
   getPage($event: PageEvent) {
     console.log($event);
     this.dialogCurrentPage = $event.pageIndex + 1;
@@ -149,5 +155,9 @@ export class DialogsComponent implements OnInit, OnDestroy {
 
   dialogFilterOpen() {
     this.dialogFilterService.open();
+  }
+
+  checkStartOrActive(dialogStatus: DialogStatus): boolean {
+    return (dialogStatus & (DialogStatus.Started | DialogStatus.Active)) !== 0;
   }
 }

@@ -118,5 +118,11 @@ namespace Chatbot.Hosting.Controllers
         {
             await _messageDialogService.Reject(actionsRequest.MessageDialogId);
         }
+
+        [HttpPost]
+        public async Task Close([FromBody] DialogActionsRequest actionsRequest)
+        {
+            await _messageDialogService.Close(actionsRequest.MessageDialogId);
+        }
     }
 }

@@ -21,7 +21,6 @@ export class ClientMessageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.message.content);
     this.msgView.nativeElement.innerHTML = this.message.content;
   }
 }

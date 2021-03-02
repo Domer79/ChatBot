@@ -6,8 +6,9 @@ import Message from "../../abstracts/message";
 import {TokenService} from "../services/token.service";
 import MessageDialog, {DialogStatus} from "../contracts/message-dialog";
 import {MessageService} from "../services/message.service";
-import {map, tap} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {Observable, Subject, Subscription} from "rxjs";
+import Helper from "../misc/Helper";
 
 @Component({
   selector: 'app-client-chat-dialog',
@@ -16,17 +17,19 @@ import {Observable, Subject, Subscription} from "rxjs";
 })
 export class ClientChatDialogComponent implements OnInit, OnDestroy {
   private clientMessageService: ClientMessageService
-  private dialog: MessageDialog;
   private firstMessage$: Subject<Message> = new Subject<Message>();
   private firstMessage: Observable<Message> = this.firstMessage$.asObservable();
   private onConnectedSubscription: Subscription;
   private messagesSubscription: Subscription;
   private metaSubscription: Subscription;
+  private clientMessageServiceSubscription: Subscription;
 
   inputText: string | null | undefined;
   messages: Message[] = [];
   @ViewChild('chatEditor') chatEditorElement: ElementRef;
   senderName: Observable<string>;
+  dialog: MessageDialog;
+  dialogStatus = DialogStatus;
 
   constructor(
       public dialogRef: MatDialogRef<ClientChatDialogComponent>,
@@ -36,9 +39,18 @@ export class ClientChatDialogComponent implements OnInit, OnDestroy {
   ) {
     this.dialog = data;
     this.clientMessageService = new ClientMessageService(this.tokenService, this.messageService, data.id);
-    this.onConnectedSubscription = this.clientMessageService.onConnected.subscribe(s => this.connectedEvent(s));
+    this.onConnectedSubscription = this.clientMessageService.onConnected.subscribe(s => ClientChatDialogComponent.connectedEvent(s));
     this.messagesSubscription = this.clientMessageService.messages.subscribe(_ => this.messages.push(_));
     this.metaSubscription = this.clientMessageService.meta.subscribe(m => this.setMeta(m));
+    this.clientMessageServiceSubscription = this.clientMessageService.connectionStartError.subscribe(_ => {
+      if (_.exception !== 'DialogNotActiveException'){
+        return;
+      }
+
+      this.messageService.getMessages(data.id).subscribe(_ => {
+        this.messages = Helper.sortMessages(_);
+      });
+    });
     this.senderName = this.firstMessage.pipe(map(m => m.content));
   }
 
@@ -78,7 +90,7 @@ export class ClientChatDialogComponent implements OnInit, OnDestroy {
   }
 
   get isDisallowSend(){
-    return this.dialog.dialogStatus == (DialogStatus.Closed | DialogStatus.Rejected)
+    return this.dialog.dialogStatus !== DialogStatus.Active
         || !this.clientMessageService.connected;
   }
 
@@ -97,7 +109,7 @@ export class ClientChatDialogComponent implements OnInit, OnDestroy {
     this.chatEditorElement.nativeElement.style.height = '';
   }
 
-  private connectedEvent(connectionStatus: string): void {
+  private static connectedEvent(connectionStatus: string): void {
     if (connectionStatus !== "success")
       return;
   }
@@ -118,5 +130,6 @@ export class ClientChatDialogComponent implements OnInit, OnDestroy {
     this.messagesSubscription.unsubscribe();
     this.onConnectedSubscription.unsubscribe();
     this.metaSubscription.unsubscribe();
+    this.clientMessageServiceSubscription.unsubscribe();
   }
 }

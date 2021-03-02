@@ -76,6 +76,10 @@ export class DialogService implements OnDestroy{
     await this.httpClient.post("api/Dialog/Reject", { messageDialogId: dlg.id }).toPromise();
   }
 
+  async close(dlg: MessageDialog) {
+    await this.httpClient.post("api/Dialog/Close", { messageDialogId: dlg.id }).toPromise();
+  }
+
   ngOnDestroy(): void {
   }
 

@@ -9,13 +9,14 @@
                 <operator-message [message]="msg" *ngSwitchCase="1"></operator-message>
             </div>
         </div>
-        <div class="editor-container" [attr.disabled]="isDisallowSend">
+        <div class="editor-container">
+            <div [class.editor-disabled]="isDisallowSend"></div>
             <div
                 #chatEditor
-                contenteditable="true"
+                [attr.contenteditable]="!isDisallowSend"
                 class="chat-editor"
                 placeholder="Введите сообщение"
-                [ngClass]="{'placeholder-active': inputText === ''}"
+                [ngClass]="{'placeholder-active': inputText === '' || inputText === undefined}"
                 (keypress)="enter($event)"
                 (input)="onChange($event.target)"
                 (keydown.enter)="onKeydownEnter($event)"
@@ -26,7 +27,12 @@
             </div>
         </div>
         <div style="margin-top: 0.5em">
-            <button mat-raised-button color="primary" (click)="closeDialog()">Закрыть диалог</button>
+            <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="closeDialog()"
+                    [disabled]="dialog.dialogStatus === dialogStatus.Rejected || dialog.dialogStatus === dialogStatus.Closed"
+            >Закрыть диалог</button>
         </div>
     </div>
 </div>

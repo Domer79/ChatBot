@@ -46,7 +46,7 @@
             <div class="dialog-date-created">{{dialog.dateCreated | date }}</div>
             <div class="dialog-date-closed">{{dialog.dateCompleted | date}}</div>
             <div class="dialog-operator">{{dialog.operator ? dialog.operator.fio : 'Пусто'}}</div>
-            <div class="dialog-client">{{dialog.client.fio}} <br> {{dialog.client.email}}, {{dialog.client.phone}}</div>
+            <div class="dialog-client">{{dialog.client.fio}}<br>{{dialog.client.email}}, {{dialog.client.phone}}</div>
             <div class="dialog-actions">
                 <div class="dialog-open">
                     <button mat-button (click)="openChat(dialog)">
@@ -54,10 +54,16 @@
                     </button>
                 </div>
                 <div class="dialog-close">
-                    <button mat-button class="rao-button" (click)="reject(dialog)">Отклонить</button>
+                    <button mat-button class="rao-button" (click)="close(dialog)"
+                            [disabled]="!checkStartOrActive(dialog.dialogStatus)">Закрыть</button>
                 </div>
-                <div class="dialog-work" (click)="activate(dialog)">
-                    <button mat-button class="rao-button">Взять в работу</button>
+                <div class="dialog-close">
+                    <button mat-button class="rao-button" (click)="reject(dialog)"
+                            [disabled]="!checkStartOrActive(dialog.dialogStatus)">Отклонить</button>
+                </div>
+                <div class="dialog-work">
+                    <button mat-button class="rao-button" (click)="activate(dialog)"
+                            [disabled]="dialog.dialogStatus !== dialogStatus.Started">Взять в работу</button>
                 </div>
             </div>
         </div>

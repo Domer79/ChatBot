@@ -7,16 +7,19 @@ import {environment} from "../../environments/environment";
 import {TokenService} from "./token.service";
 import {MessageService} from "./message.service";
 import {map} from "rxjs/operators";
+import Helper from "../misc/Helper";
 
 export class ClientMessageService {
   private connection: HubConnection;
   private messages$: Subject<Message> = new Subject<Message>();
   private messageDialogId: string | null | undefined;
-  public messages: Observable<Message>
+  private onConnected$: BehaviorSubject<any> = new BehaviorSubject<any>("");
   private meta$: Subject<Message> = new Subject<Message>();
+  private connectionStartError$: Subject<{ 'exception': string, 'message': string }> = new Subject<{exception: string; message: string}>();
+  public connectionStartError = this.connectionStartError$.asObservable();
+  public messages: Observable<Message>
   public meta: Observable<Message> = this.meta$.asObservable();
   public connected: boolean = false;
-  public onConnected$: BehaviorSubject<any> = new BehaviorSubject<any>("");
   public onConnected: Observable<any> = this.onConnected$.asObservable();
 
   constructor(
@@ -31,12 +34,13 @@ export class ClientMessageService {
 
   private initHub(): void {
     const token = this.tokenService.tokenId;
+    const isProd = environment.production;
     this.connection = new HubConnectionBuilder()
         .withUrl(`${environment.hubUrl}/chat?token=${token}`, { accessTokenFactory: () => {
             return token;
           }})
         .withAutomaticReconnect()
-        .configureLogging(LogLevel.Information)
+        .configureLogging(isProd ? LogLevel.Error : LogLevel.Information)
         .build();
     this.connection.serverTimeoutInMilliseconds = 120000;
 
@@ -46,7 +50,13 @@ export class ClientMessageService {
           console.log('Connection started')
           await this.connection.invoke("OperatorConnect", this.messageDialogId);
         })
-        .catch(err => console.log('Error while starting connection: ' + err));
+        .catch(err => {
+          console.log('Error while starting connection: ' + err);
+          const errMatch: RegExpMatchArray = err.message.match(/\s(\w+Exception):\s(.+).$/);
+          if (errMatch){
+            this.connectionStartError$.next({ exception: errMatch[1], message: errMatch[2] });
+          }
+        });
   }
 
   private connectionInit(): void {
@@ -76,23 +86,14 @@ export class ClientMessageService {
 
     this.connection.on("operatorConnect", (connectionStatus: string) => {
       this.onConnected$.next(connectionStatus);
-      this.connected = connectionStatus == "success";
+      this.connected = connectionStatus === "success";
 
       this.messageService.getMessages(this.messageDialogId).pipe(map(msgs => {
-        return msgs.sort((a:Message, b: Message) => {
-          if (a.time < b.time)
-            return -1;
-
-          if (a.time > b.time)
-            return 1;
-
-          return 0;
-        })
+        return Helper.sortMessages(msgs);
       })).subscribe(async msgs => {
-        debugger
         for (const msg of msgs){
           this.messages$.next(msg);
-          if (msg.status !== MessageStatus.received){
+          if (msg.owner == MessageOwner.client && msg.status !== MessageStatus.received){
             msg.status = MessageStatus.received;
             await this.connection.invoke('MessageRead', msg);
           }

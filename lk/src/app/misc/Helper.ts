@@ -1,5 +1,6 @@
 import {TimeStatus} from "../../abstracts/message-type";
 import {LinkType} from "../contracts/message-dialog";
+import Message from "../../abstracts/message";
 
 export default class Helper{
   public static getTimeStatus(time: Date): TimeStatus{
@@ -71,5 +72,17 @@ export default class Helper{
     }
 
     return true;
+  }
+
+  public static sortMessages(messages: Message[]): Message[]{
+    return messages.sort((a:Message, b: Message) => {
+      if (a.time < b.time)
+        return -1;
+
+      if (a.time > b.time)
+        return 1;
+
+      return 0;
+    });
   }
 }

@@ -89,6 +89,7 @@ namespace Chatbot.Core.Services
         public async Task<MessageDialog> Close(Guid messageDialogId)
         {
             var dialog = await GetDialog(messageDialogId);
+            dialog.DateCompleted = DateTime.UtcNow;
             return await Close(dialog);
         }
 

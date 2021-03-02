@@ -45,7 +45,7 @@ namespace Chatbot.Core.Chat
                     {
                         var dialog = await _dialogService.GetDialog(messageDialogId);
                         if (dialog == null) throw new InvalidOperationException("Dialog not found");
-                        if (!(DialogStatus.Closed | DialogStatus.Rejected).HasFlag(dialog.DialogStatus))
+                        if (!(DialogStatus.NotActive).HasFlag(dialog.DialogStatus))
                             throw new InvalidOperationException(
                                 "When dialog creating based prev dialog, this dialog must by closed or rejected");
 
