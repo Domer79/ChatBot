@@ -1,4 +1,4 @@
-import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ClientMessageService} from "../services/client-message.service";
 import {MessageType} from "../../abstracts/message-type";
@@ -7,21 +7,25 @@ import {TokenService} from "../services/token.service";
 import MessageDialog, {DialogStatus} from "../contracts/message-dialog";
 import {MessageService} from "../services/message.service";
 import {map, tap} from "rxjs/operators";
-import {Observable, Subject} from "rxjs";
+import {Observable, Subject, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-client-chat-dialog',
   templateUrl: './client-chat-dialog.component.html',
   styleUrls: ['./client-chat-dialog.component.sass']
 })
-export class ClientChatDialogComponent implements OnInit {
-  inputText: string | null | undefined;
-  messages: Message[] = [];
+export class ClientChatDialogComponent implements OnInit, OnDestroy {
   private clientMessageService: ClientMessageService
-  @ViewChild('chatEditor') chatEditorElement: ElementRef;
   private dialog: MessageDialog;
   private firstMessage$: Subject<Message> = new Subject<Message>();
   private firstMessage: Observable<Message> = this.firstMessage$.asObservable();
+  private onConnectedSubscription: Subscription;
+  private messagesSubscription: Subscription;
+  private metaSubscription: Subscription;
+
+  inputText: string | null | undefined;
+  messages: Message[] = [];
+  @ViewChild('chatEditor') chatEditorElement: ElementRef;
   senderName: Observable<string>;
 
   constructor(
@@ -30,13 +34,11 @@ export class ClientChatDialogComponent implements OnInit {
       private tokenService: TokenService,
       private messageService: MessageService
   ) {
-    console.log(this.messageService);
     this.dialog = data;
-    console.log(this.dialog.id);
-    this.clientMessageService = new ClientMessageService(this.tokenService, data.id);
-    this.clientMessageService.onConnected.subscribe(s => this.connectedEvent(s));
-    this.clientMessageService.messages.subscribe(_ => this.messages.push(_));
-    this.clientMessageService.meta.subscribe(m => this.setMeta(m));
+    this.clientMessageService = new ClientMessageService(this.tokenService, this.messageService, data.id);
+    this.onConnectedSubscription = this.clientMessageService.onConnected.subscribe(s => this.connectedEvent(s));
+    this.messagesSubscription = this.clientMessageService.messages.subscribe(_ => this.messages.push(_));
+    this.metaSubscription = this.clientMessageService.meta.subscribe(m => this.setMeta(m));
     this.senderName = this.firstMessage.pipe(map(m => m.content));
   }
 
@@ -52,7 +54,6 @@ export class ClientChatDialogComponent implements OnInit {
       $event.preventDefault();
     }
     else if ($event.code === 'Enter' && $event.shiftKey){
-      console.log(this.dialogRef);
       const clientHeight = this.chatEditorElement.nativeElement.clientHeight;
       this.chatEditorElement.nativeElement.style.height = `${clientHeight + 15}px`;
     }
@@ -99,20 +100,6 @@ export class ClientChatDialogComponent implements OnInit {
   private connectedEvent(connectionStatus: string): void {
     if (connectionStatus !== "success")
       return;
-
-    this.messageService.getMessages(this.dialog.id).pipe(tap(messages => {
-      if (!this.senderName){
-        this.firstMessage$.next(messages[0]);
-      }
-    })).subscribe(m => this.messages = m.sort((a:Message, b: Message) => {
-      if (a.time < b.time)
-        return -1;
-
-      if (a.time > b.time)
-        return 1;
-
-      return 0;
-    }));
   }
 
   private setMeta(msg: Message) {
@@ -125,5 +112,11 @@ export class ClientChatDialogComponent implements OnInit {
   closeDialog() {
     this.clientMessageService.setMessage(MessageType.CloseSession, "Диалог закрыт");
     this.dialogRef.close();
+  }
+
+  ngOnDestroy(): void {
+    this.messagesSubscription.unsubscribe();
+    this.onConnectedSubscription.unsubscribe();
+    this.metaSubscription.unsubscribe();
   }
 }

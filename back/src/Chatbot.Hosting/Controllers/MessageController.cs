@@ -34,10 +34,6 @@ namespace Chatbot.Hosting.Controllers
         public async Task<MessageResponse[]> GetMessages(Guid messageDialogId)
         {
             var messages = await _messageService.GetDialogMessages(messageDialogId);
-            foreach (var message in messages)
-            {
-                message.Status = MessageStatus.Received;
-            }
             return _mapper.Map<MessageResponse[]>(messages);
         }
 

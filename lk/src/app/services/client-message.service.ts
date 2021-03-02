@@ -1,12 +1,12 @@
-import {EventEmitter, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from "rxjs";
 import Message from "../../abstracts/message";
-import {MessageType, MessageOwner, MessageStatus} from "../../abstracts/message-type";
-import { v4 as uuidv4 } from 'uuid';
-import { NIL as guidEmpty } from 'uuid';
+import {MessageOwner, MessageStatus, MessageType} from "../../abstracts/message-type";
+import {NIL as guidEmpty, v4 as uuidv4} from 'uuid';
 import {HubConnection, HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
 import {environment} from "../../environments/environment";
 import {TokenService} from "./token.service";
+import {MessageService} from "./message.service";
+import {map} from "rxjs/operators";
 
 export class ClientMessageService {
   private connection: HubConnection;
@@ -21,6 +21,7 @@ export class ClientMessageService {
 
   constructor(
       private tokenService: TokenService,
+      private messageService: MessageService,
       messageDialogId: string
   ) {
     this.messages = this.messages$.asObservable();
@@ -76,6 +77,27 @@ export class ClientMessageService {
     this.connection.on("operatorConnect", (connectionStatus: string) => {
       this.onConnected$.next(connectionStatus);
       this.connected = connectionStatus == "success";
+
+      this.messageService.getMessages(this.messageDialogId).pipe(map(msgs => {
+        return msgs.sort((a:Message, b: Message) => {
+          if (a.time < b.time)
+            return -1;
+
+          if (a.time > b.time)
+            return 1;
+
+          return 0;
+        })
+      })).subscribe(async msgs => {
+        debugger
+        for (const msg of msgs){
+          this.messages$.next(msg);
+          if (msg.status !== MessageStatus.received){
+            msg.status = MessageStatus.received;
+            await this.connection.invoke('MessageRead', msg);
+          }
+        }
+      });
     })
   }
 
