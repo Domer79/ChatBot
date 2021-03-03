@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import {stringify} from "querystring";
-import {Observable} from "rxjs";
-import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +27,10 @@ export class CacheService {
   contains(key: string): boolean {
     const result = sessionStorage.getItem(key) != null;
     return result;
+  }
+
+  clear(): void{
+    sessionStorage.clear();
   }
 }
 

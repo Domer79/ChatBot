@@ -5,6 +5,7 @@ import {Security} from "../security.decorator";
 import {ActivatedRoute, Router} from "@angular/router";
 import MainMenu, {PageInfo} from "../../abstracts/MainMenu";
 import {TokenService} from "../services/token.service";
+import {CacheService} from "../services/cache.service";
 
 @Component({
   selector: 'main',
@@ -21,6 +22,7 @@ export class MainComponent implements OnInit {
       private domSanitizer: DomSanitizer,
       private router: Router,
       private tokenService: TokenService,
+      private cacheService: CacheService,
       private route: ActivatedRoute,
   ){
     this.matIconRegistry.addSvgIcon("res-chat",
@@ -52,6 +54,7 @@ export class MainComponent implements OnInit {
 
   logout() {
     this.tokenService.clear();
+    this.cacheService.clear();
     this.router.navigate(['/login'], {
       relativeTo: this.route,
     });

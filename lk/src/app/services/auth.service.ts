@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable, of} from "rxjs";
+import {BehaviorSubject, Observable, of} from "rxjs";
 import {CacheService} from "./cache.service";
 import {map, tap} from "rxjs/operators";
 import Token from "../contracts/token";
@@ -10,11 +10,12 @@ import {TokenService} from "./token.service";
   providedIn: 'root'
 })
 export class AuthService {
+  private userPolicies: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
   redirectUrl: string = '';
 
   constructor(
       private httpClient: HttpClient,
-      private cacheService: CacheService,
+      private cache: CacheService,
       private tokenService: TokenService
   ) { }
 
@@ -23,11 +24,11 @@ export class AuthService {
   }
 
   checkAccess(policy: string): Observable<boolean>{
-    if (this.cacheService.contains(policy))
-      return of(this.cacheService.get<boolean>(policy));
+    if (this.cache.contains(policy))
+      return of(this.cache.get<boolean>(policy));
 
     return this.httpClient.get<boolean>("api/Auth/CheckAccess", { params: { policy } })
-        .pipe(tap(_ => this.cacheService.set(policy, _)));
+        .pipe(tap(_ => this.cache.set(policy, _)));
   }
 
   logIn(login: string, password: string): Observable<boolean> {
@@ -43,5 +44,24 @@ export class AuthService {
           return true;
         })
     );
+  }
+
+  checkAccessPolicy(policy: string): Observable<boolean> {
+      if (this.userPolicies.getValue().length !== 0){
+          return this.userPolicies.pipe(
+              map(policies => {
+                  return policies.some(_ => _ === policy);
+              }),
+          );
+      }
+
+      return this.httpClient.get<string[]>('api/GetAllUserPolicies').pipe(
+          tap(policies => {
+              this.userPolicies.next(policies);
+          }),
+          map(policies => {
+              return policies.some(_ => _ === policy);
+          }),
+      );
   }
 }

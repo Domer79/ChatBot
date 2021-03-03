@@ -35,7 +35,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, OnDestroy {
     return this.checkAccess(childRoute, state);
   }
 
-  private isAuth(component: any): boolean{
+  private isProtected(component: any): boolean{
     return !!component['__securityPolicy'];
   }
 
@@ -46,7 +46,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, OnDestroy {
     }
 
     const component = route.component;
-    if (this.isAuth(component)){
+    if (this.isProtected(component)){
       return this.authService.checkAccess(component['__securityPolicy'] as string)
           .pipe(tap(async result => {
             if (!result)

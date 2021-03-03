@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Contracts;
 using Chatbot.Abstractions.Contracts.Requests;
@@ -22,15 +23,18 @@ namespace Chatbot.Hosting.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
         private readonly Mapper _mapper;
 
         public AuthController(
             IAuthService authService, 
-            IUserService userService, 
+            IUserService userService,
+            IRoleService roleService,
             Mapper mapper)
         {
             _authService = authService;
             _userService = userService;
+            _roleService = roleService;
             _mapper = mapper;
         }
         
@@ -56,6 +60,7 @@ namespace Chatbot.Hosting.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<bool> SetPassword(PasswordRequest request)
         {
             return await _userService.SetPassword(request.UserId, request.Password);
@@ -79,6 +84,16 @@ namespace Chatbot.Hosting.Controllers
 
             user = await _userService.Upsert(user);
             return _mapper.Map<UserResponse>(user);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<string[]> GetAllUserPolicies()
+        {
+            var roles = await _userService.GetRoles(UserId.Value);
+            var permissions = await _roleService.GetPermissions(roles.Select(_ => _.Id).ToArray());
+
+            return permissions.Select(_ => _.Politic.ToString()).ToArray();
         }
     }
 }
