@@ -18,6 +18,9 @@ namespace Chatbot.Ef.Configurations
             b.Property(_ => _.Politic)
                 .HasColumnName("politic")
                 .IsRequired();
+
+            b.Property(_ => _.Name)
+                .HasColumnName("name");
             
             b.Property(_ => _.DateCreated)
                 .HasColumnName("date_created")

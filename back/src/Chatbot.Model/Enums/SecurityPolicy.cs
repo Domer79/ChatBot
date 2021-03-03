@@ -44,5 +44,39 @@ namespace Chatbot.Model.Enums
         
         [Description("Разработчик")]
         Developer = 11,
+        
+        #region Front Dialogs Menu
+        
+        /// <summary>
+        /// Все диалоги
+        /// </summary>
+        DialogsAll = 12,
+        
+        /// <summary>
+        /// Открытые диалоги
+        /// </summary>
+        DialogsOpened = 13,
+        
+        /// <summary>
+        /// Отклоненные диалоги
+        /// </summary>
+        DialogsRejected = 14,
+        
+        /// <summary>
+        /// Диалоги в работе
+        /// </summary>
+        DialogsActivated = 15,
+        
+        /// <summary>
+        /// Закрытые диалоги
+        /// </summary>
+        DialogsClosed = 16,
+        
+        /// <summary>
+        /// Диалоги офлайн
+        /// </summary>
+        DialogsOffline = 17,
+
+        #endregion
     }
 }

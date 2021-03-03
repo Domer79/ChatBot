@@ -71,7 +71,11 @@ namespace Chatbot.Core.Services
             {
                 if (container.NeedAdd)
                 {
-                    await _permissionRepository.Upsert(new Permission() {Politic = container.Real.Value});
+                    await _permissionRepository.Upsert(new Permission()
+                    {
+                        Politic = container.Real.Value,
+                        Name = container.Real.Value.ToString()
+                    });
                     continue;
                 }
 

@@ -6,6 +6,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import MainMenu, {PageInfo} from "../../abstracts/MainMenu";
 import {TokenService} from "../services/token.service";
 import {CacheService} from "../services/cache.service";
+import {Observable, of} from "rxjs";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'main',
@@ -16,6 +18,7 @@ import {CacheService} from "../services/cache.service";
 export class MainComponent implements OnInit {
   title = 'lk';
   activePageInfo: PageInfo = MainMenu.getPageInfo('dialogs');
+  dialogsCanShow: Observable<boolean> = of(false);
 
   constructor(
       private matIconRegistry: MatIconRegistry,
@@ -24,6 +27,7 @@ export class MainComponent implements OnInit {
       private tokenService: TokenService,
       private cacheService: CacheService,
       private route: ActivatedRoute,
+      private auth: AuthService
   ){
     this.matIconRegistry.addSvgIcon("res-chat",
         this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/res_chat.svg"));
@@ -44,7 +48,7 @@ export class MainComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-
+    this.dialogsCanShow = this.auth.checkAccessPolicy('DialogPage');
   }
 
   async goto(pageCode: string): Promise<void> {

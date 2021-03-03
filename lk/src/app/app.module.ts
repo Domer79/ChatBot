@@ -52,6 +52,7 @@ import { DatePickerComponent } from './components/date-picker/date-picker.compon
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { FilterInputComponent } from './components/filter-input/filter-input.component';
+import {AuthDirective} from "./directives/auth.directive";
 
 registerLocaleData(localeRu, 'ru');
 
@@ -77,6 +78,7 @@ registerLocaleData(localeRu, 'ru');
     TestComponent,
     DatePickerComponent,
     FilterInputComponent,
+    AuthDirective,
   ],
   imports: [
     BrowserModule,

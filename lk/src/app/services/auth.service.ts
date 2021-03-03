@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {CacheService} from "./cache.service";
-import {map, tap} from "rxjs/operators";
+import {delay, exhaustMap, map, switchMap, tap} from "rxjs/operators";
 import Token from "../contracts/token";
 import {TokenService} from "./token.service";
 
@@ -55,7 +55,7 @@ export class AuthService {
           );
       }
 
-      return this.httpClient.get<string[]>('api/GetAllUserPolicies').pipe(
+      return this.httpClient.get<string[]>('api/Auth/GetAllUserPolicies').pipe(
           tap(policies => {
               this.userPolicies.next(policies);
           }),

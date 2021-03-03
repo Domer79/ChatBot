@@ -3,22 +3,34 @@
         <div style="padding-top: 1em">
             <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.all]]" routerLinkActive #rla="routerLinkActive"
                [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.all"
-               (click)="activeLink = linkType.all">Все</a>
+               (click)="activeLink = linkType.all"
+               *auth="'DialogsAll'"
+            >Все</a>
             <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.opened]]" routerLinkActive #rla="routerLinkActive"
                [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.opened"
-               (click)="activeLink = linkType.opened">Открытые</a>
+               (click)="activeLink = linkType.opened"
+               *auth="'DialogsOpened'"
+            >Открытые</a>
             <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.rejected]]" routerLinkActive #rla="routerLinkActive"
                [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.rejected"
-               (click)="activeLink = linkType.rejected">Отклоненные</a>
+               (click)="activeLink = linkType.rejected"
+               *auth="'DialogsRejected'"
+            >Отклоненные</a>
             <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.worked]]" routerLinkActive #rla="routerLinkActive"
                [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.worked"
-               (click)="activeLink = linkType.worked">В работе</a>
+               (click)="activeLink = linkType.worked"
+               *auth="'DialogsActivated'"
+            >В работе</a>
             <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.closed]]" routerLinkActive #rla="routerLinkActive"
                [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.closed"
-               (click)="activeLink = linkType.closed">Закрытые</a>
+               (click)="activeLink = linkType.closed"
+               *auth="'DialogsClosed'"
+            >Закрытые</a>
             <a mat-tab-link [routerLink]="['/dialogs/', linkType[linkType.offline]]" routerLinkActive #rla="routerLinkActive"
                [routerLinkActiveOptions]="{ exact: true }" [active]="activeLink == linkType.offline"
-               (click)="activeLink = linkType.offline">Офлайн</a>
+               (click)="activeLink = linkType.offline"
+               *auth="'DialogsOffline'"
+            >Офлайн</a>
         </div>
         <div>
             <button mat-flat-button class="dialog-filter-btn" (click)="dialogFilterOpen()">
