@@ -158,6 +158,6 @@ export class DialogsComponent implements OnInit, OnDestroy {
   }
 
   checkStartOrActive(dialogStatus: DialogStatus): boolean {
-    return (dialogStatus & (DialogStatus.Started | DialogStatus.Active)) !== 0;
+    return dialogStatus == DialogStatus.Active;
   }
 }

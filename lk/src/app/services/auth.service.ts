@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {CacheService} from "./cache.service";
-import {delay, exhaustMap, map, switchMap, tap} from "rxjs/operators";
+import {delay, exhaustMap, map, publishReplay, refCount, switchMap, tap} from "rxjs/operators";
 import Token from "../contracts/token";
 import {TokenService} from "./token.service";
 
@@ -10,7 +10,7 @@ import {TokenService} from "./token.service";
   providedIn: 'root'
 })
 export class AuthService {
-  private userPolicies: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+  private userPolicies: Observable<string[]>;
   redirectUrl: string = '';
 
   constructor(
@@ -47,18 +47,14 @@ export class AuthService {
   }
 
   checkAccessPolicy(policy: string): Observable<boolean> {
-      if (this.userPolicies.getValue().length !== 0){
-          return this.userPolicies.pipe(
-              map(policies => {
-                  return policies.some(_ => _ === policy);
-              }),
+      if (!this.userPolicies){
+          this.userPolicies = this.httpClient.get<string[]>('api/Auth/GetAllUserPolicies').pipe(
+              publishReplay(1),
+              refCount()
           );
       }
 
-      return this.httpClient.get<string[]>('api/Auth/GetAllUserPolicies').pipe(
-          tap(policies => {
-              this.userPolicies.next(policies);
-          }),
+      return this.userPolicies.pipe(
           map(policies => {
               return policies.some(_ => _ === policy);
           }),
