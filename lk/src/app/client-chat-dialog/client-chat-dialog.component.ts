@@ -57,7 +57,6 @@ export class ClientChatDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.dialogRef.afterClosed().subscribe(async result => {
       console.log('The dialog was closed');
-      await this.clientMessageService.Disconnect();
     })
   }
 

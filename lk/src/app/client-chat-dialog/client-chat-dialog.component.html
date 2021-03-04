@@ -31,7 +31,7 @@
                     mat-raised-button
                     color="primary"
                     (click)="closeDialog()"
-                    [disabled]="dialog.dialogStatus === dialogStatus.Rejected || dialog.dialogStatus === dialogStatus.Closed"
+                    [disabled]="!(dialog.dialogStatus === dialogStatus.Active)"
             >Закрыть диалог</button>
         </div>
     </div>

@@ -53,6 +53,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { FilterInputComponent } from './components/filter-input/filter-input.component';
 import {AuthDirective} from "./directives/auth.directive";
+import { AppComponent } from './app/app.component';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -79,6 +80,7 @@ registerLocaleData(localeRu, 'ru');
     DatePickerComponent,
     FilterInputComponent,
     AuthDirective,
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -116,6 +118,6 @@ registerLocaleData(localeRu, 'ru');
       DialogService,
       MessageService,
   ],
-  bootstrap: [MainComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -9,27 +9,30 @@ import {QuestionsPageComponent} from "./questions/questions-page/questions-page.
 import {OperatorsComponent} from "./security/operators/operators.component";
 import {LinkType} from "./contracts/message-dialog";
 import {TestComponent} from "./test/test.component";
+import {AppComponent} from "./app/app.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'denied', component: AccessDeniedComponent},
-  {
-    path: '',
-    canActivateChild: [AuthGuard],
-    redirectTo: `/dialogs/${LinkType[LinkType.all]}`,
-    pathMatch: 'full'
-  },
-  {
-    path: 'dialogs',
-    canActivateChild: [AuthGuard],
-    redirectTo: `dialogs/${LinkType[LinkType.all]}`,
-    pathMatch: 'full'
-  },
-  {path: 'dialogs/:id', component: DialogsComponent, canActivate: [AuthGuard], pathMatch: 'full'},
-  {path: 'questions', component: QuestionsPageComponent, canActivate: [AuthGuard]},
-  {path: 'questions/:parentId', component: QuestionsPageComponent, canActivate: [AuthGuard], pathMatch: 'full'},
-  {path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard]},
-  {path: 'test', component: TestComponent, canActivate: [AuthGuard]},
+  {path: '', component: MainComponent, children: [
+      {
+        path: '',
+        canActivateChild: [AuthGuard],
+        redirectTo: `/dialogs/${LinkType[LinkType.all]}`,
+        pathMatch: 'full'
+      },
+      {
+        path: 'dialogs',
+        canActivateChild: [AuthGuard],
+        redirectTo: `dialogs/${LinkType[LinkType.all]}`,
+        pathMatch: 'full'
+      },
+      {path: 'dialogs/:id', component: DialogsComponent, canActivate: [AuthGuard], pathMatch: 'full'},
+      {path: 'questions', component: QuestionsPageComponent, canActivate: [AuthGuard]},
+      {path: 'questions/:parentId', component: QuestionsPageComponent, canActivate: [AuthGuard], pathMatch: 'full'},
+      {path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard]},
+      {path: 'test', component: TestComponent, canActivate: [AuthGuard]},
+    ]},
 ];
 
 @NgModule({
