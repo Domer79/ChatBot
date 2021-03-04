@@ -65,17 +65,14 @@
                         <mat-icon svgIcon="res-chat"></mat-icon>
                     </button>
                 </div>
-                <div class="dialog-close">
-                    <button mat-button class="rao-button" (click)="close(dialog)"
-                            [disabled]="!checkStartOrActive(dialog.dialogStatus)">Закрыть</button>
+                <div class="dialog-close" *ngIf="checkStartOrActive(dialog.dialogStatus)">
+                    <button mat-button class="rao-button" (click)="close(dialog)">Закрыть</button>
                 </div>
-                <div class="dialog-close">
-                    <button mat-button class="rao-button" (click)="reject(dialog)"
-                            [disabled]="!checkStartOrActive(dialog.dialogStatus)">Отклонить</button>
+                <div class="dialog-close" *ngIf="checkStartOrActive(dialog.dialogStatus)">
+                    <button mat-button class="rao-button" (click)="reject(dialog)">Отклонить</button>
                 </div>
-                <div class="dialog-work">
-                    <button mat-button class="rao-button" (click)="activate(dialog)"
-                            [disabled]="dialog.dialogStatus !== dialogStatus.Started">Взять в работу</button>
+                <div class="dialog-work" *ngIf="dialog.dialogStatus === dialogStatus.Started">
+                    <button mat-button class="rao-button" (click)="activate(dialog)">Взять в работу</button>
                 </div>
             </div>
         </div>

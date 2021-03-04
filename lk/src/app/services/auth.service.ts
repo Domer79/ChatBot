@@ -41,6 +41,7 @@ export class AuthService {
             return false;
 
           this.tokenService.saveToken(new Token(_));
+          this.userPolicies = null;
           return true;
         })
     );
