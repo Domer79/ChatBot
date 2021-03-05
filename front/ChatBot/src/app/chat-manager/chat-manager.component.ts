@@ -15,6 +15,7 @@ export class ChatManagerComponent implements OnInit {
 
   onToggle(): void {
     this.opened = !this.opened;
+    console.log(`Chat opened: ${this.opened}`);
   }
 
   onClosed(): void {

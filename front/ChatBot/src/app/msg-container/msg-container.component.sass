@@ -1,10 +1,22 @@
 @import ../../common/styles/variables
 
+@media screen and (max-width: $parentChatBotWidth - 1px)
+  .parent-chatbot
+    min-width: 100%
+    min-height: 100%
+    max-width: 100%
+    max-height: 100%
+    left: 0
+    right: 0
+
+@media screen and (min-width: $parentChatBotWidth)
+  .parent-chatbot
+    min-width: $parentChatBotWidth
+    max-width: $parentChatBotWidth
+    min-height: $parentChatBotHeight
+    max-height: $parentChatBotHeight
+
 .parent-chatbot
-  min-width: $parentChatBotWidth
-  max-width: $parentChatBotWidth
-  min-height: $parentChatBotHeight
-  max-height: $parentChatBotHeight
   position: fixed
   bottom: -10px - $parentChatBotHeight
   right: 10px

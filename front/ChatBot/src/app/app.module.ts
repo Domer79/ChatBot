@@ -35,6 +35,7 @@ import { SearchQuestionsComponent } from './questions/search-questions/search-qu
 import { AuthFormComponent } from './auth-form/auth-form.component';
 import { AuthFormHederComponent } from './auth-form-heder/auth-form-heder.component';
 import {IMaskModule} from 'angular-imask';
+import {CommonService} from './services/common.service';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import {IMaskModule} from 'angular-imask';
     ClientMsgDispatcher,
     QuestionsProviderService,
     PageDispatcherService,
-    TokenService
+    TokenService,
+    CommonService
   ],
   bootstrap: [ChatManagerComponent]
 })

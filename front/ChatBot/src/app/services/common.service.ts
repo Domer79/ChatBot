@@ -1,9 +1,10 @@
-import {Injectable, OnInit} from '@angular/core';
+import {HostListener, Injectable, OnInit} from '@angular/core';
 import {Time} from '@angular/common';
 import {NumberSettings, Settings, Shift} from '../../abstracts/settings';
 import {forkJoin, Observable, ReplaySubject, Subject, Subscription, timer, zip} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map, repeatWhen, switchAll, switchMap, take, takeUntil, tap, zipAll} from 'rxjs/operators';
+import Helper from '../../misc/Helper';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class CommonService{
   private closeShift: Observable<NumberSettings> = this.closeShift$.asObservable();
   private stopTimeout$: Subject<void> = new Subject<void>();
   private startTimeout$: Subject<void> = new Subject<void>();
+  private closeSessionSubscription: Subscription;
 
   salam1: Observable<string> = this.salam1$.asObservable();
   salam2: Observable<string> = this.salam2$.asObservable();
@@ -29,7 +31,6 @@ export class CommonService{
   caption: Observable<string> = this.captionMessage$.asObservable();
   questionSearchPlaceHolder: Observable<string> = this.questionSearchPlaceHolder$.asObservable();
   closeSessionByTimeout: Observable<any> = this.closeSessionByTimeout$.asObservable();
-  private closeSessionSubscription: Subscription;
 
   constructor(
     private httpClient: HttpClient,

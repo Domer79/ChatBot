@@ -6,6 +6,7 @@ import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {MainQuestionsComponent} from '../questions/main-questions/main-questions.component';
 import {CommonService} from '../services/common.service';
 import {MessageType} from '../../misc/message-type';
+import Helper from '../../misc/Helper';
 
 @Component({
   selector: 'msg-container',
@@ -15,11 +16,11 @@ import {MessageType} from '../../misc/message-type';
     trigger('openClose', [
       state('open', style({
         opacity: 1,
-        bottom: '70px'
+        bottom: innerWidth > 559 ? '70px' : '0'
       })),
       state('closed', style({
         opacity: 0,
-        bottom: '-640px'
+        bottom: '-100%'
       })),
       transition('open => closed', [
         animate('0.3s ease-out')
@@ -34,10 +35,10 @@ export class MsgContainerComponent implements OnInit, OnDestroy {
   @Input() opened = false;
   @Output() closed = new EventEmitter<void>();
 
-  title = 'ChatBot';
   private closeChatSubscription: Subscription;
   private closeSessionSubscription: Subscription;
 
+  title = 'ChatBot';
   constructor(
     private pageDispatcher: PageDispatcherService,
     private common: CommonService,

@@ -15,9 +15,10 @@ export class MainQuestionsHeaderComponent implements OnInit {
 
   constructor(
     private common: CommonService
-  ) { }
+  ) {
+    this.caption = this.common.caption;
+  }
 
   ngOnInit(): void {
-    this.caption = this.common.caption;
   }
 }
