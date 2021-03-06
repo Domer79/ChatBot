@@ -16,7 +16,7 @@ import Helper from '../../misc/Helper';
     trigger('openClose', [
       state('open', style({
         opacity: 1,
-        bottom: innerWidth > 559 ? '70px' : '0'
+        bottom: innerWidth < 600 || innerHeight < 700 ? '0' : '70px'
       })),
       state('closed', style({
         opacity: 0,

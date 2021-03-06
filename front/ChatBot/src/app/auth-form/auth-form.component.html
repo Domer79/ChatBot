@@ -63,7 +63,7 @@
   </div>
   <div class="form-input-container" (click)="sendData()">
     <div class="form-submit">
-      {{!(isShift | async) ? 'Отправить сообщение' : 'Начать чат с оператором'}}
+      <span>{{!(isShift | async) ? 'Отправить сообщение' : 'Начать чат с оператором'}}</span>
     </div>
   </div>
 </div>
