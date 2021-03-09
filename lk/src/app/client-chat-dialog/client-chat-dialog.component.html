@@ -3,7 +3,7 @@
         <h1 mat-dialog-title>{{senderName | async}}</h1>
     </div>
     <div class="chat">
-        <div class="chat-message chat-background">
+        <div class="chat-message chat-background" scrollControl>
             <div *ngFor="let msg of messages" [ngSwitch]="msg.owner">
                 <client-message [message]="msg" *ngSwitchCase="0"></client-message>
                 <operator-message [message]="msg" *ngSwitchCase="1"></operator-message>

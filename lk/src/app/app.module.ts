@@ -54,6 +54,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { FilterInputComponent } from './components/filter-input/filter-input.component';
 import {AuthDirective} from "./directives/auth.directive";
 import { AppComponent } from './app/app.component';
+import {ScrollControlDirective} from "./directives/scroll-control.directive";
 
 registerLocaleData(localeRu, 'ru');
 
@@ -80,6 +81,7 @@ registerLocaleData(localeRu, 'ru');
     DatePickerComponent,
     FilterInputComponent,
     AuthDirective,
+    ScrollControlDirective,
     AppComponent,
   ],
   imports: [
