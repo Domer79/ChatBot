@@ -29,6 +29,10 @@ export class AppComponent implements OnInit {
         this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/calendar.svg"));
     this.matIconRegistry.addSvgIcon("lens",
         this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/lens.svg"));
+    this.matIconRegistry.addSvgIcon("operators",
+        this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/operators.svg"));
+    this.matIconRegistry.addSvgIcon("questions",
+        this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/questions.svg"));
   }
 
   ngOnInit(): void {

@@ -40,44 +40,48 @@
         </div>
     </div>
 </nav>
-<div class="dialog-captions">
-    <div class="dialog-number">№ Диалога</div>
-    <div class="dialog-status">Статус</div>
-    <div class="dialog-date-created">Дата открытия</div>
-    <div class="dialog-date-closed">Дата закрытия</div>
-    <div class="dialog-operator">Оператор</div>
-    <div class="dialog-client">Клиент</div>
-    <div class="dialog-actions"></div>
-</div>
-<mat-card *ngFor="let dialog of dialogs | async; index as i" tabindex="i" class="card">
-    <mat-card-subtitle *ngIf="dialog.firstMessage">Сообщение: <span class="dialog-first-message">{{dialog.firstMessage}}</span></mat-card-subtitle>
-    <mat-card-content>
-        <div class="dialog-info-container">
-            <div class="dialog-number">№{{dialog.number}}</div>
-            <div class="dialog-status {{dialog | dialogStatus:'color'}}">{{dialog | dialogStatus}}</div>
-            <div class="dialog-date-created">{{dialog.dateCreated | date }}</div>
-            <div class="dialog-date-closed">{{dialog.dateCompleted | date}}</div>
-            <div class="dialog-operator">{{dialog.operator ? dialog.operator.fio : 'Пусто'}}</div>
-            <div class="dialog-client">{{dialog.client.fio}}<br>{{dialog.client.email}}, {{dialog.client.phone}}</div>
-            <div class="dialog-actions">
-                <div class="dialog-open">
-                    <button mat-button (click)="openChat(dialog)">
-                        <mat-icon svgIcon="res-chat"></mat-icon>
-                    </button>
+<div class="dialogs-container">
+    <div class="dialog-captions">
+        <div class="dialog-number">№ Диалога</div>
+        <div class="dialog-status">Статус</div>
+        <div class="dialog-date-created">Дата открытия</div>
+        <div class="dialog-date-closed">Дата закрытия</div>
+        <div class="dialog-operator">Оператор</div>
+        <div class="dialog-client">Клиент</div>
+        <div class="dialog-actions"></div>
+    </div>
+    <div *ngFor="let dialog of dialogs | async; index as i" id="card">
+        <mat-card tabindex="i" class="card {{dialog | dialogStatus:'color'}}">
+            <mat-card-subtitle *ngIf="dialog.firstMessage">Сообщение: <span class="dialog-first-message">{{dialog.firstMessage}}</span></mat-card-subtitle>
+            <mat-card-content>
+                <div class="dialog-info-container">
+                    <div class="dialog-number">№{{dialog.number}}</div>
+                    <div class="dialog-status {{dialog | dialogStatus:'color'}}">{{dialog | dialogStatus}}</div>
+                    <div class="dialog-date-created">{{dialog.dateCreated | date }}</div>
+                    <div class="dialog-date-closed">{{dialog.dateCompleted | date}}</div>
+                    <div class="dialog-operator">{{dialog.operator ? dialog.operator.fio : 'Пусто'}}</div>
+                    <div class="dialog-client">{{dialog.client.fio}}<br>{{dialog.client.email}}, {{dialog.client.phone}}</div>
+                    <div class="dialog-actions">
+                        <div class="dialog-open">
+                            <button mat-button (click)="openChat(dialog)">
+                                <mat-icon svgIcon="res-chat"></mat-icon>
+                            </button>
+                        </div>
+                        <div class="dialog-close" *ngIf="checkStartOrActive(dialog.dialogStatus)">
+                            <button mat-button class="rao-button" (click)="close(dialog)" [ngStyle]="{'color': '#E52D2E'}">Закрыть</button>
+                        </div>
+                        <div class="dialog-close" *ngIf="checkStartOrActive(dialog.dialogStatus)">
+                            <button mat-button class="rao-button" (click)="reject(dialog)" [ngStyle]="{'color': '#E52D2E'}">Отклонить</button>
+                        </div>
+                        <div class="dialog-work" *ngIf="dialog.dialogStatus === dialogStatus.Started">
+                            <button mat-button class="rao-button" (click)="activate(dialog)" [ngStyle]="{'color': '#6EB443'}">Взять в работу</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="dialog-close" *ngIf="checkStartOrActive(dialog.dialogStatus)">
-                    <button mat-button class="rao-button" (click)="close(dialog)">Закрыть</button>
-                </div>
-                <div class="dialog-close" *ngIf="checkStartOrActive(dialog.dialogStatus)">
-                    <button mat-button class="rao-button" (click)="reject(dialog)">Отклонить</button>
-                </div>
-                <div class="dialog-work" *ngIf="dialog.dialogStatus === dialogStatus.Started">
-                    <button mat-button class="rao-button" (click)="activate(dialog)">Взять в работу</button>
-                </div>
-            </div>
-        </div>
-    </mat-card-content>
-</mat-card>
-<mat-paginator [length]="dialogCount" [pageSize]="dialogPageSize" [pageSizeOptions]="[10, 20, 30]" (page)="getPage($event)">
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <mat-paginator [length]="dialogCount" [pageSize]="dialogPageSize" [pageSizeOptions]="[10, 20, 30]" (page)="getPage($event)">
 
-</mat-paginator>
+    </mat-paginator>
+</div>

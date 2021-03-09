@@ -17,6 +17,9 @@
 .dialog-status.active
   color: #6EB443
 
+.dialog-status.started
+  color: #E52D2E
+
 .dialog-status.inactive
   color: #333740
 
@@ -40,6 +43,21 @@
     top: 1em
     bottom: 1em
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.15)
+
+.card.active
+  border-left: 2px solid #6EB443
+
+.card.started
+  border-left: 2px solid #E52D2E
+
+.card.inactive
+  border-left: 2px solid #333740
+
+.card.offline
+  border-left: 2px solid #3757A1
+
+#card:hover
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.15)
 
 .rao-button
   background: linear-gradient(180deg, #FFFFFF 0%, #FAFBFF 100%)
@@ -90,5 +108,11 @@
 .dialog-panel-class
   background: #2E5CC7
 
+.dialogs-container
+  padding:
+    left: 1em
+    right: 1em
+
 ::ng-deep mat-dialog-container.mat-dialog-container
   background-color: #f5f5f5
+

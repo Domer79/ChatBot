@@ -11,7 +11,7 @@ export class DialogStatusPipe implements PipeTransform {
 
     switch (value.dialogStatus){
       case DialogStatus.Started:
-        result = exportType == 'color' ? "active" : "Открыт";
+        result = exportType == 'color' ? "started" : "Открыт";
         break;
       case DialogStatus.Active:
         result = exportType == 'color' ? "active" : "В работе";
