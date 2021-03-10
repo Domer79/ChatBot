@@ -34,6 +34,9 @@ export class DialogStatusPipe implements PipeTransform {
 
     if (value.offline){
       if (exportType == 'color'){
+        if (value.dialogStatus & (DialogStatus.Closed | DialogStatus.Rejected)){
+          return 'inactive';
+        }
         return 'offline';
       }
       else{

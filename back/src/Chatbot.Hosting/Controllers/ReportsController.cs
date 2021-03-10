@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Chatbot.Abstractions.Core.Services;
 using Chatbot.Common;
@@ -27,7 +28,7 @@ namespace Chatbot.Hosting.Controllers
         [HttpGet]
         public async Task<IActionResult> GetReport(DateTime start, DateTime end)
         {
-            var dialogs = await _dialogService.GetDialogsByPeriod(start, end);
+            var dialogs = (await _dialogService.GetDialogsByPeriod(start, end)).OrderBy(_ => _.Number).ToArray();
             var utcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
             using var xlPackage = new ExcelPackage();
             var workSheetName = $"{start.Add(utcOffset).ToShortDateString()}-" +
