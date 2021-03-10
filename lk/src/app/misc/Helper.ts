@@ -1,6 +1,7 @@
 import {TimeStatus} from "../../abstracts/message-type";
 import {LinkType} from "../contracts/message-dialog";
 import Message from "../../abstracts/message";
+import {HttpResponse} from "@angular/common/http";
 
 export default class Helper{
   public static getTimeStatus(time: Date): TimeStatus{
@@ -85,4 +86,20 @@ export default class Helper{
       return 0;
     });
   }
+
+  /**
+   * https://stackoverflow.com/a/60455250
+   * Method is use to download file.
+   * @param fileName - File name
+   * @param response - HttpResponse<Blob>
+   * @param type - type of the document.
+   */
+  public static downLoadFile(fileName: string, response: HttpResponse<Blob>, type: string) {
+    let binaryData = [];
+    binaryData.push(response.body);
+    let downloadLink = document.createElement('a');
+    downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: 'blob' }));
+    downloadLink.setAttribute('download', fileName);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();  }
 }

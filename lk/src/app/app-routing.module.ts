@@ -10,6 +10,7 @@ import {OperatorsComponent} from "./security/operators/operators.component";
 import {LinkType} from "./contracts/message-dialog";
 import {TestComponent} from "./test/test.component";
 import {AppComponent} from "./app/app.component";
+import {ReportsComponent} from "./reports/reports.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -31,6 +32,7 @@ const routes: Routes = [
       {path: 'questions', component: QuestionsPageComponent, canActivate: [AuthGuard]},
       {path: 'questions/:parentId', component: QuestionsPageComponent, canActivate: [AuthGuard], pathMatch: 'full'},
       {path: 'operators', component: OperatorsComponent, canActivate: [AuthGuard]},
+      {path: 'reports', component: ReportsComponent, canActivate: [AuthGuard]},
       {path: 'test', component: TestComponent, canActivate: [AuthGuard]},
     ]},
 ];

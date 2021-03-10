@@ -33,6 +33,8 @@ export class AppComponent implements OnInit {
         this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/operators.svg"));
     this.matIconRegistry.addSvgIcon("questions",
         this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/questions.svg"));
+    this.matIconRegistry.addSvgIcon("reports",
+        this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/reports.svg"));
   }
 
   ngOnInit(): void {

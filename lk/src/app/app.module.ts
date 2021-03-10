@@ -55,6 +55,7 @@ import { FilterInputComponent } from './components/filter-input/filter-input.com
 import {AuthDirective} from "./directives/auth.directive";
 import { AppComponent } from './app/app.component';
 import {ScrollControlDirective} from "./directives/scroll-control.directive";
+import { ReportsComponent } from './reports/reports.component';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -83,6 +84,7 @@ registerLocaleData(localeRu, 'ru');
     AuthDirective,
     ScrollControlDirective,
     AppComponent,
+    ReportsComponent,
   ],
   imports: [
     BrowserModule,

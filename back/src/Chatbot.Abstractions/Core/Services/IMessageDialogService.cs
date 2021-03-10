@@ -31,5 +31,7 @@ namespace Chatbot.Abstractions.Core.Services
 
         Task<Page<MessageDialog>> GetPageByFilter(DialogStatus? linkType, string @operator, string client,
             DateTime? startDate, DateTime? closeDate, int? dialogNumber, int pageNumber, int pageSize);
+
+        Task<MessageDialog[]> GetDialogsByPeriod(DateTime startDate, DateTime endDate);
     }
 }

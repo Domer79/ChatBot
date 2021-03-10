@@ -14,7 +14,12 @@ export default class MainMenu{
             link: '/operators',
             name: 'Операторы',
             code: 'operators'
-        }
+        },
+        {
+            link: '/reports',
+            name: 'Отчеты',
+            code: 'reports'
+        },
     ];
 
     public static getPageInfo(code: string): PageInfo{

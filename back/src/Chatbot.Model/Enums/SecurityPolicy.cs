@@ -78,5 +78,11 @@ namespace Chatbot.Model.Enums
         DialogsOffline = 17,
 
         #endregion
+        
+        /// <summary>
+        /// Страница отчетов
+        /// </summary>
+        [Description("Страница отчетов")]
+        ReportsPage,
     }
 }

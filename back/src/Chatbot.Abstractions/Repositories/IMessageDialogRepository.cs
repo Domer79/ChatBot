@@ -24,5 +24,7 @@ namespace Chatbot.Abstractions.Repositories
 
         Task<long> GetTotalCountByFilter(DialogStatus? linkType, string @operator, string client, DateTime? startDate,
             DateTime? closeDate, int? dialogNumber, int pageNumber, int pageSize);
+
+        Task<MessageDialog[]> GetDialogsByPeriod(DateTime startDate, DateTime endDate);
     }
 }

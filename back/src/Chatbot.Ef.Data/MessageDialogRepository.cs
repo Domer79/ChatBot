@@ -82,6 +82,15 @@ namespace Chatbot.Ef.Data
             return query.LongCountAsync();
         }
 
+        public Task<MessageDialog[]> GetDialogsByPeriod(DateTime startDate, DateTime endDate)
+        {
+            return _context.Dialogs
+                .Include(_ => _.Operator)
+                .Include(_ => _.Client)
+                .Where(_ => _.DateCreated >= startDate && _.DateCreated <= endDate)
+                .ToArrayAsync();
+        }
+
         public Task<long> GetTotalCount()
         {
             return _context.Dialogs.LongCountAsync();

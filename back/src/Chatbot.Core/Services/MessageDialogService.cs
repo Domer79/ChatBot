@@ -190,5 +190,10 @@ namespace Chatbot.Core.Services
                 TotalCount = totalCount
             };
         }
+
+        public Task<MessageDialog[]> GetDialogsByPeriod(DateTime startDate, DateTime endDate)
+        {
+            return _dialogRepository.GetDialogsByPeriod(startDate, endDate);
+        }
     }
 }

@@ -78,6 +78,12 @@ namespace Chatbot.Common
             return (await source).ToList();
         }
 
+        public static string GetDescription(this Enum value)
+        {
+            var enumInfos = GetEnumInfos(value.GetType());
+            return enumInfos.First(_ => _.Enum.Equals(value)).Description;
+        }
+
         public static EnumInfo[] GetEnumInfos(Type enumType)
         {
             var fieldInfos = enumType.GetFields(BindingFlags.Public | BindingFlags.Static);
