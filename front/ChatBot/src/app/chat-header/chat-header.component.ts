@@ -10,6 +10,8 @@ import {CommonService} from '../services/common.service';
 export class ChatHeaderComponent implements OnInit {
   @Output() openQuestions = new EventEmitter<void>();
   caption: Observable<string>;
+  bWidth: number = innerWidth;
+  bHeight: number = innerHeight;
 
   constructor(
     private common: CommonService
