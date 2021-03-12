@@ -19,7 +19,7 @@
       <img src="assets/search.svg"/>
     </div>
   </div>
-  <div class="main-questions-block elements" *ngIf="!isSearchQueryInput">
+  <div class="main-questions-block elements" *ngIf="!isSearchQueryInput" #typicalQuestions>
     <first-questions *ngFor="let question of questions | async" [question]="question" (select)="selectQuestion($event)"></first-questions>
   </div>
   <div class="main-questions-block" *ngIf="isSearchQueryInput" style="padding-top: 0">
