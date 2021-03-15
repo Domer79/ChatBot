@@ -49,7 +49,9 @@ export class MainQuestionsComponent implements OnInit, OnDestroy, AfterViewInit,
   }
 
   ngAfterViewInit(): void {
-    this.typicalQuestions.nativeElement.style.height = (innerHeight - 71 - 84 - 40 - 40 - 40 - 29 - 50) + 'px';
+    if (innerWidth < 400){
+      this.typicalQuestions.nativeElement.style.height = (innerHeight - 71 - 84 - 40 - 40 - 40 - 29 - 50) + 'px';
+    }
     if (this.data.searchQuery){
       this.searchEditor.nativeElement.innerHTML = this.data.searchQuery;
       this.questionsProvider.setSearchQuery(this.data.searchQuery);
