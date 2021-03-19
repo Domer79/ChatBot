@@ -1,7 +1,14 @@
 @import ../../common/styles/variables
 
+@media screen and (orientation: landscape)
+  .chat-editor
+    position: fixed
+
+@media screen and (orientation: portrait)
+  .chat-editor
+    position: absolute
+
 .chat-editor
-  position: absolute
   bottom: 0
   width: 100%
   min-height: $chatEditorMinHeight

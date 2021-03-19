@@ -1,4 +1,5 @@
-<div [@openClose]="opened ? 'open' : 'closed'" class="parent-chatbot">
+<!--<div [@openClose]="opened ? 'open' : 'closed'" class="parent-chatbot">-->
+<div class="parent-chatbot" [ngClass]="{'open': opened, 'close': !opened}">
   <div class="chatbot">
     <page-dispatcher></page-dispatcher>
     <chat-editor></chat-editor>

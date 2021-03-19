@@ -16,11 +16,13 @@ import Helper from '../../misc/Helper';
     trigger('openClose', [
       state('open', style({
         opacity: 1,
-        bottom: innerWidth < 600 || innerHeight < 700 ? '0' : '70px'
+        bottom: innerWidth < 600 || innerHeight < 700 ? '0' : '70px',
+        top: 'inherit',
       })),
       state('closed', style({
         opacity: 0,
-        bottom: '-100%'
+        bottom: innerHeight < 500 || innerWidth < 600 ? '-157%' : '-100%',
+        top: innerHeight < 500 || innerWidth < 600 ? '100%' : 'inherit'
       })),
       transition('open => closed', [
         animate('0.3s ease-out')

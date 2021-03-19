@@ -1,4 +1,4 @@
-<div #chatEditor class="chat-editor" *ngIf="canShow | async">
+<div #chatEditor class="chat-editor" *ngIf="isOpen || canShow | async">
 <!--  <div class="whenEmpty" *ngIf="this.message === ''" >Введите сообщение</div>-->
   <div
     #editor

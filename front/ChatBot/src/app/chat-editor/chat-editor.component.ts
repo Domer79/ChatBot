@@ -9,6 +9,7 @@ import {ShowChatEditor} from '../../abstracts/ShowChatEditor';
 import {AuthService} from '../services/auth.service';
 import {ChatEditorService} from '../services/chat-editor.service';
 import {ChatDialogComponent} from '../dialog/chat-dialog.component';
+import {ChatManagerService} from '../services/chat-manager.service';
 
 @Component({
   selector: 'chat-editor',
@@ -18,17 +19,21 @@ import {ChatDialogComponent} from '../dialog/chat-dialog.component';
 export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   private originalClientHeight: number;
   private closeCurrentTimeoutSubscription: Subscription;
+  private isFixed = false;
 
   message = '';
 
   @ViewChild('editor') editorElement: ElementRef;
   @ViewChild('chatEditor') chatEditorElement: ElementRef;
+  isOpen: Observable<boolean>;
 
   constructor(
     private clientMsgDispatcher: ClientMsgDispatcher,
     private pageDispatcher: PageDispatcherService,
-    private chatEditorService: ChatEditorService
+    private chatEditorService: ChatEditorService,
+    private chatManagerService: ChatManagerService,
     ) {
+    this.isOpen = chatManagerService.isOpenChat;
   }
 
   ngOnInit(): void {
@@ -70,6 +75,7 @@ export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.isFixed = innerHeight < 500;
     this.originalClientHeight = this.chatEditorElement.nativeElement.clientHeight;
   }
 
