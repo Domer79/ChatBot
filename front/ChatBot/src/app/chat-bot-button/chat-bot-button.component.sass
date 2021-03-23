@@ -1,8 +1,19 @@
 @import ../../common/styles/variables
 
+@media screen and (orientation: landscape) and (max-height: 450px)
+  .chatbot-button
+    bottom: 45px
+
+@media screen and (orientation: landscape) and (min-height: 451px)
+  .chatbot-button
+    bottom: 10px
+
+@media screen and (orientation: portrait)
+  .chatbot-button
+    bottom: 10px
+
 .chatbot-button
   position: fixed
-  bottom: 10px
   right: 10px
   max-width: $chat-bot-button-width
   min-width: $chat-bot-button-width

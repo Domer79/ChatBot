@@ -3,8 +3,8 @@ import {ClientMsgDispatcher} from '../services/client-msg-dispatcher.service';
 import {MessageType} from '../../misc/message-type';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
-import {Observable, of, Subscription} from 'rxjs';
-import {delay, timeout} from 'rxjs/operators';
+import {forkJoin, Observable, of, Subscription, combineLatest} from 'rxjs';
+import {delay, map, switchMap, timeout} from 'rxjs/operators';
 import {ShowChatEditor} from '../../abstracts/ShowChatEditor';
 import {AuthService} from '../services/auth.service';
 import {ChatEditorService} from '../services/chat-editor.service';
@@ -19,13 +19,14 @@ import {ChatManagerService} from '../services/chat-manager.service';
 export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   private originalClientHeight: number;
   private closeCurrentTimeoutSubscription: Subscription;
+  private isOpenSubscription: Subscription;
   private isFixed = false;
 
   message = '';
+  isOpen = false;
 
   @ViewChild('editor') editorElement: ElementRef;
   @ViewChild('chatEditor') chatEditorElement: ElementRef;
-  isOpen: Observable<boolean>;
 
   constructor(
     private clientMsgDispatcher: ClientMsgDispatcher,
@@ -33,7 +34,7 @@ export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     private chatEditorService: ChatEditorService,
     private chatManagerService: ChatManagerService,
     ) {
-    this.isOpen = chatManagerService.isOpenChat;
+    this.isOpenSubscription = this.chatManagerService.isOpenChat.subscribe(val => this.isOpen = val);
   }
 
   ngOnInit(): void {
@@ -76,7 +77,7 @@ export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.isFixed = innerHeight < 500;
-    this.originalClientHeight = this.chatEditorElement.nativeElement.clientHeight;
+    this.originalClientHeight = this.chatEditorElement?.nativeElement?.clientHeight ?? 50;
   }
 
   sendMessage(): void {
@@ -95,6 +96,10 @@ export class ChatEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     if (this.closeCurrentTimeoutSubscription){
       this.closeCurrentTimeoutSubscription.unsubscribe();
+    }
+
+    if (this.isOpenSubscription){
+      this.isOpenSubscription.unsubscribe();
     }
   }
 }
