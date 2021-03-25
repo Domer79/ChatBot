@@ -15,7 +15,7 @@
   <div class="right-block"></div>
 </div>
 
-<div class="operator-message button-message" *ngIf="message.type == messageType.ButtonForForm" (click)="fillAuthForm()">
+<div class="operator-message button-message" *ngIf="message.type == messageType.ButtonForForm && !(isAuth | async)" (click)="fillAuthForm()">
   <div class="msg-left button-left">
     <div style="text-align: center; line-height: 1.5" [innerHTML]="message.content"></div>
   </div>

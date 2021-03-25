@@ -5,6 +5,8 @@ import Question from '../../abstracts/Question';
 import {PageDispatcherService} from '../services/page-dispatcher.service';
 import {QuestionsComponent} from '../questions/questions/questions.component';
 import {AuthFormComponent} from '../auth-form/auth-form.component';
+import {AuthService} from '../services/auth.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'operator-message',
@@ -17,10 +19,14 @@ export class OperatorMessageComponent implements AfterViewInit {
   @Input() message: Message;
 
   messageType = MessageType;
+  isAuth: Observable<boolean>;
 
   constructor(
-    private pageDispatcher: PageDispatcherService
-  ) { }
+    private pageDispatcher: PageDispatcherService,
+    private auth: AuthService
+  ) {
+    this.isAuth = auth.isActive();
+  }
 
   ngAfterViewInit(): void {
     if (this.message.type === MessageType.Question){
