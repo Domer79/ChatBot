@@ -20,16 +20,14 @@
       <span style="color: #E52D2E" *ngIf="emailIsNotValid">Не верный формат email</span>
     </div>
     <div class="form-input-container">
-      <div
+      <input
+        type="email"
         #emailEditor
-        contenteditable="true"
         class="form-input editable-placeholder"
         placeholder="Укажите свой email"
-        [ngClass]="{'placeholder-active': email === ''}"
-        (keypress)="emailEnter($event)"
-        (input)="emailInput($event.target)"
-        (keydown.enter)="emailOnKeydownEnter($event)"
-      ></div>
+        [(ngModel)]="email"
+        style="padding-top: 0"
+      />
     </div>
   </div>
   <div>

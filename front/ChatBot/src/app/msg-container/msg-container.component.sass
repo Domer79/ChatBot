@@ -29,6 +29,7 @@
     max-width: $parentChatBotWidth
     min-height: $parentChatBotHeight
     max-height: $parentChatBotHeight
+    right: 10px
 
   .parent-chatbot.open
     opacity: 1
@@ -44,7 +45,7 @@
     transition-duration: 0.5s
     transition-timing-function: ease-out
 
-@media screen and (orientation: landscape)
+@media screen and (orientation: landscape) and (max-height: $parentChatBotWidth - 1px)
   .parent-chatbot
     left: 0
     right: 0

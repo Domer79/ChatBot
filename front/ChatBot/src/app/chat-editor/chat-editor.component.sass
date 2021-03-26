@@ -1,10 +1,14 @@
 @import ../../common/styles/variables
 
-@media screen and (orientation: landscape)
+@media screen and (orientation: landscape) and (max-height: 450px)
   .chat-editor
     position: fixed
 
-@media screen and (orientation: portrait)
+@media screen and (orientation: portrait) and (max-width: 450px)
+  .chat-editor
+    position: absolute
+
+@media screen and (min-width: $parentChatBotWidth)
   .chat-editor
     position: absolute
 
