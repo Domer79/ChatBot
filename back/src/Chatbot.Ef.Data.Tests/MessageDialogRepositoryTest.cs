@@ -22,7 +22,7 @@ namespace Chatbot.Ef.Data.Tests
                 .AddEnvironmentVariables()
                 .Build();
 
-            var options = new DbContextOptionsBuilder()
+            var options = new DbContextOptionsBuilder<ChatbotContext>()
                 .UseSqlServer(config.GetConnectionString("default"))
                 .Options;
             _context = new ChatbotContext(options);

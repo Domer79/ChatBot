@@ -7,7 +7,7 @@ namespace Chatbot.Ef
     {
         private readonly DbContextOptions _options;
 
-        public ChatbotContext(DbContextOptions options) : base(options)
+        public ChatbotContext(DbContextOptions<ChatbotContext> options) : base(options)
         {
             _options = options;
         }
