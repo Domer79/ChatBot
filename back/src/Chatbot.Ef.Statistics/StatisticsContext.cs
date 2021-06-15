@@ -1,10 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Chatbot.Model.DataModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chatbot.Ef.Statistics
 {
     public class StatisticsContext: DbContext
     {
         private readonly DbContextOptions _options;
+        
+        public DbSet<Stat> Stats { get; set; }
 
         public StatisticsContext(DbContextOptions<StatisticsContext> options) : base(options)
         {

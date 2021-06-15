@@ -52,20 +52,14 @@ namespace Chatbot.Hosting
             {
                 options.EnableEndpointRouting = false;
             });
-            // services.AddDbContext<ChatbotContext>(options =>
-            // {
-            //     options.UseSqlServer(_configuration.GetConnectionString("default"));
-            // }, ServiceLifetime.Transient);
-            // services.AddDbContext<StatisticsContext>(options =>
-            // {
-                // options.UseSqlServer(_configuration.GetConnectionString("Stat"));
-            // }, ServiceLifetime.Transient);
-            // services.AddTransient<DbContextOptions<StatisticsContext>>(_ =>
-            //     new DbContextOptionsBuilder<StatisticsContext>()
-            //         .UseSqlServer(_configuration.GetConnectionString("Stat")).Options
-            //     );
-            // services.AddTransient<StatisticsContext>(_ =>
-            //     new StatisticsContext(_.GetRequiredService<DbContextOptions<StatisticsContext>>()));
+            services.AddDbContext<ChatbotContext>(options =>
+            {
+                options.UseSqlServer(_configuration.GetConnectionString("default"));
+            }, ServiceLifetime.Transient);
+            services.AddDbContext<StatisticsContext>(options =>
+            {
+                options.UseSqlServer(_configuration.GetConnectionString("Stat"));
+            }, ServiceLifetime.Transient);
             
             services.AddTransient<IAuthenticationHandler, TokenAuthenticationHandler>();
             services.AddTransient<IAuthorizationHandler, CustomAuthorizationHandler>();
@@ -124,12 +118,6 @@ namespace Chatbot.Hosting
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.Register(c =>
-                    new DbContextOptionsBuilder().UseSqlServer(_configuration.GetConnectionString("Stat")).Options)
-                .As<DbContextOptions<StatisticsContext>>();
-            builder.Register(c => new StatisticsContext(c.Resolve<DbContextOptions<StatisticsContext>>()))
-                .As<StatisticsContext>();
-
             builder.RegisterModule<WebApiModule>();
             builder.RegisterModule<HostingModule>();
             builder.RegisterModule<HubModule>();
@@ -143,8 +131,7 @@ namespace Chatbot.Hosting
                 // var context = AutofacContainer.Resolve<ChatbotContext>();
                 // context.Database.Migrate();
 
-                var statContext = new StatisticsContext(new DbContextOptionsBuilder<StatisticsContext>()
-                    .UseSqlServer(_configuration.GetConnectionString("Stat")).Options);
+                var statContext = AutofacContainer.Resolve<StatisticsContext>();
                 statContext.Database.Migrate();
                 
                 var permissionService = AutofacContainer.Resolve<IPermissionService>();

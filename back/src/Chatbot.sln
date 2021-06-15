@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatbot.Core.Tests", "Chatb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatbot.Ef.Statistics", "Chatbot.Ef.Statistics\Chatbot.Ef.Statistics.csproj", "{6E138A0E-C8BF-488A-A1F9-AC22FEECAAD6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatbot.Helper", "Chatbot.Helper\Chatbot.Helper.csproj", "{D81D3F26-21C8-4702-8EE7-B94EEA79E855}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{6E138A0E-C8BF-488A-A1F9-AC22FEECAAD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E138A0E-C8BF-488A-A1F9-AC22FEECAAD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E138A0E-C8BF-488A-A1F9-AC22FEECAAD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D81D3F26-21C8-4702-8EE7-B94EEA79E855}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D81D3F26-21C8-4702-8EE7-B94EEA79E855}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D81D3F26-21C8-4702-8EE7-B94EEA79E855}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D81D3F26-21C8-4702-8EE7-B94EEA79E855}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
