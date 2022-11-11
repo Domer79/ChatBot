@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start2": "ng serve --prod --ssl true",
     "build": "ng build --prod --progress --optimization --extra-webpack-config webpack.extra.js",
     "test": "ng test",
     "lint": "ng lint"
